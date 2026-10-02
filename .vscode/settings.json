@@ -1,25 +1,25 @@
 {
   "latex-workshop.latex.tools": [
     {
-      "name": "pdflatex",
-      "command": "pdflatex",
+      "name": "xelatex",
+      "command": "/Library/TeX/texbin/xelatex",
       "args": [
         "-synctex=1",
         "-interaction=nonstopmode",
         "-file-line-error",
-        "%DOCFILE%"
+        "%DOC%"
       ]
     },
     {
       "name": "biber",
-      "command": "biber",
+      "command": "/Library/TeX/texbin/biber",
       "args": ["%DOCFILE%"]
     }
   ],
   "latex-workshop.latex.recipes": [
     {
-      "name": "pdflatex → biber → pdflatex × 2",
-      "tools": ["pdflatex", "biber", "pdflatex", "pdflatex"]
+      "name": "xelatex → biber → xelatex × 2",
+      "tools": ["xelatex", "biber", "xelatex", "xelatex"]
     }
   ],
   "latex-workshop.latex.autoBuild.run": "onSave",
