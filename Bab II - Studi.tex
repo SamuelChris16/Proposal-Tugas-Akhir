@@ -6,24 +6,24 @@ Bab ini menjelaskan dasar teori dan penelitian terdahulu yang menjadi landasan t
 
 \section{Metode Penelusuran Literatur}
 \label{sec:metode_slr}
-Literatur dikumpulkan melalui \textit{systematic literature review} (SLR) di basis data Scopus menggunakan \textit{query} yang tercantum pada Bab~I. Literatur dipilih jika (1) terbit di jurnal bereputasi atau prosiding konferensi bereputasi, (2) membahas keamanan konsensus \textit{blockchain}, penerapan \textit{reinforcement learning} pada keamanan, atau keduanya, dan (3) menyajikan hasil empiris atau formal yang dapat diverifikasi. Hasil penelusuran dikelompokkan ke dalam empat klaster: (a) mekanisme dan analisis konsensus Gasper, (b) serangan strategis pada konsensus, (c) penerapan AI pada konsensus \textit{blockchain}, dan (d) pertahanan adaptif berbasis RL.
+Literatur dikumpulkan melalui \textit{systematic literature review} (SLR) di basis data Scopus menggunakan \textit{query} yang tercantum pada Bab~I. Literatur dipilih jika (1) terbit di jurnal bereputasi kuartil pertama (Q1) pada tahun 2025 atau sesudahnya, (2) membahas keamanan konsensus \textit{blockchain}, penerapan \textit{reinforcement learning} pada keamanan, atau keduanya, dan (3) menyajikan hasil empiris atau formal yang dapat diverifikasi. Dokumentasi resmi \textit{Ethereum} digunakan sebagai rujukan pelengkap untuk definisi teknis protokol. Hasil penelusuran dikelompokkan ke dalam empat klaster: (a) mekanisme dan analisis konsensus Gasper, (b) serangan strategis pada konsensus, (c) penerapan AI pada konsensus \textit{blockchain}, dan (d) pertahanan adaptif berbasis RL.
 % TODO: isi jumlah artikel hasil pencarian awal, setelah penyaringan judul/abstrak, dan setelah baca penuh (misalnya dalam diagram PRISMA).
 
 \section{Konsensus \textit{Proof-of-Stake} pada \textit{Ethereum}}
 \label{sec:gasper}
 
 \subsection{Struktur Waktu dan Pemilihan \textit{Proposer}}
-Gasper membagi waktu ke dalam \textit{slot} berdurasi 12 detik. Pada setiap \textit{slot}, satu validator dipilih secara acak semu melalui mekanisme RANDAO untuk mengusulkan blok baru. Sebanyak 32 \textit{slot} berurutan membentuk satu \textit{epoch}, dan blok pertama setiap \textit{epoch} disebut \textit{checkpoint} \parencite{laneve2025stochastic}. Jika \textit{proposer} sedang tidak aktif, \textit{slot} tersebut berlalu tanpa blok. Sebaliknya, keterlambatan jaringan dapat membuat beberapa blok diterima pada ketinggian yang sama sehingga terjadi percabangan (\textit{fork}).
+Gasper membagi waktu ke dalam \textit{slot} berdurasi 12 detik. Pada setiap \textit{slot}, satu validator dipilih secara acak semu melalui mekanisme RANDAO untuk mengusulkan blok baru. Sebanyak 32 \textit{slot} berurutan membentuk satu \textit{epoch}, dan blok pertama setiap \textit{epoch} disebut \textit{checkpoint} \parencite{laneve2025stochastic}. Untuk menjadi validator, pengguna harus menyetorkan 32 ETH sebagai \textit{stake} \parencite{ethereum2025attackdefense}. Jika \textit{proposer} sedang tidak aktif, \textit{slot} tersebut berlalu tanpa blok. Sebaliknya, keterlambatan jaringan dapat membuat beberapa blok diterima pada ketinggian yang sama sehingga terjadi percabangan (\textit{fork}).
 
 \subsection{Pemilihan Rantai Utama dan Finalisasi}
-Gasper menggabungkan dua komponen. Komponen pertama, LMD-GHOST, menentukan rantai utama ketika terjadi \textit{fork} dengan mengambil suara terbaru setiap validator lalu memilih cabang yang memiliki bobot dukungan terbesar. Komponen kedua, Casper FFG, memberikan finalitas melalui dua tahap \parencite{buterin2020combining, laneve2025stochastic}. Sebuah \textit{checkpoint} $c$ menjadi \textit{justified} jika total \textit{stake} validator yang memilihnya mencapai minimal dua pertiga total \textit{stake}:
+Gasper menggabungkan dua komponen. Komponen pertama, LMD-GHOST, menentukan rantai utama ketika terjadi \textit{fork} dengan mengambil suara terbaru setiap validator lalu memilih cabang yang memiliki bobot dukungan terbesar. Komponen kedua, Casper FFG, memberikan finalitas melalui dua tahap \parencite{laneve2025stochastic}. Sebuah \textit{checkpoint} $c$ menjadi \textit{justified} jika total \textit{stake} validator yang memilihnya mencapai minimal dua pertiga total \textit{stake}:
 \begin{equation}
 \sum_{i \in V_c} \textit{stake}_i \geq \frac{2}{3} \sum_{j \in V} \textit{stake}_j
 \label{eq:justified}
 \end{equation}
 \eqcaption{Syarat \textit{checkpoint} menjadi \textit{justified}}
 
-\noindent dengan $V_c$ adalah himpunan validator yang memilih $c$ dan $V$ adalah seluruh validator aktif. Sebuah \textit{checkpoint} menjadi \textit{finalized} jika \textit{checkpoint} itu sendiri dan \textit{checkpoint} berikutnya sama-sama \textit{justified}. Blok yang sudah \textit{finalized} tidak dapat dibatalkan tanpa membuat sepertiga validator terkena \textit{slashing}. Inilah jaminan \textit{safety} protokol. Sementara itu, \textit{liveness} terjaga jika \textit{checkpoint} baru terus berhasil difinalisasi.
+\noindent dengan $V_c$ adalah himpunan validator yang memilih $c$ dan $V$ adalah seluruh validator aktif. Sebuah \textit{checkpoint} menjadi \textit{finalized} jika \textit{checkpoint} itu sendiri dan \textit{checkpoint} berikutnya sama-sama \textit{justified}. Blok yang sudah \textit{finalized} hanya dapat dibatalkan jika penyerang rela kehilangan lebih dari sepertiga total \textit{stake}. Jaminan ini disebut finalitas ekonomi dan menjadi dasar \textit{safety} protokol \parencite{ethereum2025attackdefense}. Sementara itu, \textit{liveness} terjaga jika \textit{checkpoint} baru terus berhasil difinalisasi.
 
 \subsection{Insentif: \textit{Reward} dan \textit{Slashing}}
 Validator memperoleh \textit{reward} dengan mengusulkan blok dan memberikan suara (\textit{attestation}) yang sejalan dengan mayoritas. Besar \textit{reward} dasar validator $i$ sebanding dengan saldo efektifnya dan berbanding terbalik dengan akar total \textit{stake} jaringan \parencite{laneve2025stochastic}:
@@ -33,30 +33,33 @@ Validator memperoleh \textit{reward} dengan mengusulkan blok dan memberikan suar
 \end{equation}
 \eqcaption{Hubungan \textit{reward} dasar dengan \textit{stake}}
 
-Saldo efektif dibatasi maksimal 32 ETH. Sebaliknya, validator yang mengusulkan dua blok berbeda pada \textit{slot} yang sama atau memberikan suara ganda pada \textit{checkpoint} akan terkena \textit{slashing}: sebagian saldonya dihanguskan dan ia dikeluarkan dari jaringan. Validator yang lalai atau tidak aktif juga dikenai penalti yang lebih ringan. Parameter-parameter inilah, yaitu besaran \textit{reward}, tingkat \textit{slashing}, dan aturan finalitas, yang akan disetel oleh agen pertahanan pada tugas akhir ini.
+Saldo efektif dibatasi maksimal 32 ETH. Sebaliknya, validator yang mengusulkan dua blok berbeda pada \textit{slot} yang sama atau memberikan suara ganda pada \textit{checkpoint} akan terkena \textit{slashing}. Sebanyak 1/32 saldonya langsung dihanguskan, ia dikeluarkan dari jaringan selama 36 hari, dan selama masa itu masih dikenai penalti tambahan \parencite{laneve2025stochastic}. Validator yang tidak aktif juga kehilangan \textit{stake} secara bertahap melalui mekanisme \textit{inactivity leak}, sampai porsi mereka cukup kecil sehingga finalisasi dapat berjalan kembali \parencite{ethereum2025attackdefense}. Parameter-parameter inilah, yaitu besaran \textit{reward}, tingkat \textit{slashing}, dan aturan finalitas, yang akan disetel oleh agen pertahanan pada tugas akhir ini.
 
 \section{Serangan Strategis pada Konsensus PoS}
 \label{sec:serangan}
-Serangan strategis adalah serangan oleh validator yang secara rasional menyimpang dari protokol untuk mendapatkan keuntungan lebih besar atau merusak jaringan. Berikut jenis serangan yang relevan dengan tugas akhir ini.
+Serangan strategis adalah serangan oleh validator yang secara rasional menyimpang dari protokol untuk mendapatkan keuntungan lebih besar atau merusak jaringan. Pada dasarnya, serangan dengan \textit{stake} kecil merupakan variasi dari dua perilaku: terlalu pasif (tidak atau terlambat memberikan suara dan blok) atau terlalu aktif (mengirim suara atau blok lebih dari sekali dalam satu \textit{slot}) \parencite{ethereum2025attackdefense}. Berikut jenis serangan yang relevan dengan tugas akhir ini.
 
 \subsection{\textit{Selfish Mining} dan Reorganisasi Rantai}
-\textit{Selfish mining} pertama kali ditemukan pada \textit{Bitcoin}: penyerang menahan blok yang ia temukan, lalu melepaskannya pada saat yang tepat agar blok milik penambang jujur terbuang. \textcite{eyal2018majority} membuktikan bahwa strategi ini sudah menguntungkan meskipun penyerang menguasai jauh di bawah setengah daya jaringan. Pada PoS, pola serupa muncul sebagai reorganisasi rantai (\textit{reorg}), yaitu ketika validator jahat memanipulasi rantai utama agar blok validator jujur terbuang. \textit{Reorg} dapat dimanfaatkan untuk menyensor transaksi tertentu (\textit{censorship}) atau mengambil nilai dari urutan transaksi (MEV) \parencite{ethereum2025attackdefense}.
+\textit{Selfish mining} adalah serangan penambangan strategis pada PoW: penambang menahan blok yang ia temukan, lalu melepaskannya pada saat yang tepat agar blok milik penambang jujur terbuang. Serangan ini sudah lama menjadi sasaran pengembangan pertahanan, termasuk pertahanan berbasis AI \parencite{skowronski2026adaptive}. Pada PoS, pola serupa muncul sebagai reorganisasi rantai (\textit{reorg}). Validator penyerang membuat blok tetapi tidak menyebarkannya, lalu melepaskan blok beserta suaranya tepat ketika validator jujur mengusulkan blok berikutnya. Akibatnya, aturan \textit{fork-choice} menganggap cabang penyerang lebih berat dan blok jujur tergeser. Serangan ini awalnya diperkirakan membutuhkan sekitar 30\% \textit{stake}, tetapi kemudian terbukti dapat dilakukan dengan porsi yang jauh lebih kecil \parencite{ethereum2025attackdefense}. \textit{Reorg} dapat dimanfaatkan untuk menyensor transaksi tertentu (\textit{censorship}) atau mengambil nilai dari urutan transaksi (MEV) \parencite{ethereum2025attackdefense}.
 
 \subsection{Serangan \textit{Balancing} dan \textit{Bouncing}}
-Serangan \textit{balancing} memecah suara validator jujur ke dua cabang secara seimbang sehingga tidak ada cabang yang mencapai dua pertiga suara dan finalisasi terhenti. Serangan \textit{bouncing} membuat justifikasi berpindah-pindah antara dua cabang sehingga dua \textit{checkpoint} berturutan pada cabang yang sama tidak pernah tercapai. \textcite{laneve2025stochastic} menunjukkan bahwa dengan 4 dari 13 validator yang tidak jujur, serangan \textit{balancing} mampu mencegah finalisasi, dan serangan \textit{bouncing} membuat peluang finalisasi turun menjadi nol.
+Serangan \textit{balancing} memecah suara validator jujur ke dua cabang secara seimbang sehingga tidak ada cabang yang mencapai dua pertiga suara dan finalisasi terhenti. Serangan \textit{bouncing} membuat justifikasi berpindah-pindah antara dua cabang sehingga dua \textit{checkpoint} berturutan pada cabang yang sama tidak pernah tercapai \parencite{ethereum2025attackdefense}. \textcite{laneve2025stochastic} menunjukkan bahwa dengan 4 dari 13 validator yang tidak jujur, serangan \textit{balancing} mampu mencegah finalisasi, dan serangan \textit{bouncing} membuat peluang finalisasi turun menjadi nol.
+
+\subsection{Ambang Kekuatan Penyerang}
+Dampak serangan meningkat seiring porsi \textit{stake} yang dikuasai penyerang. Dengan sepertiga \textit{stake}, penyerang dapat menunda finalisasi cukup dengan berhenti memberikan suara, sehingga mengganggu \textit{liveness}. Dengan 34\% \textit{stake}, penyerang berpotensi membuat dua cabang sama-sama final, sehingga melanggar \textit{safety}. Dengan lebih dari separuh \textit{stake}, penyerang dapat menyensor transaksi dan mengatur blok-blok berikutnya. Dengan dua pertiga \textit{stake}, penyerang dapat memfinalisasi rantai pilihannya dan mengubah riwayat \parencite{ethereum2025attackdefense}. Tugas akhir ini berfokus pada penyerang dengan \textit{stake} di bawah sepertiga, yaitu wilayah di mana serangan bergantung pada strategi yang cerdik, bukan pada kekuatan suara semata, dan di mana parameter insentif paling menentukan.
 
 \subsection{Mitigasi yang Diterapkan Saat Ini}
-Mitigasi yang ada umumnya berupa tambalan protokol yang dirancang manual. Serangan \textit{balancing} diredam dengan \textit{proposer boost}, yaitu tambahan bobot tetap bagi blok yang tiba tepat waktu. Pada simulasi \textcite{laneve2025stochastic}, \textit{boost} sebesar 40\% membuat peluang finalisasi kembali mencapai 1 setelah 3 \textit{epoch}. Namun, mekanisme ini hanya efektif terhadap \textit{reorg} murah dan dapat dimanfaatkan oleh pemegang \textit{stake} besar \parencite{ethereum2025attackdefense}. Tambalan untuk serangan \textit{bouncing} bahkan telah dihapus dari protokol \parencite{laneve2025stochastic}. Pola ini menunjukkan bahwa pertahanan saat ini bersifat reaktif: parameter ditetapkan sekali, lalu diubah manual setelah serangan baru ditemukan.
+Mitigasi yang ada umumnya berupa tambalan protokol yang dirancang manual. Serangan \textit{balancing} diredam dengan \textit{proposer boost}, yaitu tambahan bobot tetap bagi blok yang tiba tepat waktu. Pada simulasi \textcite{laneve2025stochastic}, \textit{boost} sebesar 40\% membuat peluang finalisasi kembali mencapai 1 setelah 3 \textit{epoch}. Namun, mekanisme ini hanya efektif terhadap \textit{reorg} murah, dan penyerang dengan sekitar 7\% \textit{stake} justru dapat memanfaatkannya untuk menggeser blok jujur \parencite{ethereum2025attackdefense}. Tambalan untuk serangan \textit{bouncing} bahkan telah dihapus dari protokol \parencite{laneve2025stochastic}. Pola ini menunjukkan bahwa pertahanan saat ini bersifat reaktif: parameter ditetapkan sekali, lalu diubah manual setelah serangan baru ditemukan.
 
 \section{Pendekatan Analisis Keamanan Konsensus}
 \label{sec:analisis_keamanan}
 Terdapat tiga pendekatan utama untuk menilai ketahanan konsensus terhadap serangan.
 
-\textbf{Analisis manual dan teoretis.} Peneliti merancang strategi serangan secara manual lalu menghitung keuntungannya, seperti pada \textcite{eyal2018majority}. Pendekatan ini memberikan pemahaman mendalam, tetapi harus diulang dari awal untuk setiap varian serangan baru.
-
 \textbf{Analisis formal stokastik.} \textcite{laneve2025stochastic} memodelkan Gasper sebagai kumpulan proses (validator, jaringan, pengelola suara, dan pemilih \textit{proposer}) dalam PRISM+, lalu menghitung peluang justifikasi dan finalisasi pada berbagai latensi jaringan. Hasilnya antara lain peluang justifikasi dalam 64 \textit{slot} sebesar 0,552 dan lebih dari 0,9 dalam 96 \textit{slot}, serta penurunan tajam peluang finalisasi saat latensi naik. Kelemahannya, perilaku penyerang ditentukan sejak awal dan parameter diubah secara manual.
 
-\textbf{Penemuan serangan otomatis dengan RL.} SquirRL \parencite{hou2021squirrl} memodelkan penyerang sebagai agen DRL yang belajar sendiri strategi paling menguntungkan. Pendekatan ini menemukan strategi yang lebih baik daripada rancangan manusia, tetapi hanya sisi penyerang yang belajar, sedangkan pertahanan tetap statis.
+\textbf{Analisis berbasis \textit{machine learning}.} Survei \textcite{rizal2025enhancing} menunjukkan bahwa \textit{machine learning} banyak dipakai untuk memprediksi perilaku jaringan dan mendeteksi serangan pada konsensus \textit{blockchain}. Pendekatan ini membantu mengenali ancaman, tetapi umumnya tidak mengubah aturan protokol.
+
+\textbf{Penyerang yang belajar.} Agen penyerang dapat dimodelkan sebagai agen RL yang belajar sendiri strategi paling menguntungkan. Pada \textcite{wushishi2026coadam}, agen penyerang berbasis \textit{Q-learning} secara mandiri belajar lebih sering memilih aksi berdampak tinggi dengan intensitas tertinggi, tanpa diarahkan secara manual. Pendekatan ini mampu menemukan kelemahan yang tidak terpikirkan oleh perancang, tetapi hasilnya hanya bermakna jika pertahanan juga diberi kesempatan beradaptasi.
 
 \section{Dasar Teori \textit{Reinforcement Learning}}
 \label{sec:teori_rl}
@@ -73,28 +76,28 @@ Pada sistem kritis seperti konsensus, agen tidak boleh mengejar \textit{reward} 
 
 \noindent dengan $c_i$ adalah biaya seperti tingkat salah tuduh terhadap validator jujur atau keterlambatan blok, dan $d_i$ adalah batas yang diizinkan. Dalam praktiknya, batasan ini dapat ditegakkan melalui \textit{action masking}, yaitu menonaktifkan aksi yang akan melanggar batas sebelum agen memilih \parencite{skowronski2026adaptive}.
 
-\subsection{\textit{Markov Game} untuk Interaksi Banyak Agen}
-Ketika lebih dari satu agen belajar dalam lingkungan yang sama, MDP diperluas menjadi \textit{Markov game} \parencite{zhang2021multi}:
+\subsection{\textit{Markov Game} untuk Interaksi Penyerang dan Pertahanan}
+Ketika lebih dari satu agen belajar dalam lingkungan yang sama, MDP diperluas menjadi \textit{Markov game}. Setiap agen memiliki ruang aksi dan fungsi \textit{reward} masing-masing, sedangkan \textit{state} dan transisinya dipengaruhi oleh aksi semua agen sekaligus. \textcite{wushishi2026coadam} menggunakan bentuk ini untuk memodelkan interaksi agen pertahanan dan agen penyerang, dengan ruang aksi dan \textit{reward} yang terpisah untuk masing-masing pihak serta batasan anggaran pertahanan:
 \begin{equation}
 \mathcal{G} = \left(\mathcal{N}, \mathcal{S}, \{\mathcal{A}^{k}\}_{k \in \mathcal{N}}, P, \{R^{k}\}_{k \in \mathcal{N}}, \gamma\right)
 \label{eq:markov_game}
 \end{equation}
 \eqcaption{Definisi \textit{Markov game}}
 
-\noindent dengan $\mathcal{N}$ adalah himpunan agen, $\mathcal{A}^{k}$ dan $R^{k}$ adalah ruang aksi dan fungsi \textit{reward} agen ke-$k$. Pada tugas akhir ini terdapat dua agen: penyerang, yang \textit{reward}-nya berasal dari keuntungan berlebih, dan pertahanan, yang \textit{reward}-nya berasal dari terjaganya \textit{safety}, \textit{liveness}, dan rendahnya profit penyerang. Karena kepentingan keduanya berlawanan, setiap perubahan kebijakan satu agen langsung mengubah lingkungan bagi agen lainnya.
+\noindent dengan $\mathcal{N}$ adalah himpunan agen, sedangkan $\mathcal{A}^{k}$ dan $R^{k}$ adalah ruang aksi dan fungsi \textit{reward} agen ke-$k$. Pada tugas akhir ini $\mathcal{N}$ terdiri atas dua agen: penyerang, yang \textit{reward}-nya berasal dari keuntungan berlebih, dan pertahanan, yang \textit{reward}-nya berasal dari terjaganya \textit{safety}, \textit{liveness}, dan rendahnya profit penyerang. Karena kepentingan keduanya berlawanan, setiap perubahan kebijakan satu agen langsung mengubah lingkungan bagi agen lainnya.
 
 \subsection{PPO dan MAPPO}
-\textit{Proximal Policy Optimization} (PPO) adalah algoritma RL berbasis kebijakan yang membatasi seberapa jauh kebijakan baru boleh berubah dari kebijakan lama, sehingga pelatihan lebih stabil \parencite{schulman2017proximal}:
+\textit{Proximal Policy Optimization} (PPO) adalah algoritma RL berbasis kebijakan yang membatasi seberapa jauh kebijakan baru boleh berubah dari kebijakan lama, sehingga pelatihan lebih stabil. Pembatasan ini dilakukan melalui fungsi objektif terpotong (\textit{clipped}) \parencite{ma2025multiagent}:
 \begin{equation}
 L^{\text{CLIP}}(\theta) = \mathbb{E}_t\left[\min\left(r_t(\theta)\hat{A}_t,\; \text{clip}\left(r_t(\theta), 1-\epsilon, 1+\epsilon\right)\hat{A}_t\right)\right]
 \label{eq:ppo}
 \end{equation}
 \eqcaption{Fungsi objektif PPO}
 
-\noindent dengan $r_t(\theta)$ adalah rasio peluang aksi pada kebijakan baru terhadap kebijakan lama, $\hat{A}_t$ adalah estimasi keunggulan (\textit{advantage}) suatu aksi, dan $\epsilon$ adalah batas perubahan. MAPPO memperluas PPO ke banyak agen dengan memberikan pengkritik (\textit{critic}) akses ke informasi global selama pelatihan, sementara setiap agen tetap bertindak berdasarkan pengamatannya sendiri. Pendekatan ini terbukti kompetitif pada berbagai lingkungan multi-agen \parencite{yu2022surprising}.
+\noindent dengan $r_t(\theta)$ adalah rasio peluang aksi pada kebijakan baru terhadap kebijakan lama, $\hat{A}_t$ adalah estimasi keunggulan (\textit{advantage}) suatu aksi, dan $\epsilon$ adalah batas perubahan. MAPPO memperluas PPO ke banyak agen dengan prinsip pelatihan terpusat dan eksekusi terdesentralisasi. Selama pelatihan, pengkritik (\textit{critic}) dapat melihat informasi global sehingga kebijakan lebih stabil. Saat dijalankan, setiap agen cukup bertindak berdasarkan pengamatannya sendiri \parencite{ma2025multiagent}. Pendekatan ini menjadi salah satu paradigma utama untuk pengambilan keputusan banyak agen dalam kondisi dinamis, dan terbukti unggul atas \textit{baseline} MARL lain pada lingkungan dengan prioritas tugas yang berubah-ubah \parencite{ma2025multiagent}.
 
 \subsection{\textit{Self-Play} dan Pelatihan Berbasis Populasi}
-Pada \textit{self-play}, agen dilatih melawan versi lawan yang juga terus belajar sehingga keduanya saling mendorong menjadi lebih kuat \parencite{zhang2021multi}. Risikonya, agen dapat terlalu menyesuaikan diri dengan satu lawan terakhir lalu lemah terhadap strategi lama. Masalah ini diatasi dengan menyimpan kumpulan (\textit{pool}) kebijakan lawan dari berbagai tahap pelatihan dan mengambil lawan secara acak dari kumpulan tersebut. \textcite{wushishi2026coadam} menggunakan kumpulan 10 kebijakan penyerang historis yang diambil dengan peluang 0,30 di setiap episode. Hasilnya, pertahanan yang dilatih dengan cara ini hanya mengalami penurunan tingkat mitigasi sekitar 4,9\% dari penyerang acak hingga penyerang yang dilatih khusus untuk melawannya. \textit{Population-based training} menerapkan gagasan serupa dengan melatih beberapa varian agen sekaligus agar strategi yang dihasilkan lebih beragam.
+Pada \textit{self-play}, agen pertahanan dilatih melawan agen penyerang yang juga terus belajar, sehingga keduanya saling mendorong menjadi lebih kuat. Risikonya, agen pertahanan dapat terlalu menyesuaikan diri dengan satu lawan terakhir lalu lemah terhadap strategi lama. Masalah ini diatasi dengan menyimpan kumpulan (\textit{pool}) kebijakan penyerang dari berbagai tahap pelatihan dan mengambil lawan secara acak dari kumpulan tersebut. \textcite{wushishi2026coadam} menggunakan kumpulan 10 kebijakan penyerang historis yang diambil dengan peluang 0,30 di setiap episode. Hasilnya, pertahanan yang dilatih dengan cara ini hanya mengalami penurunan tingkat mitigasi sekitar 4,9\% dari penyerang acak hingga penyerang yang dilatih khusus untuk melawannya. \textit{Population-based training} menerapkan gagasan serupa dengan melatih beberapa varian agen sekaligus agar strategi yang dihasilkan lebih beragam.
 
 \subsection{Metrik Ketangguhan}
 Ketangguhan pertahanan diukur terhadap penyerang yang terkuat, bukan rata-rata. Dua ukuran yang digunakan adalah sebagai berikut. Pertama, profit relatif penyerang, yaitu selisih pendapatan penyerang dengan pendapatan yang seharusnya ia peroleh jika jujur \parencite{skowronski2026adaptive}:
@@ -131,10 +134,6 @@ Perbandingan penelitian terkait dengan tugas akhir ini disajikan pada Tabel~\ref
 \hline
 \textbf{Penelitian} & \textbf{Domain} & \textbf{Penyerang} & \textbf{Pertahanan} & \textbf{Keterbatasan} \\
 \hline
-\textcite{eyal2018majority} & PoW & Strategi manual & Statis & Tidak skalabel untuk varian baru \\
-\hline
-\textcite{hou2021squirrl} & PoW, PoS & Agen DRL & Statis & Hanya penyerang yang belajar \\
-\hline
 \textcite{laneve2025stochastic} & Gasper & \textit{Scripted} & Statis, tambalan manual & Penyerang tidak adaptif \\
 \hline
 \textcite{rizal2025enhancing} & Umum (survei) & -- & Prediksi dan deteksi & Konsensus adaptif masih arah riset \\
@@ -143,6 +142,8 @@ Perbandingan penelitian terkait dengan tugas akhir ini disajikan pada Tabel~\ref
 \hline
 \textcite{wushishi2026coadam} & IIoT & Agen RL ko-evolusioner & Agen DQN & Bukan \textit{blockchain} \\
 \hline
+\textcite{ma2025multiagent} & IIoT & -- & Agen MAPPO (kooperatif) & Tidak ada lawan; bukan keamanan \\
+\hline
 \textbf{Tugas akhir ini} & \textbf{Gasper} & \textbf{Agen MARL} & \textbf{Agen MARL (\textit{reward}, \textit{slashing}, finalitas)} & -- \\
 \hline
 \end{tabular}
@@ -150,9 +151,9 @@ Perbandingan penelitian terkait dengan tugas akhir ini disajikan pada Tabel~\ref
 
 Dari Tabel~\ref{tab:perbandingan_literatur} terlihat tiga celah penelitian:
 \begin{enumerate}
-	\item \textbf{Penyerang adaptif belum diuji pada Gasper.} Analisis Gasper yang ada masih menggunakan penyerang dengan perilaku tetap \parencite{laneve2025stochastic}, sedangkan penyerang berbasis RL baru diterapkan dengan pertahanan statis \parencite{hou2021squirrl}.
+	\item \textbf{Penyerang adaptif belum diuji pada Gasper.} Analisis Gasper yang ada masih menggunakan penyerang dengan perilaku tetap \parencite{laneve2025stochastic}, padahal penyerang yang belajar terbukti mampu menemukan sendiri aksi paling merusak \parencite{wushishi2026coadam}.
 	\item \textbf{Pertahanan adaptif belum menyentuh parameter insentif PoS.} Pertahanan DRL yang terbukti efektif baru diterapkan pada ambang deteksi di PoW \parencite{skowronski2026adaptive}, dan survei \textcite{rizal2025enhancing} menunjukkan bahwa penyesuaian parameter konsensus secara proaktif masih jarang diteliti.
-	\item \textbf{Pelatihan dua sisi belum diterapkan pada konsensus.} Pelatihan ko-evolusioner sudah terbukti efektif pada domain keamanan lain \parencite{wushishi2026coadam}, tetapi belum digunakan untuk melatih penyerang dan pertahanan pada protokol konsensus PoS secara bersamaan.
+	\item \textbf{Pelatihan dua sisi belum diterapkan pada konsensus.} Pelatihan ko-evolusioner sudah terbukti efektif pada domain keamanan lain \parencite{wushishi2026coadam}, dan MAPPO sudah matang untuk lingkungan multi-agen yang dinamis \parencite{ma2025multiagent}. Namun, keduanya belum digabungkan untuk melatih penyerang dan pertahanan pada protokol konsensus PoS secara bersamaan.
 \end{enumerate}
 
 Tugas akhir ini mengisi ketiga celah tersebut dengan membangun arena MARL berbasis simulator Gasper, di mana agen penyerang dan agen pertahanan dilatih bersamaan, dan agen pertahanan menyetel \textit{reward}, \textit{slashing}, serta parameter finalitas dengan batasan keselamatan yang jelas.
