@@ -1,233 +1,158 @@
 \cleardoublepage % memastikan bab baru dimulai di halaman ganjil (kanan)
 \chapter{STUDI LITERATUR}
 \label{chap:studi-literatur}
-\section{Tentang Studi Literatur}
-Studi literatur biasanya berisi tentang tinjauan pustaka, landasan teori, dan penelitian-penelitian terdahulu yang relevan dengan topik tugas akhir yang dikerjakan.
-Dalam subbab ini, penulis diharapkan dapat menjelaskan:
-\begin{enumerate}
-  \item Landasan teori yang diperoleh dari literatur yang akan digunakan untuk menyelesaikan persoalan TA;
-  \item Pengetahuan tentang kasus yang akan dikaji; dan
-  \item Penelitian atau solusi terkait untuk mengetahui posisi persoalan dan berbagai solusi yang memungkinkan untuk diterapkan berdasarkan hasil studi literatur ini.
-\end{enumerate}
-Jadi, studi literatur ini bukan sekadar rangkuman dari berbagai sumber referensi, tetapi harus diolah dan disajikan secara sistematis sehingga dapat memberikan gambaran yang jelas tentang landasan teori dan penelitian-penelitian terdahulu yang relevan dengan topik tugas akhir.
 
-Penulisan studi literatur yang baik dimulai dari penjelasan tentang kasus yang akan dikaji, kemudian diikuti dengan penjelasan tentang teori-teori yang relevan, dan diakhiri dengan tinjauan terhadap penelitian-penelitian terdahulu yang berkaitan dengan topik tugas akhir.
-Misalnya, jika topik tugas akhir adalah tentang masalah klasifikasi biji kopi berdasarkan citra kopi, 
-penulis dapat memulai dengan menjelaskan terlebih dahulu tentang karakteristik biji kopi, masalah dalam melakukan klasifikasi biji kopi, 
-kemudian menjelaskan tentang berbagai metode berbasis komputer yang dapat digunakan untuk mengklasifikasikan biji kopi berdasarkan citranya, 
-metode terbaik yang memungkinkan untuk diterapkan, teori-teori dasar tentang metode tersebut, dan diakhiri dengan tinjauan terhadap penelitian-penelitian terdahulu yang menggunakan metode untuk klasifikasi citra.
+Bab ini menjelaskan dasar teori dan penelitian terdahulu yang menjadi landasan tugas akhir. Pembahasan dimulai dari cara kerja konsensus Gasper, dilanjutkan dengan jenis serangan yang mengancamnya, teori \textit{reinforcement learning} yang digunakan sebagai solusi, lalu ditutup dengan tinjauan penelitian terkait dan celah yang akan diisi oleh tugas akhir ini.
 
-Dalam studi literatur, biasanya banyak penjelasan tentang teori-teori yang disertai dengan rumus atau persamaan matematika, gambar, tabel, algoritma, pseudocode, atau kode program.
-Oleh karena itu, pada subbab berikut akan dijelaskan beberapa hal teknis terkait format penulisan dokumen tugas akhir.
+\section{Metode Penelusuran Literatur}
+\label{sec:metode_slr}
+Literatur dikumpulkan melalui \textit{systematic literature review} (SLR) di basis data Scopus menggunakan \textit{query} yang tercantum pada Bab~I. Literatur dipilih jika (1) terbit di jurnal bereputasi atau prosiding konferensi bereputasi, (2) membahas keamanan konsensus \textit{blockchain}, penerapan \textit{reinforcement learning} pada keamanan, atau keduanya, dan (3) menyajikan hasil empiris atau formal yang dapat diverifikasi. Hasil penelusuran dikelompokkan ke dalam empat klaster: (a) mekanisme dan analisis konsensus Gasper, (b) serangan strategis pada konsensus, (c) penerapan AI pada konsensus \textit{blockchain}, dan (d) pertahanan adaptif berbasis RL.
+% TODO: isi jumlah artikel hasil pencarian awal, setelah penyaringan judul/abstrak, dan setelah baca penuh (misalnya dalam diagram PRISMA).
 
-\section{Format Penulisan Gambar, Tabel, Rumus, dan Kode Program}
-Berikut adalah beberapa contoh penulisan gambar, tabel, rumus, dan kode program yang sesuai dengan format penulisan tugas akhir.
-\subsection{Penulisan Gambar}
-Contoh gambar dapat dilihat pada Gambar \ref{fig:jaringan} dan Gambar \ref{fig:jaringan2}.
-Secara vertikal, gambar biasanya diletakkan di bagian atas halaman (\textit{top}) atau di bagian bawah halaman (\textit{bottom}).
-Gambar tidak harus diletakkan tepat di tempat gambar tersebut disebutkan pertama kali dalam teks,
-tetapi dapat diletakkan di halaman berikutnya jika tidak muat di halaman yang sama. Pada contoh ini, kedua gambar diletakkan di bagian atas halaman 
-menggunakan opsi \texttt{[t]} pada lingkungan \texttt{figure}, namun pada halaman yang berbeda, meskipun disebutkan di halaman yang sama akibat ruang yang terbatas. 
+\section{Konsensus \textit{Proof-of-Stake} pada \textit{Ethereum}}
+\label{sec:gasper}
 
-Penyebutan judul gambar dalam teks menggunakan perintah \texttt{ref}, misalnya Gambar \texttt{\\ref\{fig:jaringan\}}.
-Gunakan huruf kapital pada kata "Gambar" saat menyebutkan gambar dalam teks.
+\subsection{Struktur Waktu dan Pemilihan \textit{Proposer}}
+Gasper membagi waktu ke dalam \textit{slot} berdurasi 12 detik. Pada setiap \textit{slot}, satu validator dipilih secara acak semu melalui mekanisme RANDAO untuk mengusulkan blok baru. Sebanyak 32 \textit{slot} berurutan membentuk satu \textit{epoch}, dan blok pertama setiap \textit{epoch} disebut \textit{checkpoint} \parencite{laneve2025stochastic}. Jika \textit{proposer} sedang tidak aktif, \textit{slot} tersebut berlalu tanpa blok. Sebaliknya, keterlambatan jaringan dapat membuat beberapa blok diterima pada ketinggian yang sama sehingga terjadi percabangan (\textit{fork}).
 
-\begin{figure}[t] % pilihan opsi yang disarankan: t = top, b = bottom, h = here
-  \caption{Contoh peletakan gambar di bagian atas halaman} 
-	\label{fig:jaringan}
-    	\includegraphics[width=0.7\textwidth]{images/gambar1.png}
-\end{figure}
-
-Gambar, grafik, atau ilustrasi harus memiliki keterangan atau judul (\textit{caption}) yang menjelaskan isi gambar tersebut. 
-Secara horisontal, gambar dan judulnya diposisikan di tengah. Nomor gambar tidak diakhiri tanda baca.
-Judul gambar diletakkan di bawah gambar dan ditulis dengan huruf kecil kecuali huruf pertama pada kalimat judul. 
-Kalimat judul yang panjang dapat ditulis dalam beberapa baris seperti pada Gambar \ref{fig:jaringan2}.
-
-Ukuran gambar yang ditampilkan dapat diatur dengan mengubah nilai \textit{width} dalam sintaks \textit{includegraphics}. 
-Gambar \ref{fig:jaringan} memiliki lebar 70\% dari lebar teks, sedangkan Gambar \ref{fig:jaringan2} memiliki lebar 90\% dari lebar teks.
-
-
-\begin{figure}[t]
-  
-  \includegraphics[width=0.9\textwidth]{images/gambar1.png}
-  
-  \caption{Contoh peletakan gambar dengan judul yang panjang sehingga ditulis dalam beberapa baris dengan menggunakan gambar yang sama dengan Gambar~\ref{fig:jaringan} dengan hanya memodifikasi ukuran gambarnya saja} 
-	\label{fig:jaringan2} 
-    	
-\end{figure}
-
-Pastikan gambar yang digunakan memiliki resolusi yang cukup tinggi agar tidak pecah atau buram saat dicetak. 
-Gambar umumnya tidak tajam dan tulisan tidak jelas atau kabur jika gambar tersebut:
-\begin{enumerate}[a.]
-  \item diperoleh dari hasil cropping pada suatu halaman buku atau situs web;
-  \item hasil pembesaran gambar yang gambar aslinya sebenarnya berukuran kecil; atau
-  \item disimpan dalam resolusi kecil
-\end{enumerate}
-Ketidakjelasan gambar ini dapat dilihat pada garis-garis diagram yang tidak tegas dan tulisan-tulisan dalam gambar yang tampak kabur dan kurang jelas terbaca.
-
-Untuk mendapatkan gambar yang tidak kabur (\textit{blur}), langkah-langkah berikut dapat digunakan:
-\begin{enumerate}[(a)]
-\item Hindari \textit{screenshot}. Gambar yang didapat di suatu pustaka atau referensi sebaiknya digambar ulang (tidak perlu sama persis), misalnya menggunakan PowerPoint, Canva, Figma, draw.io, atau yang lainnya.
-\item Jika diagram atau ilustrasi digambar menggunakan draw.io, saat gambar disimpan ke format PNG atau JPG (\textit{export as}), lakukan \textit{zoom} ke minimal 300\% (\textit{the default value is} 100\%). 
-\item Jika diagram digambar dengan menggunakan \texttt{PowerPoint} atau aplikasi yang mengolah gambar vektor lainnya, gambar dapat langsung disimpan asalkan resolusinya tinggi.
-\end{enumerate}
-
-\subsection{Penulisan Tabel}
-Format penulisan tabel hampir sama dengan format penulisan gambar. Bedanya adalah judul tabel diletakkan di atas tabel, bukan di bawah tabel seperti pada gambar.
-Ada tabel yang bisa dimuat dalam satu halaman (tabel pendek) dan ada tabel panjang yang yang tidak muat dalam satu halaman. Kedua jenis tabel tersebut disusun dengan cara yang berbeda.
-Jika tabel sangat panjang, gunakan paket \textit{longtable} untuk membuat tabel yang dapat terpotong ke halaman berikutnya.
-Namun, jika tabel dapat dimuat dalam satu halaman, gunakan lingkungan \textit{table} biasa, tidak menggunakan \textit{longtable}.
-Usahakan tabel dapat ditulis dalam satu halaman, tidak terpotong ke halaman berikutnya, jika memungkinkan.
-
-\subsubsection{Penulisan Tabel Pendek}
-Contoh tabel pendek dapat dilihat pada Tabel \ref{tab:tabel1}, \ref{tab:tabel2}, dan \ref{tab:tabel3}. 
-Pada kedua table ini, tabel dan judulnya diposisikan di tengah secara horisontal dan 
-judul tabel diletakkan di atas tabel. Secara vertikal, tabel sebaiknya diletakkan di bagian atas atau bawah halaman.
-
-Penyebutan judul tabel dalam teks menggunakan perintah \texttt{ref}, misalnya Tabel \ref{tab:tabel1}.
-Gunakan huruf kapital pada kata "Tabel" saat menyebutkan tabel dalam teks.
-
-Tabel \ref{tab:tabel1} menggunakan paket \textit{tabularx} untuk mengatur lebar kolom secara fleksibel. 
-Selain itu, tabel ini juga menggunakan \textit{threeparttable} untuk menambahkan catatan kaki pada tabel 
-dan opsi \texttt{X} agar lebar kolom fleksibel menyesuaikan lebar tabel.
-Catatan kaki pada tabel ini menggunakan perintah \texttt{tablenotes} yang disediakan oleh paket \textit{threeparttable}.
-Catatan kaki pada tabel ini menggunakan perintah \texttt{\textbackslash footnotemark} dan \texttt{\textbackslash footnotetext} untuk menambahkan catatan kaki pada tabel.
-
-Tabel \ref{tab:tabel2} menggunakan format standar \texttt{| l | c | r |}. 
-Tabel \ref{tab:tabel3} menggunakan lebar kolom tetap (\textit{fixed width}) menggunakan \texttt{p\{width\}}.
-
-\begin{table} 
-  \centering
-    \begin{threeparttable}[t] % threeparttable agar bisa menambahkan catatan kaki pada tabel
-    \caption{Contoh tabel yang menggunakan \texttt{tabularx} untuk mengatur lebar kolom secara fleksibel. 
-    Selain itu, tabel ini juga menggunakan \texttt{threeparttable} untuk menambahkan catatan kaki pada tabel 
-    dan opsi \texttt{X} agar lebar kolom fleksibel menyesuaikan lebar tabel.}
-    \label{tab:tabel1}
-    \begin{tabularx}{0.6\textwidth}{| c | X| l | r @{}|} % @{} removes extra space at edges, X makes the column flexible width
-	    \hline
-	    No & Nama 	& Satuan 		& Harga \\
-	    \hline
-	    1 & Buku 	& Exemplar	& 25000 \\
-	    2 & Komputer	& Unit		& 2500000 \\
-	    3 & Pensil	& Buah		& 118900 \\
-	    \hline
-	  \end{tabularx} 
-    \begin{tablenotes}
-      \footnotesize
-      \item \footnotemark[1]Tabel harga berdasarkan data tahun 2023.
-      \item \footnotemark[2]Sumber: \url{https://www.example.com}
-    \end{tablenotes}
-  \end{threeparttable}
-\end{table}
-
-
-
-
-\begin{table}[t] % pilihan opsi yang disarankan: t = top, b = bottom, h = here
-  \caption{Tabel yang menggunakan format standar \texttt{| l | c | r |}}
-  \label{tab:tabel2}
-	\begin{tabular}{ | l | c | r | }
-	\hline
-	Nama 	& Satuan 		& Harga \\
-	\hline
-	Buku 	& Exemplar	& 25000 \\
-	Komputer	& Unit		& 2500000 \\
-	Pensil	& Buah		& 118900 \\
-	\hline
-	\end{tabular}
-\end{table}
-
-
-\begin{table}[t] % pilihan opsi yang disarankan: t = top, b = bottom, h = here
-  \centering
-  \caption{Tabel yang lebar kolomnya dibuat tetap}
-  \label{tbl:tabel3}
-	\begin{tabular}{  p{0.2\textwidth} | p{0.2\textwidth} | p{0.2\textwidth}  }
-	\hline
-	\textbf{Nama} 	& \textbf{Satuan} 		& \textbf{Harga} \\
-	\hline
-	Buku 	& Exemplar	& 25000 \\
-	\emph{Komputer}	& Unit		& 2500000 \\
-	Pensil	& Buah		& 118900 \\
-	\hline
-	\end{tabular}
-\end{table}
-
-% -- Example of importing table from external file --
-\subsubsection{Mengimpor Tabel dari Berkas Eksternal}
-
-Untuk kerapian penulisan, tabel tidak harus ditulis di dokumen utama. Sebagai contoh, Tabel \ref{tab:tabel4} diimpor dari berkas eksternal \texttt{table/tabel1.tex} menggunakan perintah \texttt{input}. 
-Dengan demikian, jika tabel tersebut perlu diubah, cukup mengubah pada berkas eksternal tersebut tanpa perlu mengubah pada berkas dokumen utama ini.
-
-\input tables/tabel1.tex
-
-
-% -- Example of long table --
-\subsubsection{Tabel yang Sangat Panjang}
-Jika tabel terlalu panjang sehingga tidak muat dalam satu halaman, gunakan paket 
-\textit{longtable} untuk membuat tabel yang dapat terpotong ke halaman berikutnya, 
-seperti pada Tabel \ref{tab:long}. 
-
-\input tables/longtable1.tex
-
-\subsection{Penulisan Rumus atau Persamaan Matematika Menggunakan {\LaTeX} dan Penomorannya}
-Contoh rumus matematika dapat ditulis seperti pada Persamaan \ref{eq:contoh1} di bawah ini. 
-Penomoran persamaan diletakkan di sebelah kanan, dan rumus ditulis dalam mode \textit{display math}.
+\subsection{Pemilihan Rantai Utama dan Finalisasi}
+Gasper menggabungkan dua komponen. Komponen pertama, LMD-GHOST, menentukan rantai utama ketika terjadi \textit{fork} dengan mengambil suara terbaru setiap validator lalu memilih cabang yang memiliki bobot dukungan terbesar. Komponen kedua, Casper FFG, memberikan finalitas melalui dua tahap \parencite{buterin2020combining, laneve2025stochastic}. Sebuah \textit{checkpoint} $c$ menjadi \textit{justified} jika total \textit{stake} validator yang memilihnya mencapai minimal dua pertiga total \textit{stake}:
 \begin{equation}
-E = mc^2
-\label{eq:contoh1}
+\sum_{i \in V_c} \textit{stake}_i \geq \frac{2}{3} \sum_{j \in V} \textit{stake}_j
+\label{eq:justified}
 \end{equation}
-\eqcaption{Persamaan Pertama}
+\eqcaption{Syarat \textit{checkpoint} menjadi \textit{justified}}
 
-Contoh lain penulisan rumus matematika yang lebih kompleks dapat ditulis seperti pada Persamaan \ref{eq:rumus2}.
+\noindent dengan $V_c$ adalah himpunan validator yang memilih $c$ dan $V$ adalah seluruh validator aktif. Sebuah \textit{checkpoint} menjadi \textit{finalized} jika \textit{checkpoint} itu sendiri dan \textit{checkpoint} berikutnya sama-sama \textit{justified}. Blok yang sudah \textit{finalized} tidak dapat dibatalkan tanpa membuat sepertiga validator terkena \textit{slashing}. Inilah jaminan \textit{safety} protokol. Sementara itu, \textit{liveness} terjaga jika \textit{checkpoint} baru terus berhasil difinalisasi.
 
-\begin{align}
-f(x) &= ax^2 + bx + c \\
-f'(x) &= \frac{d}{dx}(ax^2 + bx + c) \notag \\ % tidak menampilkan nomor pada baris ini
-      &= 2ax + b \label{eq:rumus2}
-\end{align}
-\eqcaption{Persamaan Kedua}
+\subsection{Insentif: \textit{Reward} dan \textit{Slashing}}
+Validator memperoleh \textit{reward} dengan mengusulkan blok dan memberikan suara (\textit{attestation}) yang sejalan dengan mayoritas. Besar \textit{reward} dasar validator $i$ sebanding dengan saldo efektifnya dan berbanding terbalik dengan akar total \textit{stake} jaringan \parencite{laneve2025stochastic}:
+\begin{equation}
+\textit{base\_reward}_i \propto \frac{\textit{stake}_i}{\sqrt{\sum_{j \in V} \textit{stake}_j}}
+\label{eq:base_reward}
+\end{equation}
+\eqcaption{Hubungan \textit{reward} dasar dengan \textit{stake}}
 
-Jika rumus terlalu panjang untuk ditulis dalam satu baris, gunakan lingkungan \textit{multline} seperti pada Persamaan \ref{eq:rumus3} di bawah ini.
-\begin{multline} 
-y = a_0 + a_1x + a_2x^2 + a_3x^3 + a_4x^4 + a_5x^5 + a_6x^6 + a_7x^7 \\
-    + a_8x^8 + a_9x^9 + a_{10}x^{10} \label{eq:rumus3}
-\end{multline}
-\eqcaption{Persamaan Ketiga}
+Saldo efektif dibatasi maksimal 32 ETH. Sebaliknya, validator yang mengusulkan dua blok berbeda pada \textit{slot} yang sama atau memberikan suara ganda pada \textit{checkpoint} akan terkena \textit{slashing}: sebagian saldonya dihanguskan dan ia dikeluarkan dari jaringan. Validator yang lalai atau tidak aktif juga dikenai penalti yang lebih ringan. Parameter-parameter inilah, yaitu besaran \textit{reward}, tingkat \textit{slashing}, dan aturan finalitas, yang akan disetel oleh agen pertahanan pada tugas akhir ini.
 
-Jika ada penurunan rumus yang terdiri dari beberapa baris, namun tidak memerlukan penomoran pada setiap baris, gunakan lingkungan \textit{align*}, misalnya:
+\section{Serangan Strategis pada Konsensus PoS}
+\label{sec:serangan}
+Serangan strategis adalah serangan oleh validator yang secara rasional menyimpang dari protokol untuk mendapatkan keuntungan lebih besar atau merusak jaringan. Berikut jenis serangan yang relevan dengan tugas akhir ini.
 
-\begin{align*} 
-S &= \sum_{i=1}^{n} i^2 \\
-  &= 1^2 + 2^2 + 3^2 + \cdots + n^2 \\
-  &= \frac{n(n + 1)(2n + 1)}{6}
-\intertext{Contoh lainnya adalah rumus untuk mencari nilai rata-rata fungsi $f(x)$ pada interval $[p, q]$:}
-\bar{f} &= \frac{1}{q - p} \int_{p}^{q} f(x) \, dx \\
-        &= \frac{1}{q - p} \int_{p}^{q} (ax^2 + bx + c) \, dx \\
-        &= \frac{1}{q - p} \left[ \frac{a}{3}x^3 + \frac{b}{2}x^2 + cx \right]_p^q \\
-        &= \frac{a(q^3 - p^3)}{3(q - p)} + \frac{b(q^2 - p^2)}{2(q - p)} + c \label{eq:rumus4}
-\end{align*}
+\subsection{\textit{Selfish Mining} dan Reorganisasi Rantai}
+\textit{Selfish mining} pertama kali ditemukan pada \textit{Bitcoin}: penyerang menahan blok yang ia temukan, lalu melepaskannya pada saat yang tepat agar blok milik penambang jujur terbuang. \textcite{eyal2018majority} membuktikan bahwa strategi ini sudah menguntungkan meskipun penyerang menguasai jauh di bawah setengah daya jaringan. Pada PoS, pola serupa muncul sebagai reorganisasi rantai (\textit{reorg}), yaitu ketika validator jahat memanipulasi rantai utama agar blok validator jujur terbuang. \textit{Reorg} dapat dimanfaatkan untuk menyensor transaksi tertentu (\textit{censorship}) atau mengambil nilai dari urutan transaksi (MEV) \parencite{ethereum2025attackdefense}.
 
+\subsection{Serangan \textit{Balancing} dan \textit{Bouncing}}
+Serangan \textit{balancing} memecah suara validator jujur ke dua cabang secara seimbang sehingga tidak ada cabang yang mencapai dua pertiga suara dan finalisasi terhenti. Serangan \textit{bouncing} membuat justifikasi berpindah-pindah antara dua cabang sehingga dua \textit{checkpoint} berturutan pada cabang yang sama tidak pernah tercapai. \textcite{laneve2025stochastic} menunjukkan bahwa dengan 4 dari 13 validator yang tidak jujur, serangan \textit{balancing} mampu mencegah finalisasi, dan serangan \textit{bouncing} membuat peluang finalisasi turun menjadi nol.
 
+\subsection{Mitigasi yang Diterapkan Saat Ini}
+Mitigasi yang ada umumnya berupa tambalan protokol yang dirancang manual. Serangan \textit{balancing} diredam dengan \textit{proposer boost}, yaitu tambahan bobot tetap bagi blok yang tiba tepat waktu. Pada simulasi \textcite{laneve2025stochastic}, \textit{boost} sebesar 40\% membuat peluang finalisasi kembali mencapai 1 setelah 3 \textit{epoch}. Namun, mekanisme ini hanya efektif terhadap \textit{reorg} murah dan dapat dimanfaatkan oleh pemegang \textit{stake} besar \parencite{ethereum2025attackdefense}. Tambalan untuk serangan \textit{bouncing} bahkan telah dihapus dari protokol \parencite{laneve2025stochastic}. Pola ini menunjukkan bahwa pertahanan saat ini bersifat reaktif: parameter ditetapkan sekali, lalu diubah manual setelah serangan baru ditemukan.
 
-\subsection{Penulisan Kode Program, \textit{Script} atau \textit{Pseudocode}}
-Contoh penulisan kode program, \textit{script}, atau \textit{pseudocode} dapat dilihat seperti pada \textit{listing} \ref{lst:binary_iter}. 
-Gunakan paket \textit{listings} untuk menulis \textit{source code} dalam bahasa pemrograman tertentu. 
-Kode seperti ini disebut dengan istilah \textit{listing}. 
-Kode program, \textit{script}, atau \textit{pseudocode} yang relatif pendek dapat ditulis di dalam
-dokumen utama. Namun, jika kode programnya sangat panjang, sebaiknya ditulis di berkas terpisah dan diletakkan di lampiran.
+\section{Pendekatan Analisis Keamanan Konsensus}
+\label{sec:analisis_keamanan}
+Terdapat tiga pendekatan utama untuk menilai ketahanan konsensus terhadap serangan.
 
-\subsection{Penulisan Algoritma}
-Contoh penulisan algoritma dapat dilihat pada Algoritma \ref{alg:binary-search}. Ada beberapa paket yang dapat digunakan untuk menulis algoritma,
-misalnya \textit{algorithm2e}, \textit{algorithmic}, dan \textit{algpseudocode}. 
-Pada contoh ini digunakan paket \textit{algorithmic} untuk menulis algoritma. Setiap paket memiliki sintaks yang berbeda-beda.
-Oleh karena itu, pelajari dokumentasi paket yang digunakan untuk menulis algoritma.
+\textbf{Analisis manual dan teoretis.} Peneliti merancang strategi serangan secara manual lalu menghitung keuntungannya, seperti pada \textcite{eyal2018majority}. Pendekatan ini memberikan pemahaman mendalam, tetapi harus diulang dari awal untuk setiap varian serangan baru.
 
+\textbf{Analisis formal stokastik.} \textcite{laneve2025stochastic} memodelkan Gasper sebagai kumpulan proses (validator, jaringan, pengelola suara, dan pemilih \textit{proposer}) dalam PRISM+, lalu menghitung peluang justifikasi dan finalisasi pada berbagai latensi jaringan. Hasilnya antara lain peluang justifikasi dalam 64 \textit{slot} sebesar 0,552 dan lebih dari 0,9 dalam 96 \textit{slot}, serta penurunan tajam peluang finalisasi saat latensi naik. Kelemahannya, perilaku penyerang ditentukan sejak awal dan parameter diubah secara manual.
 
-\input{listings/binary-search-python.tex}
+\textbf{Penemuan serangan otomatis dengan RL.} SquirRL \parencite{hou2021squirrl} memodelkan penyerang sebagai agen DRL yang belajar sendiri strategi paling menguntungkan. Pendekatan ini menemukan strategi yang lebih baik daripada rancangan manusia, tetapi hanya sisi penyerang yang belajar, sedangkan pertahanan tetap statis.
 
+\section{Dasar Teori \textit{Reinforcement Learning}}
+\label{sec:teori_rl}
 
-\input{algorithms/binary-search-alg.tex}
+\subsection{\textit{Markov Decision Process} dan Versi Terbatasnya}
+\textit{Reinforcement learning} (RL) adalah metode pembelajaran di mana agen belajar mengambil keputusan dengan mencoba aksi dan menerima umpan balik berupa \textit{reward}. Masalah ini dimodelkan sebagai \textit{Markov Decision Process} (MDP) $(\mathcal{S}, \mathcal{A}, P, R, \gamma)$, yaitu ruang \textit{state}, ruang aksi, peluang transisi, fungsi \textit{reward}, dan faktor diskon. Tujuan agen adalah menemukan kebijakan $\pi$ yang memaksimalkan total \textit{reward} jangka panjang.
 
+Pada sistem kritis seperti konsensus, agen tidak boleh mengejar \textit{reward} dengan mengorbankan keselamatan jaringan. Karena itu digunakan \textit{Constrained} MDP (CMDP), yang menambahkan batasan pada biaya tertentu \parencite{skowronski2026adaptive}:
+\begin{equation}
+\max_{\pi} \; \mathbb{E}_{\pi}\left[\sum_{t=0}^{\infty} \gamma^{t} r_t\right] \quad \text{dengan syarat} \quad \mathbb{E}_{\pi}[c_i] \leq d_i, \;\; \forall i
+\label{eq:cmdp}
+\end{equation}
+\eqcaption{Fungsi tujuan \textit{Constrained Markov Decision Process}}
 
+\noindent dengan $c_i$ adalah biaya seperti tingkat salah tuduh terhadap validator jujur atau keterlambatan blok, dan $d_i$ adalah batas yang diizinkan. Dalam praktiknya, batasan ini dapat ditegakkan melalui \textit{action masking}, yaitu menonaktifkan aksi yang akan melanggar batas sebelum agen memilih \parencite{skowronski2026adaptive}.
 
+\subsection{\textit{Markov Game} untuk Interaksi Banyak Agen}
+Ketika lebih dari satu agen belajar dalam lingkungan yang sama, MDP diperluas menjadi \textit{Markov game} \parencite{zhang2021multi}:
+\begin{equation}
+\mathcal{G} = \left(\mathcal{N}, \mathcal{S}, \{\mathcal{A}^{k}\}_{k \in \mathcal{N}}, P, \{R^{k}\}_{k \in \mathcal{N}}, \gamma\right)
+\label{eq:markov_game}
+\end{equation}
+\eqcaption{Definisi \textit{Markov game}}
+
+\noindent dengan $\mathcal{N}$ adalah himpunan agen, $\mathcal{A}^{k}$ dan $R^{k}$ adalah ruang aksi dan fungsi \textit{reward} agen ke-$k$. Pada tugas akhir ini terdapat dua agen: penyerang, yang \textit{reward}-nya berasal dari keuntungan berlebih, dan pertahanan, yang \textit{reward}-nya berasal dari terjaganya \textit{safety}, \textit{liveness}, dan rendahnya profit penyerang. Karena kepentingan keduanya berlawanan, setiap perubahan kebijakan satu agen langsung mengubah lingkungan bagi agen lainnya.
+
+\subsection{PPO dan MAPPO}
+\textit{Proximal Policy Optimization} (PPO) adalah algoritma RL berbasis kebijakan yang membatasi seberapa jauh kebijakan baru boleh berubah dari kebijakan lama, sehingga pelatihan lebih stabil \parencite{schulman2017proximal}:
+\begin{equation}
+L^{\text{CLIP}}(\theta) = \mathbb{E}_t\left[\min\left(r_t(\theta)\hat{A}_t,\; \text{clip}\left(r_t(\theta), 1-\epsilon, 1+\epsilon\right)\hat{A}_t\right)\right]
+\label{eq:ppo}
+\end{equation}
+\eqcaption{Fungsi objektif PPO}
+
+\noindent dengan $r_t(\theta)$ adalah rasio peluang aksi pada kebijakan baru terhadap kebijakan lama, $\hat{A}_t$ adalah estimasi keunggulan (\textit{advantage}) suatu aksi, dan $\epsilon$ adalah batas perubahan. MAPPO memperluas PPO ke banyak agen dengan memberikan pengkritik (\textit{critic}) akses ke informasi global selama pelatihan, sementara setiap agen tetap bertindak berdasarkan pengamatannya sendiri. Pendekatan ini terbukti kompetitif pada berbagai lingkungan multi-agen \parencite{yu2022surprising}.
+
+\subsection{\textit{Self-Play} dan Pelatihan Berbasis Populasi}
+Pada \textit{self-play}, agen dilatih melawan versi lawan yang juga terus belajar sehingga keduanya saling mendorong menjadi lebih kuat \parencite{zhang2021multi}. Risikonya, agen dapat terlalu menyesuaikan diri dengan satu lawan terakhir lalu lemah terhadap strategi lama. Masalah ini diatasi dengan menyimpan kumpulan (\textit{pool}) kebijakan lawan dari berbagai tahap pelatihan dan mengambil lawan secara acak dari kumpulan tersebut. \textcite{wushishi2026coadam} menggunakan kumpulan 10 kebijakan penyerang historis yang diambil dengan peluang 0,30 di setiap episode. Hasilnya, pertahanan yang dilatih dengan cara ini hanya mengalami penurunan tingkat mitigasi sekitar 4,9\% dari penyerang acak hingga penyerang yang dilatih khusus untuk melawannya. \textit{Population-based training} menerapkan gagasan serupa dengan melatih beberapa varian agen sekaligus agar strategi yang dihasilkan lebih beragam.
+
+\subsection{Metrik Ketangguhan}
+Ketangguhan pertahanan diukur terhadap penyerang yang terkuat, bukan rata-rata. Dua ukuran yang digunakan adalah sebagai berikut. Pertama, profit relatif penyerang, yaitu selisih pendapatan penyerang dengan pendapatan yang seharusnya ia peroleh jika jujur \parencite{skowronski2026adaptive}:
+\begin{equation}
+\textit{Profit}\,(\%) = 100 \times \frac{\textit{ROI}_{\text{penyerang}} - \textit{ROI}_{\text{jujur}}}{\left|\textit{ROI}_{\text{jujur}}\right|}
+\label{eq:profit_relatif}
+\end{equation}
+\eqcaption{Profit relatif penyerang}
+
+\noindent Nilai positif berarti serangan menguntungkan, sedangkan nilai negatif berarti serangan merugikan penyerang. Kedua, \textit{exploitability}, yaitu seberapa besar penyerang terbaik dalam populasi masih dapat meningkatkan hasilnya terhadap pertahanan yang sudah dibekukan. Semakin kecil nilainya, semakin dekat pasangan kebijakan dengan titik keseimbangan \parencite{wushishi2026coadam}.
+
+\section{Penerapan AI pada Konsensus \textit{Blockchain}}
+\label{sec:ai_konsensus}
+\textcite{rizal2025enhancing} mengkaji 120 artikel tentang penerapan AI pada konsensus \textit{blockchain} dan mengelompokkannya menjadi tiga fungsi utama. Fungsi pertama adalah prediksi, misalnya memperkirakan validator berikutnya, biaya transaksi, atau peluang \textit{fork}. Fungsi kedua adalah deteksi anomali dan serangan, misalnya serangan Sybil dan \textit{double spending}. Fungsi ketiga adalah konsensus adaptif yang menyesuaikan parameter terhadap kondisi jaringan, misalnya protokol Sabine yang mengatur jumlah validator PBFT berdasarkan model regresi. Survei tersebut juga mencatat risiko integrasi AI, seperti beban komputasi tambahan, kerentanan terhadap serangan adversarial, dan potensi sentralisasi. Survei ini menempatkan \textit{blockchain} yang mampu menyesuaikan parameternya sendiri secara proaktif sebagai arah riset ke depan, bukan sebagai praktik yang sudah mapan.
+
+\section{Pertahanan Adaptif Berbasis \textit{Reinforcement Learning}}
+\label{sec:pertahanan_adaptif}
+Dua penelitian terbaru menunjukkan keunggulan pertahanan yang ikut belajar dibanding pertahanan statis.
+
+\textcite{skowronski2026adaptive} meneliti \textit{wave attack} pada \textit{blockchain} PoW, yaitu serangan di mana penambang mengatur naik-turunnya partisipasi untuk mengeksploitasi algoritma penyesuaian kesulitan. Pertahanan statis dengan ambang deteksi tetap awalnya membuat serangan merugi, tetapi penyerang yang menguji batas ambang secara bertahap berhasil kembali untung setelah sekitar 20 hari. Penulis lalu menambahkan agen \textit{Double DQN} yang menyetel ambang deteksi dan masa \textit{cooldown} dalam kerangka CMDP dengan \textit{action masking}. Hasilnya, dalam 30 kali uji, profit penyerang tetap negatif ($-42 \pm 13\%$) dibanding $+65 \pm 22\%$ pada pertahanan statis, tanpa satu pun pelanggaran batas keselamatan.
+
+\textcite{wushishi2026coadam} meneliti penipuan siber (\textit{cyber deception}) pada \textit{Industrial Internet of Things} dengan melatih agen pertahanan DQN secara ko-evolusioner melawan agen penyerang yang ikut belajar dan kumpulan penyerang historis. Pertahanan yang dilatih tanpa penyerang ko-evolusioner tingkat mitigasinya turun dari 0,778 menjadi 0,681 saat menghadapi penyerang adaptif, sedangkan pertahanan ko-evolusioner hanya turun dari 0,836 menjadi 0,803. Studi ablasi juga menunjukkan bahwa memodelkan adaptasi penyerang merupakan komponen paling berpengaruh dalam kerangka tersebut.
+
+\section{Penelitian Terkait dan Posisi Tugas Akhir}
+\label{sec:penelitian_terkait}
+Perbandingan penelitian terkait dengan tugas akhir ini disajikan pada Tabel~\ref{tab:perbandingan_literatur}.
+
+\begin{table}[htbp]
+\centering
+\caption{Perbandingan penelitian terkait dengan tugas akhir ini}
+\label{tab:perbandingan_literatur}
+\small
+\begin{tabular}{|p{2.6cm}|p{1.7cm}|p{2.4cm}|p{2.4cm}|p{4.2cm}|}
+\hline
+\textbf{Penelitian} & \textbf{Domain} & \textbf{Penyerang} & \textbf{Pertahanan} & \textbf{Keterbatasan} \\
+\hline
+\textcite{eyal2018majority} & PoW & Strategi manual & Statis & Tidak skalabel untuk varian baru \\
+\hline
+\textcite{hou2021squirrl} & PoW, PoS & Agen DRL & Statis & Hanya penyerang yang belajar \\
+\hline
+\textcite{laneve2025stochastic} & Gasper & \textit{Scripted} & Statis, tambalan manual & Penyerang tidak adaptif \\
+\hline
+\textcite{rizal2025enhancing} & Umum (survei) & -- & Prediksi dan deteksi & Konsensus adaptif masih arah riset \\
+\hline
+\textcite{skowronski2026adaptive} & PoW & Adaptif heuristik & Agen DRL (ambang deteksi) & Bukan PoS; penyerang tidak belajar \\
+\hline
+\textcite{wushishi2026coadam} & IIoT & Agen RL ko-evolusioner & Agen DQN & Bukan \textit{blockchain} \\
+\hline
+\textbf{Tugas akhir ini} & \textbf{Gasper} & \textbf{Agen MARL} & \textbf{Agen MARL (\textit{reward}, \textit{slashing}, finalitas)} & -- \\
+\hline
+\end{tabular}
+\end{table}
+
+Dari Tabel~\ref{tab:perbandingan_literatur} terlihat tiga celah penelitian:
+\begin{enumerate}
+	\item \textbf{Penyerang adaptif belum diuji pada Gasper.} Analisis Gasper yang ada masih menggunakan penyerang dengan perilaku tetap \parencite{laneve2025stochastic}, sedangkan penyerang berbasis RL baru diterapkan dengan pertahanan statis \parencite{hou2021squirrl}.
+	\item \textbf{Pertahanan adaptif belum menyentuh parameter insentif PoS.} Pertahanan DRL yang terbukti efektif baru diterapkan pada ambang deteksi di PoW \parencite{skowronski2026adaptive}, dan survei \textcite{rizal2025enhancing} menunjukkan bahwa penyesuaian parameter konsensus secara proaktif masih jarang diteliti.
+	\item \textbf{Pelatihan dua sisi belum diterapkan pada konsensus.} Pelatihan ko-evolusioner sudah terbukti efektif pada domain keamanan lain \parencite{wushishi2026coadam}, tetapi belum digunakan untuk melatih penyerang dan pertahanan pada protokol konsensus PoS secara bersamaan.
+\end{enumerate}
+
+Tugas akhir ini mengisi ketiga celah tersebut dengan membangun arena MARL berbasis simulator Gasper, di mana agen penyerang dan agen pertahanan dilatih bersamaan, dan agen pertahanan menyetel \textit{reward}, \textit{slashing}, serta parameter finalitas dengan batasan keselamatan yang jelas.

@@ -1,196 +1,171 @@
 \cleardoublepage % memastikan bab baru dimulai di halaman ganjil (kanan)
 \chapter{PENDAHULUAN}
 \label{chap:pendahuluan}
-% --- Latar Belakang ---
+
 \section{Latar Belakang}
 \label{sec:latar_belakang}
 
-% ELEMEN 1: Kondisi/situasi + permasalahan
-Sistem blockchain modern, seperti \textit{Ethereum}, telah bertransisi menggunakan mekanisme konsensus \textit{Proof-of-Stake} (PoS) yang keamanannya secara fundamental bertumpu pada sistem insentif ekonomi. Dalam mekanisme ini, validator yang bertindak jujur dan mengikuti aturan protokol akan diberikan imbalan (\textit{reward}), sedangkan validator yang terbukti melakukan kecurangan akan dikenakan penalti berupa pemotongan aset yang mereka pertaruhkan (\textit{slashing}) \parencite{buterin2020combining}. Permasalahan utama yang mengemuka saat ini adalah parameter pertahanan insentif tersebut bersifat statis dan hanya disetel secara manual di awal, sementara pihak penyerang terus beradaptasi. Dalam praktiknya, berbagai ancaman dari validator strategis ini telah terwujud secara nyata, mulai dari serangan \textit{selfish mining} \parencite{eyal2018majority}, serangan \textit{reorg} dan \textit{balancing}, (\textit{transaction censorship}), hingga eksploitasi \textit{Maximal Extractable Value} (MEV) untuk meraup keuntungan dari selisih harga transaksi pengguna lain \parencite{buterin2020combining}.
+% ELEMEN 1: Kondisi dan permasalahan
+\textit{Ethereum} saat ini menggunakan mekanisme konsensus \textit{Proof-of-Stake} (PoS) melalui protokol Gasper. Dalam protokol ini, waktu dibagi menjadi \textit{slot} berdurasi 12 detik, dan setiap 32 \textit{slot} membentuk satu \textit{epoch}. Blok pertama pada setiap \textit{epoch} disebut \textit{checkpoint}. Sebuah \textit{checkpoint} menjadi \textit{justified} jika didukung oleh validator yang memegang minimal dua pertiga total \textit{stake}, lalu menjadi \textit{finalized} jika \textit{checkpoint} berikutnya juga \textit{justified} \parencite{laneve2025stochastic}. Keamanan protokol ini bertumpu pada insentif ekonomi: validator yang jujur menerima imbalan (\textit{reward}), sedangkan validator yang curang dikenai pemotongan \textit{stake} (\textit{slashing}) \parencite{buterin2020combining, laneve2025stochastic}.
 
-% ELEMEN 2: Urgensi / dampak negatif jika tidak diselesaikan
-Persoalan parameter pertahanan statis yang berhadapan dengan penyerang yang terus berinovasi ini memiliki urgensi tinggi untuk segera ditangani, karena berdampak langsung terhadap aspek \textit{safety} dan \textit{liveness} dari jaringan \textit{blockchain}. Jika arsitektur pertahanan tidak pernah dievaluasi dan disesuaikan, terdapat dua risiko kritis yang dapat terjadi. Pertama, transaksi \textit{user} yang seharusnya telah mencapai tahap finalisasi dapat dibatalkan melalui serangan manipulasi rantai. Kedua, jaringan dapat mengalami kebuntuan konsensus sehingga transaksi baru tertahan tanpa kepastian. Mengingat total nilai aset yang dipertaruhkan di dalam jaringan \textit{Ethereum} telah mencapai angka puluhan miliar dolar, kedua risiko tersebut bukan sekadar potensi teoretis, melainkan ancaman nyata yang dapat mengurangi kepercayaan publik terhadap keandalan \textit{blockchain} sebagai infrastruktur keuangan yang aman.
+Masalahnya, parameter insentif dan pertahanan tersebut bersifat statis dan diatur secara manual, sedangkan penyerang terus menyesuaikan strateginya. Berbagai ancaman dari validator strategis telah teridentifikasi, antara lain perilaku sejenis \textit{selfish mining} \parencite{eyal2018majority}, serangan \textit{balancing} dan \textit{bouncing} yang menghambat finalisasi \parencite{laneve2025stochastic}, reorganisasi rantai (\textit{reorg}) yang dapat dipakai untuk menyensor transaksi (\textit{transaction censorship}), serta eksploitasi \textit{Maximal Extractable Value} (MEV) melalui pengaturan urutan transaksi \parencite{ethereum2025attackdefense}. Respons terhadap ancaman tersebut umumnya berupa tambalan manual. Contohnya, serangan \textit{balancing} diredam dengan \textit{proposer boost} berbobot tetap, sedangkan tambalan untuk serangan \textit{bouncing} justru dihapus kemudian \parencite{laneve2025stochastic}. Mekanisme \textit{proposer boost} pun hanya efektif terhadap \textit{reorg} murah oleh penyerang ber-\textit{stake} kecil dan dapat dimanfaatkan oleh pemegang \textit{stake} besar \parencite{ethereum2025attackdefense}.
 
-% ELEMEN 3: Solusi yang telah/dapat diterapkan
-Sejumlah pendekatan telah diusulkan dalam literatur untuk menganalisis dan memitigasi serangan pada mekanisme insentif \textit{blockchain}. Pendekatan awal berfokus pada analisis manual terhadap perilaku strategis penyerang, yang membuktikan bahwa kecurangan tetap dapat menguntungkan meskipun penyerang tidak menguasai mayoritas daya komputasi jaringan \parencite{eyal2018majority}. Perkembangan berikutnya memanfaatkan kecerdasan artifisial melalui riset SquirRL untuk mengotomasi proses ini; penggunaan \textit{Deep Reinforcement Learning} (DRL) terbukti lebih efektif dalam menemukan strategi serangan otomatis dibandingkan analisis manual \parencite{hou2021squirrl}. Di ranah yang lebih luas, kerangka kerja \textit{Multi-Agent Reinforcement Learning} (MARL) telah dieksplorasi secara matang untuk memodelkan interaksi dinamis antar-agen kompetitif \parencite{zhang2021multi}, serta telah diterapkan secara luas pada domain keamanan siber \parencite{nguyen2021deep}.berbagai kasus keamanan siber secara umum \parencite{nguyen2021deep}.
+% ELEMEN 2: Urgensi
+Persoalan ini mendesak karena berdampak langsung pada dua sifat utama jaringan, yaitu \textit{safety} (transaksi yang sudah final tidak boleh dibatalkan) dan \textit{liveness} (jaringan harus terus memproses transaksi baru). Analisis stokastik terhadap Gasper menunjukkan bahwa serangan \textit{balancing} dan \textit{bouncing} dapat menggagalkan finalisasi. Bahkan tanpa serangan, kenaikan latensi jaringan hingga sekitar 38 detik sudah membuat \textit{checkpoint} tidak dapat dipastikan \textit{justified} dalam sembilan \textit{epoch} \parencite{laneve2025stochastic}. Jika pertahanan tidak pernah dievaluasi ulang, ada dua risiko yang muncul: transaksi yang sudah final dapat dibatalkan melalui manipulasi rantai, dan jaringan dapat macet sehingga transaksi baru tertahan. Mengingat besarnya nilai aset yang dipertaruhkan di jaringan \textit{Ethereum}, kedua risiko ini merupakan ancaman nyata terhadap kepercayaan publik pada \textit{blockchain} sebagai infrastruktur keuangan.
+% TODO: tambahkan angka total ETH yang di-stake beserta sumbernya (misalnya beaconcha.in) dan tanggal aksesnya.
 
-% ELEMEN 4: Kelemahan solusi -> dasar rumusan masalah TA
-Meskipun berbagai upaya telah dilakukan, solusi-solusi yang ada masih meninggalkan celah penelitian yang mendasar. Analisis ancaman secara manual, seperti pada \textcite{eyal2018majority} tidak memiliki skalabilitas untuk menemukan pola varian serangan baru, sehingga prosesnya harus diulang dari awal setiap menghadapi ancaman berbeda. Di sisi lain, metode penemuan serangan otomatis, seperti SquirRL \parencite{hou2021squirrl} berfokus pada lingkungan (\textit{single-agent}) yang hanya melatih sisi penyerang, sementara parameter pertahanan protokol tetap dibiarkan statis selama proses evaluasi. Akibatnya, suatu desain parameter yang hanya efektif terhadap strategi serangan spesifik pada saat itu, dan rentan terhadap penyerang yang terus berevolusi. Lebih jauh, meskipun algoritma \textit{Multi Agent Reinforcement Learning} (MARL) telah matang \parencite{zhang2021multi}, pemanfaatannya sebagai pengendali yang adaptif untuk mengamankan konsensus PoS masih belum dieksplorasi dalam literatur. Kesenjangan inilah yang menjadi dasar pemikiran utama dalam merumuskan masalah tugas akhir ini, yaitu perlunya membangun arena penyerang-pertahanan pada konsensus PoS di mana agen pertahanan dapat turut belajar dan mengatur ulang respons protokol, seperti \textit{slashing} dan \textit{reward}, secara adaptif menggunakan pendekatan \textit{Multi-Agent Reinforcement Learning} (MARL).
+% ELEMEN 3: Solusi yang sudah ada
+Literatur telah menawarkan beberapa pendekatan untuk menganalisis dan meredam serangan pada mekanisme insentif. Pendekatan awal berupa analisis manual, yang membuktikan bahwa kecurangan tetap menguntungkan meskipun penyerang tidak menguasai mayoritas jaringan \parencite{eyal2018majority}. Pendekatan formal kemudian memodelkan Gasper sebagai proses stokastik dan mengujinya dengan \textit{probabilistic model checker} PRISM+ pada berbagai latensi, jumlah validator, dan skenario serangan \parencite{laneve2025stochastic}. Kecerdasan artifisial juga mulai dimanfaatkan: survei penerapan \textit{machine learning} pada konsensus \textit{blockchain} memetakan penggunaannya untuk prediksi perilaku jaringan, deteksi anomali, dan konsensus adaptif \parencite{rizal2025enhancing}. Riset SquirRL menunjukkan bahwa \textit{Deep Reinforcement Learning} (DRL) lebih efektif menemukan strategi serangan dibanding analisis manual \parencite{hou2021squirrl}. Di sisi pertahanan, agen DRL yang menyetel parameter deteksi secara dinamis terbukti mampu menjaga serangan pada \textit{blockchain} tetap merugi, sedangkan pertahanan statis akhirnya ditembus oleh penyerang yang beradaptasi \parencite{skowronski2026adaptive}. Pada ranah keamanan siber yang lebih luas, kerangka \textit{Multi-Agent Reinforcement Learning} (MARL) telah matang untuk memodelkan interaksi antar-agen yang saling bersaing \parencite{zhang2021multi, nguyen2021deep}, dan pelatihan ko-evolusioner yang mempertemukan agen pertahanan dengan kumpulan penyerang adaptif terbukti menghasilkan pertahanan yang lebih tangguh \parencite{wushishi2026coadam}.
+
+% ELEMEN 4: Kelemahan solusi yang ada
+Meskipun demikian, masih ada celah penelitian. Analisis manual \parencite{eyal2018majority} tidak dapat diskalakan untuk menemukan varian serangan baru. Analisis formal \parencite{laneve2025stochastic} memang mengukur dampak serangan secara kuantitatif, tetapi perilaku penyerangnya ditetapkan sejak awal (\textit{scripted}) dan parameter protokol diubah secara manual. SquirRL \parencite{hou2021squirrl} hanya melatih sisi penyerang, sementara parameter pertahanan dibiarkan statis. Pertahanan DRL pada \textcite{skowronski2026adaptive} sudah adaptif, tetapi diterapkan pada PoW, hanya menyetel ambang deteksi, dan menghadapi penyerang yang beradaptasi secara heuristik, bukan penyerang yang ikut belajar. Survei \textcite{rizal2025enhancing} juga menunjukkan bahwa pemanfaatan AI pada konsensus masih didominasi prediksi dan deteksi pasif, sedangkan \textit{blockchain} yang menyesuaikan parameternya sendiri masih menjadi arah riset ke depan. Dengan kata lain, belum ada penelitian yang melatih agen penyerang dan agen pertahanan secara bersamaan untuk menyetel parameter insentif pada protokol Gasper. Celah inilah yang mendasari tugas akhir ini, yaitu membangun arena penyerang-pertahanan pada konsensus PoS di mana agen pertahanan ikut belajar mengatur \textit{reward} dan \textit{slashing} secara adaptif menggunakan MARL.
 
 \section{Rumusan Masalah}
 \label{sec:rumusan_masalah}
-Pokok persoalan yang menjadi fokus pada tugas akhir ini adalah evaluasi ketahanan protokol \textit{Proof-of-Stake} (PoS) terhadap serangan otomatis (sebagaimana dirintis oleh riset seperti SquirRL) yang selama ini dilakukan dengan membiarkan parameter pertahanan tetap statis sepanjang proses pelatihan agen penyerang. Akibatnya, kesimpulan bahwa suatu parameter pertahanan sudah cukup "aman" berpotensi menyesatkan, sebab kesimpulan tersebut hanya berlaku secara spesifik terhadap strategi serangan yang kebetulan ditemukan agen pada saat itu. Begitu agen penyerang diberi kesempatan untuk menyesuaikan strateginya lebih lanjut, misalnya melalui pelatihan tambahan atau variasi kondisi jaringan, tidak ada jaminan bahwa parameter pertahanan yang sama masih akan efektif dalam memitigasi serangan.
+Pokok persoalan tugas akhir ini adalah cara mengevaluasi ketahanan protokol PoS terhadap serangan otomatis. Selama ini, evaluasi dilakukan dengan membiarkan parameter pertahanan tetap statis sepanjang agen penyerang dilatih, seperti pada SquirRL. Akibatnya, kesimpulan bahwa suatu parameter sudah ``aman'' bisa menyesatkan, karena kesimpulan itu hanya berlaku untuk strategi serangan yang kebetulan ditemukan saat itu. Jika penyerang diberi kesempatan beradaptasi lebih jauh, tidak ada jaminan parameter yang sama masih efektif. Gejala ini sudah teramati pada \textit{blockchain} PoW: pertahanan statis yang awalnya membuat serangan merugi ($-95\%$) ditembus oleh penyerang adaptif setelah sekitar 20 hari, sehingga profit rata-rata penyerang selama 30 hari kembali positif ($+65\%$) \parencite{skowronski2026adaptive}.
 
-Urgensi penyelesaian masalah ini terletak pada konsekuensi finansial dan reputasional yang dapat timbul jika celah adaptasi penyerang ini luput terdeteksi sebelum protokol berjalan di jaringan produksi. Mengingat total nilai aset yang dipertaruhkan pada jaringan PoS berskala besar, seperti \textit{Ethereum}, berjumlah sangat signifikan, kesalahan estimasi dalam menilai ketahanan protokol terhadap serangan yang terus beradaptasi bukan sekadar persoalan akademis. Hal ini berpotensi menimbulkan kerugian ekonomi yang nyata bagi \textit{validator} jujur maupun pengguna jaringan, serta mengancam aspek keamanan (\textit{safety}) dan ketersediaan (\textit{liveness}) sistem secara keseluruhan.
+Masalah ini penting diselesaikan karena kesalahan menilai ketahanan protokol dapat berujung pada kerugian finansial nyata bagi validator jujur dan pengguna, serta mengancam \textit{safety} dan \textit{liveness} jaringan secara keseluruhan.
 
-Sebagai usulan solusi, tugas akhir ini memodelkan interaksi penyerang dan pertahanan pada konsensus PoS sebagai permainan multi-agen yang dilatih secara bersamaan melalui skema \textit{self-play} menggunakan \textit{Multi-Agent Reinforcement Learning} (MARL). Melalui pendekatan ini, agen penyerang dan agen pertahanan sama-sama diberikan ruang untuk beradaptasi sebelum ketahanan dari kebijakan protokol tersebut dinilai secara final. Alur pergeseran cara pandang ini, dari evaluasi parsial terhadap parameter statis menuju evaluasi komprehensif terhadap entitas penyerang yang adaptif.
+Sebagai solusi, tugas akhir ini memodelkan interaksi penyerang dan pertahanan pada konsensus PoS sebagai permainan multi-agen yang dilatih bersamaan melalui skema \textit{self-play} dengan MARL. Dengan cara ini, kedua pihak sama-sama diberi kesempatan beradaptasi sebelum ketahanan kebijakan pertahanan dinilai. Evaluasi pun bergeser dari pengujian terhadap parameter statis menjadi pengujian terhadap penyerang yang adaptif.
 
-Berdasarkan kerangka pemikiran tersebut, rumusan masalah dalam tugas akhir ini dijabarkan melalui tiga pertanyaan penelitian (\textit{Research Questions} / RQ) berikut:
+Rumusan masalah tersebut dijabarkan menjadi tiga pertanyaan penelitian (\textit{Research Questions}/RQ) berikut:
 \begin{itemize}
-    \item \textbf{RQ1:} Sejauh mana formulasi \textit{Markov game}, yang mencakup ruang \textit{state}, \textit{action}, dan \textit{reward}, terbukti valid dan memadai untuk merepresentasikan dinamika adaptasi antara penyerang dan pertahanan pada konsensus PoS secara realistis tanpa melanggar spesifikasi dasar protokol?
-    \item \textbf{RQ2:} Apakah kebijakan pertahanan yang dihasilkan melalui pelatihan MARL dengan skema \textit{self-play} menunjukkan tingkat ketahanan (\textit{robustness}) yang lebih baik terhadap agen penyerang adaptif, dibandingkan dengan penggunaan parameter pertahanan statis?
-    \item \textbf{RQ3:} Bagaimana karakteristik strategi serangan yang berhasil ditemukan secara otomatis oleh agen \textit{Reinforcement Learning} di dalam arena simulasi, dan seberapa efektif kebijakan pertahanan adaptif dalam menekan profit relatif penyerang serta menekan tingkat pelanggaran \textit{safety} maupun \textit{liveness}?
+    \item \textbf{RQ1:} Sejauh mana formulasi \textit{Markov game} (ruang \textit{state}, \textit{action}, dan \textit{reward}) valid dan memadai untuk merepresentasikan dinamika adaptasi penyerang dan pertahanan pada konsensus PoS tanpa melanggar spesifikasi dasar protokol?
+    \item \textbf{RQ2:} Apakah kebijakan pertahanan hasil pelatihan MARL dengan \textit{self-play} lebih tangguh (\textit{robust}) terhadap penyerang adaptif dibandingkan parameter pertahanan statis?
+    \item \textbf{RQ3:} Bagaimana karakteristik strategi serangan yang ditemukan secara otomatis oleh agen RL, dan seberapa efektif pertahanan adaptif menekan profit relatif penyerang serta tingkat pelanggaran \textit{safety} dan \textit{liveness}?
 \end{itemize}
 
 \section{Tujuan}
 \label{sec:tujuan}
-Bertolak dari rumusan masalah di atas, tugas akhir ini bertujuan untuk:
+Berdasarkan rumusan masalah di atas, tugas akhir ini bertujuan untuk:
 
 \begin{enumerate}
-	\item Merancang dan mengimplementasikan simulator konsensus \textit{Proof-of-Stake} yang mengacu pada protokol Gasper, dikalibrasi terhadap data \textit{on-chain Ethereum}, serta merumuskan interaksi antara penyerang dan pertahanan dalam arena tersebut sebagai \textit{Markov Game}(\textit{state, action}, dan \textit{reward}).
-	
-	\item Melatih agen pertahanan menggunakan algoritma \textit{Multi Agent Reinforcement Learning} (MARL), yaitu MAPPO dengan skema \textit{self-play} dan \textit{population-based training} agar mampu menyesuaikan parameter \textit{reward}, \textit{slashing}, dan \textit{checkpoint} finalitas, kemudian membandingkan ketahanannya terhadap kebijakan pertahanan statis pada populasi agen penyerang adaptif yang sama.
-	
-	\item Menganalisis pola strategi yang muncul dari kedua sisi agen selama pelatihan, serta mengukur dampaknya terhadap tingkat pelanggaran \textit{safety} dan \textit{liveness}, keuntungan relatif penyerang, dan biaya pertahanan berupa \textit{reward} yang hilang dari validator jujur.
+	\item Merancang dan mengimplementasikan simulator konsensus PoS yang mengacu pada protokol Gasper dan dikalibrasi dengan data \textit{on-chain Ethereum}, serta merumuskan interaksi penyerang dan pertahanan di dalamnya sebagai \textit{Markov game}.
+	\item Melatih agen pertahanan menggunakan MAPPO dengan skema \textit{self-play} dan \textit{population-based training} agar mampu menyesuaikan parameter \textit{reward}, \textit{slashing}, dan finalitas \textit{checkpoint}, lalu membandingkan ketahanannya dengan pertahanan statis pada populasi penyerang adaptif yang sama.
+	\item Menganalisis pola strategi yang muncul dari kedua agen, serta mengukur dampaknya terhadap tingkat pelanggaran \textit{safety} dan \textit{liveness}, profit relatif penyerang, dan biaya pertahanan berupa \textit{reward} yang hilang dari validator jujur.
 \end{enumerate}
 
-Kriteria keberhasilan tugas akhir ini ada dua. Pertama, simulator \textit{Proof-of-Stake} (PoS) yang dibangun harus mampu mereproduksi perilaku nominal jaringan (kondisi tanpa serangan) yang selaras secara statistik dengan data \textit{on-chain} sungguhan, sebagai syarat sebelum simulator layak dipakai untuk eksperimen lanjutan. Kedua, kebijakan pertahanan hasil MARL harus menunjukkan penurunan yang terukur pada setidaknya satu dari dua indikator berikut dibandingkan pertahanan statis, yaitu profit relatif penyerang, atau tingkat pelanggaran \textit{safety}/\textit{liveness}, ketika diuji terhadap populasi penyerang yang tidak dilihat agen pertahanan selama proses pelatihan.
+Tugas akhir ini dinyatakan berhasil jika memenuhi dua kriteria. Pertama, simulator mampu mereproduksi perilaku jaringan dalam kondisi normal (tanpa serangan) yang selaras secara statistik dengan data \textit{on-chain}. Kriteria ini sekaligus menjawab keterbatasan studi sebelumnya yang hanya dapat memvalidasi model Gasper terhadap protokol pendahulunya karena belum ada \textit{benchmark} \parencite{laneve2025stochastic}. Kedua, kebijakan pertahanan hasil MARL menunjukkan penurunan terukur pada profit relatif penyerang atau tingkat pelanggaran \textit{safety}/\textit{liveness} dibanding pertahanan statis, ketika diuji melawan populasi penyerang yang tidak pernah dilihat selama pelatihan. Profit relatif dihitung terhadap pendapatan yang seharusnya diperoleh penyerang jika bertindak jujur, mengikuti definisi pada \textcite{skowronski2026adaptive}.
 
 \section{Ruang Lingkup, Asumsi, dan Batasan Masalah}
-
-Supaya pelaksanaan tugas akhir ini realistis diselesaikan dalam jangka waktu dua semester, ditetapkan ruang lingkup dan batasan berikut:
+\label{sec:ruang_lingkup}
+Agar tugas akhir ini dapat diselesaikan dalam dua semester, ditetapkan batasan berikut:
 
 \begin{enumerate}
-	\item Protokol konsensus yang dimodelkan dibatasi pada Gasper (GHOST + Casper FFG), yaitu protokol yang dipakai \textit{Ethereum} dan menjadi acuan simulator pada tugas akhir ini. Protokol PoS lain, seperti \textit{Tendermint} pada \textit{Cosmos} atau \textit{Ouroboros} pada \textit{Cardano}, tidak menjadi objek penelitian ini, sebab mekanisme \textit{fork-choice} dan finalitasnya berbeda secara mendasar dan butuh pemodelan sendiri.
-	
-	\item Jenis serangan yang dimodelkan dalam arena dibatasi pada tiga 
-    kategori yang telah diuraikan pada \ref{sec:latar_belakang}, 
-    yaitu perilaku validator strategis sejenis \textit{selfish mining}, 
-    serangan reorganisasi rantai (\textit{reorg}/\textit{balancing attack}), 
-    dan \textit{transaction censorship} terhadap \textit{attestation} atau 
-    proposal. Serangan jangka panjang (\textit{long-range attack}) dan 
-    eksploitasi MEV sengaja tidak dimasukkan, karena keduanya membutuhkan 
-    asumsi model dan skala simulasi yang berbeda. Kedua topik ini diusulkan 
-    sebagai arah pengembangan lanjutan.
-	
-	\item Ruang aksi agen pertahanan dibatasi pada tiga parameter insentif protokol sebagaimana dirumuskan pada \ref{sec:tujuan}, yaitu laju \textit{reward per epoch}, tingkat keparahan atau ambang \textit{slashing}, dan parameter finalitas \textit{checkpoint}. Perubahan pada struktur algoritmik protokol itu sendiri, misalnya mengganti aturan \textit{fork-choice}, berada di luar ruang aksi agen pertahanan.
-	
-	\item Simulator yang dibangun adalah model ringan pada \textit{level slot} dan \textit{epoch}, bukan implementasi node \textit{Ethereum} yang lengkap, dan tidak dijalankan pada jaringan \textit{testnet} maupun \textit{mainnet} sungguhan. Asumsi ini diambil demi kelayakan komputasi, mengingat sumber daya yang tersedia terbatas pada CPU \textit{multi-core} dan GPU kelas menengah.
-	
-	\item Skala jaringan yang disimulasikan dibatasi pada kisaran ratusan sampai seribu \textit{validator}, bukan skala \textit{mainnet Ethereum} yang melibatkan ratusan ribu \textit{validator} aktif.
-	
-	\item Kalibrasi parameter simulator mengacu pada data \textit{on-chain} publik \textit{Ethereum}, diambil melalui dataset publik \textit{BigQuery} dan \textit{beaconcha.in}, serta spesifikasi resmi konsensus \textit{Ethereum} yang dipublikasikan di repositori \textit{consensus-specs}, sejalan dengan kriteria keberhasilan validasi simulator pada \ref{sec:tujuan}. Diasumsikan data historis tersebut cukup mewakili pola perilaku jaringan secara umum, meski tidak menutup kemungkinan adanya penyimpangan pada periode-periode tertentu.
+	\item Protokol yang dimodelkan hanya Gasper (LMD-GHOST + Casper FFG) yang digunakan \textit{Ethereum}. Protokol PoS lain seperti \textit{Tendermint} atau \textit{Ouroboros} tidak dibahas karena aturan \textit{fork-choice} dan finalitasnya berbeda.
+	\item Serangan yang dimodelkan dibatasi pada tiga kategori dari Subbab~\ref{sec:latar_belakang}: perilaku sejenis \textit{selfish mining}, reorganisasi rantai (\textit{reorg}/\textit{balancing attack}), dan \textit{censorship} terhadap \textit{attestation} atau proposal. \textit{Long-range attack} dan MEV tidak dimasukkan karena membutuhkan model dan skala simulasi yang berbeda. Serangan \textit{bouncing} juga tidak dimodelkan khusus karena sulit direproduksi pada Gasper saat ini, sedangkan \textit{time attack} bergantung pada manipulasi sinkronisasi jam yang berada di luar model level \textit{slot} \parencite{laneve2025stochastic}.
+	\item Aksi agen pertahanan dibatasi pada tiga parameter insentif, yaitu laju \textit{reward per epoch}, tingkat atau ambang \textit{slashing}, dan parameter finalitas \textit{checkpoint}. Perubahan struktur algoritma protokol, misalnya aturan \textit{fork-choice}, berada di luar lingkup.
+	\item Simulator berupa model ringan pada level \textit{slot} dan \textit{epoch}, bukan \textit{node Ethereum} lengkap, dan tidak dijalankan di \textit{testnet} maupun \textit{mainnet}. Penyederhanaan seperti memperlakukan blok sebagai kotak hitam dan mengabaikan pembagian komite telah terbukti memadai untuk menganalisis konsensus Gasper \parencite{laneve2025stochastic}. Asumsi ini diambil karena sumber daya komputasi terbatas pada CPU \textit{multi-core} dan GPU kelas menengah.
+	\item Skala jaringan dibatasi ratusan sampai seribu validator. Studi sebelumnya melaporkan bahwa hasil analisis justifikasi dan finalisasi Gasper sudah stabil pada jaringan berukuran belasan validator \parencite{laneve2025stochastic}.
+	\item Kalibrasi simulator mengacu pada data \textit{on-chain} publik (\textit{BigQuery} dan \textit{beaconcha.in}) serta spesifikasi resmi \textit{consensus-specs}. Data historis tersebut diasumsikan cukup mewakili perilaku jaringan secara umum.
 \end{enumerate}
 
-Ringkasan cakupan penelitian terhadap komponen utama arena penyerang dan pertahanan disajikan pada Tabel \ref{tab:scope_summary}.
+Ringkasan ruang lingkup disajikan pada Tabel~\ref{tab:scope_summary}.
 
 \begin{table}[htbp]
 \centering
-\caption{Ruang lingkup penelitian pada setiap komponen arena \textit{Multi Agent Reinforcement Learning} (MARL)}
+\caption{Ruang lingkup penelitian pada setiap komponen arena MARL}
 \label{tab:scope_summary}
 \begin{tabular}{|p{3cm}|p{5.5cm}|p{5.5cm}|}
 \hline
 \textbf{Komponen} & \textbf{Termasuk Ruang Lingkup} & \textbf{Di Luar Ruang Lingkup} \\
 \hline
-Protokol & Gasper (GHOST + Casper FFG) & Tendermint, Ouroboros, protokol PoS lain \\
+Protokol & Gasper (LMD-GHOST + Casper FFG) & Tendermint, Ouroboros, protokol PoS lain \\
 \hline
-Jenis serangan & Selfish mining, reorg/balancing attack, censorship & Long-range attack, eksploitasi MEV \\
+Jenis serangan & \textit{Selfish mining}, \textit{reorg}/\textit{balancing}, \textit{censorship} & \textit{Long-range}, MEV, \textit{bouncing}, \textit{time attack} \\
 \hline
-Aksi pertahanan & Reward rate, slashing, checkpoint finalitas & Perubahan aturan fork-choice \\
+Aksi pertahanan & \textit{Reward rate}, \textit{slashing}, finalitas \textit{checkpoint} & Perubahan aturan \textit{fork-choice} \\
 \hline
-Simulator & Model ringan level slot/epoch & Full node, testnet, mainnet \\
+Simulator & Model ringan level \textit{slot}/\textit{epoch} & \textit{Full node}, \textit{testnet}, \textit{mainnet} \\
 \hline
-Skala jaringan & Ratusan sampai ribuan validator & Skala mainnet (ratusan ribu validator) \\
+Skala jaringan & Ratusan sampai seribu validator & Skala \textit{mainnet} (ratusan ribu validator) \\
 \hline
-Kalibrasi data & BigQuery, beaconcha.in, consensus-specs & Data proprietary atau non-publik \\
+Kalibrasi data & BigQuery, beaconcha.in, \textit{consensus-specs} & Data \textit{proprietary} atau non-publik \\
 \hline
 \end{tabular}
 \end{table}
 
 \section{Hipotesis Tugas Akhir}
-Premis yang mendasari hipotesis tugas akhir ini disusun dari dua temuan pada literatur yang sudah dibahas pada \ref{sec:latar_belakang}. Pertama, Hou dkk. (2021) melalui SquirRL menunjukkan bahwa agen RL mampu menemukan strategi serangan yang lebih menguntungkan dibanding strategi rancangan manusia ketika dihadapkan pada parameter pertahanan yang tetap, sebuah kondisi yang menjadi pokok persoalan pada \ref{sec:rumusan_masalah}. Kedua, Zhang, Yang, dan Basar (2021) menunjukkan bahwa skema \textit{self-play} pada MARL memungkinkan suatu kebijakan menjadi tangguh terhadap lawan yang terus berubah, karena kebijakan tersebut dilatih menghadapi berbagai versi dirinya sendiri yang semakin kuat dari waktu ke waktu. Bila kedua temuan ini digabungkan, kebijakan pertahanan yang ikut dilatih untuk beradaptasi, sebagaimana diusulkan pada \ref{sec:tujuan}, semestinya menghasilkan ketahanan yang lebih baik dibanding pertahanan statis, ketika sama-sama dihadapkan pada penyerang adaptif. Dari premis tersebut, dirumuskan pasangan hipotesis berikut:
+\label{sec:hipotesis}
+Hipotesis tugas akhir ini disusun dari empat premis literatur. Pertama, \textcite{hou2021squirrl} menunjukkan bahwa agen RL dapat menemukan strategi serangan yang lebih menguntungkan daripada rancangan manusia ketika parameter pertahanan tetap. Kedua, \textcite{zhang2021multi} menjelaskan bahwa \textit{self-play} pada MARL menghasilkan kebijakan yang tangguh karena dilatih melawan lawan yang terus menguat. Ketiga, \textcite{skowronski2026adaptive} membuktikan pada domain \textit{blockchain} bahwa pertahanan DRL yang menyetel parameternya sendiri mampu menjaga serangan tetap merugi ($-42\%$), sedangkan pertahanan statis akhirnya ditembus ($+65\%$). Keempat, \textcite{wushishi2026coadam} menunjukkan bahwa pertahanan yang dilatih secara ko-evolusioner melawan kumpulan penyerang adaptif lebih tangguh dibanding pertahanan yang dilatih melawan penyerang tetap. Dari premis tersebut, dirumuskan hipotesis berikut:
 
 \begin{itemize}
-	\item $H_0$: Tidak terdapat perbedaan yang signifikan pada metrik keamanan (tingkat pelanggaran \textit{safety}/\textit{liveness} dan profit relatif penyerang) antara kebijakan pertahanan hasil pelatihan MARL dengan \textit{self-play} dan kebijakan pertahanan dengan parameter statis, ketika keduanya diuji terhadap populasi penyerang adaptif yang sama.
-	
-	\item $H_1$: Kebijakan pertahanan hasil pelatihan MARL dengan \textit{self-play} menghasilkan tingkat pelanggaran \textit{safety}/\textit{liveness} yang lebih rendah dan menekan keuntungan relatif penyerang secara lebih signifikan dibandingkan kebijakan pertahanan dengan parameter statis, ketika diuji terhadap populasi penyerang adaptif yang sama. Namun, penurunan ini disertai kenaikan biaya pertahanan, berupa berkurangnya \textit{reward} yang diterima \textit{validator} jujur, yang perlu ditelaah lebih lanjut sebagai bentuk \textit{trade-off}, sejalan dengan metrik biaya pertahanan yang telah ditetapkan pada \ref{sec:tujuan}.
+	\item $H_0$: Tidak ada perbedaan signifikan pada metrik keamanan (tingkat pelanggaran \textit{safety}/\textit{liveness} dan profit relatif penyerang) antara pertahanan hasil MARL \textit{self-play} dan pertahanan statis, ketika keduanya diuji melawan populasi penyerang adaptif yang sama.
+	\item $H_1$: Pertahanan hasil MARL \textit{self-play} menghasilkan tingkat pelanggaran \textit{safety}/\textit{liveness} dan profit relatif penyerang yang lebih rendah secara signifikan dibanding pertahanan statis. Penurunan ini diperkirakan disertai kenaikan biaya pertahanan berupa berkurangnya \textit{reward} validator jujur, yang dianalisis sebagai \textit{trade-off}.
 \end{itemize}
 
-Keterkaitan antara premis literatur, rumusan masalah, dan pasangan hipotesis di atas dirangkum pada Tabel \ref{tab:hypothesis_basis}.
+Keterkaitan premis dan hipotesis dirangkum pada Tabel~\ref{tab:hypothesis_basis}.
 
 \begin{table}[htbp]
 \centering
-\caption{Keterkaitan premis literatur dengan rumusan hipotesis tugas akhir}
+\caption{Keterkaitan premis literatur dengan hipotesis tugas akhir}
 \label{tab:hypothesis_basis}
-\begin{tabular}{|p{3.2cm}|p{5.8cm}|p{4.8cm}|}
+\begin{tabular}{|p{2.2cm}|p{6.6cm}|p{5cm}|}
 \hline
 \textbf{Premis} & \textbf{Temuan Literatur} & \textbf{Kaitan dengan Hipotesis} \\
 \hline
-Premis 1 & Hou dkk. (2021): agen RL menemukan strategi serangan lebih optimal terhadap pertahanan statis (SquirRL) & Mendasari $H_0$ sebagai kondisi \textit{default} yang diuji \\
+Premis 1 & \textcite{hou2021squirrl}: agen RL menemukan serangan lebih optimal terhadap pertahanan statis & Mendasari $H_0$ sebagai kondisi awal yang diuji \\
 \hline
-Premis 2 & Zhang dkk. (2021): \textit{self-play} pada MARL menghasilkan kebijakan tangguh terhadap lawan yang terus beradaptasi & Mendasari $H_1$ sebagai dugaan arah perbaikan ketahanan \\
+Premis 2 & \textcite{zhang2021multi}: \textit{self-play} menghasilkan kebijakan tangguh terhadap lawan yang beradaptasi & Dasar teoretis $H_1$ \\
 \hline
-Gabungan & Pertahanan adaptif vs. pertahanan statis, diuji pada populasi penyerang adaptif yang sama & Menjawab RQ2 dan RQ3 pada Rumusan Masalah \\
+Premis 3 & \textcite{skowronski2026adaptive}: pertahanan DRL adaptif mengalahkan pertahanan statis pada \textit{blockchain} & Bukti empiris $H_1$ di domain \textit{blockchain} \\
+\hline
+Premis 4 & \textcite{wushishi2026coadam}: pertahanan ko-evolusioner lebih tangguh terhadap penyerang adaptif & Bukti empiris $H_1$ untuk skema pelatihan dua sisi \\
+\hline
+Gabungan & Pertahanan adaptif vs.\ statis pada populasi penyerang adaptif yang sama & Menjawab RQ2 dan RQ3 \\
 \hline
 \end{tabular}
 \end{table}
 
-
 \section{Metodologi}
-
-Tugas akhir ini menempuh pendekatan eksperimen simulasi kuantitatif, dengan tahapan kerja sebagai berikut:
+\label{sec:metodologi}
+Tugas akhir ini menggunakan pendekatan eksperimen simulasi kuantitatif dengan tahapan berikut:
 
 \begin{enumerate}
-	\item \textbf{Investigasi dan perumusan masalah.} Tahap ini mencakup 
-    penelusuran kondisi keamanan konsensus PoS saat ini sebagaimana 
-    diuraikan pada \ref{sec:latar_belakang}, dilanjutkan dengan 
-    \textit{systematic literature review} (SLR) menggunakan \textit{query} 
-    berikut pada basis data Scopus: 
-    \texttt{TITLE-ABS-KEY(("proof of stake" OR blockchain OR consensus) 
-    AND "reinforcement learning" AND (attack OR defense OR security OR 
-    "selfish mining"))}. Hasil SLR, termasuk peta klaster literatur dan 
-    posisi kontribusi tugas akhir ini terhadap celah yang diidentifikasi 
-    pada Rumusan Masalah, dituangkan secara komprehensif pada Bab II.
-	
-	\item \textbf{Perancangan simulator dan formulasi permainan.} Membangun simulator konsensus PoS pada level slot dan \textit{epoch} (mencakup pemilihan komite, aturan \textit{fork-choice}, perhitungan \textit{reward}, dan mekanisme \textit{slashing}) sesuai batasan protokol Gasper pada Ruang Lingkup, dikalibrasi terhadap data \textit{on-chain} publik, lalu merumuskan \textit{state}, \textit{action}, dan \textit{reward space} untuk kedua agen sebagai \textit{Markov game} guna menjawab RQ1.
-	
-	\item \textbf{Validasi simulator.} Membandingkan keluaran simulator pada kondisi nominal, yaitu tanpa keberadaan agen penyerang, terhadap statistik agregat jaringan \textit{Ethereum} sungguhan. Simulator baru dianggap layak dipakai untuk tahap berikutnya jika selisihnya berada dalam rentang yang dapat diterima, sesuai kriteria keberhasilan pertama pada \ref{sec:tujuan}.
-	
-	\item \textbf{Reproduksi baseline serangan.} Melatih agen penyerang RL \textit{single-agent}, mengikuti pendekatan \textit{SquirRL}, pada simulator yang sudah dibangun, melawan pertahanan dengan parameter statis. Tahap ini berfungsi sebagai titik pembanding terhadap kondisi pertahanan statis yang menjadi pokok persoalan pada \ref{sec:rumusan_masalah}, sebelum arena multi-agen yang lebih kompleks dibangun pada semester berikutnya.
-	
-	\item \textbf{Pembangunan arena MARL.} Mengembangkan lingkungan pelatihan multi-agen menggunakan kerangka kerja terbuka (PettingZoo dan RLlib), lalu melatih kedua agen secara bergantian menggunakan algoritme MAPPO dengan skema \textit{self-play}, dilanjutkan dengan \textit{population-based training} yang melibatkan beberapa varian kebijakan penyerang sekaligus, sebagaimana ditetapkan pada \ref{sec:tujuan} poin kedua.
-	
-	\item \textbf{Eksperimen dan evaluasi.} Menguji kebijakan pertahanan hasil MARL berhadapan dengan kebijakan pertahanan statis, keduanya dihadapkan pada populasi penyerang adaptif yang sama, untuk menguji hipotesis $H_0$ dan $H_1$. Pengujian diulang dengan beberapa \textit{seed} acak agar hasil dapat diuji signifikansinya secara statistik. Metrik yang digunakan meliputi tingkat pelanggaran \textit{safety} dan \textit{liveness}, profit relatif penyerang, biaya pertahanan, serta skor \textit{robustness} lintas populasi penyerang.
-	
-	\item \textbf{Analisis dan penarikan kesimpulan.} Menganalisis pola strategi yang muncul dari kedua sisi agen, mengaitkan temuan tersebut dengan rumusan masalah dan hipotesis yang diajukan, serta menyusun kesimpulan dan saran pengembangan lanjutan, termasuk kemungkinan perluasan ke serangan jangka panjang dan eksploitasi MEV yang tidak tercakup pada batasan penelitian ini.
+	\item \textbf{Investigasi dan perumusan masalah.} Menelusuri kondisi keamanan konsensus PoS, lalu melakukan \textit{systematic literature review} (SLR) di Scopus dengan \textit{query}: \texttt{TITLE-ABS-KEY(("proof of stake" OR blockchain OR consensus) AND "reinforcement learning" AND (attack OR defense OR security OR "selfish mining"))}. Hasilnya disajikan pada Bab~II.
+	\item \textbf{Perancangan simulator dan formulasi permainan.} Membangun simulator PoS level \textit{slot}/\textit{epoch} (pemilihan \textit{proposer} dan komite, \textit{fork-choice}, \textit{reward}, \textit{slashing}) dengan struktur modul mengacu pada \textcite{laneve2025stochastic}, lalu merumuskan \textit{state}, \textit{action}, dan \textit{reward} kedua agen sebagai \textit{Markov game} untuk menjawab RQ1.
+	\item \textbf{Validasi simulator.} Membandingkan keluaran simulator dalam kondisi normal dengan statistik jaringan \textit{Ethereum} sungguhan, misalnya peluang justifikasi, finalisasi, dan \textit{fork}. Simulator dipakai untuk tahap berikutnya hanya jika selisihnya dalam batas yang dapat diterima.
+	\item \textbf{Reproduksi \textit{baseline} serangan.} Melatih agen penyerang RL tunggal (mengikuti SquirRL) melawan pertahanan statis sebagai titik pembanding.
+	\item \textbf{Pembangunan arena MARL.} Membangun lingkungan multi-agen dengan PettingZoo dan RLlib, lalu melatih kedua agen bergantian menggunakan MAPPO dengan \textit{self-play}, dilanjutkan \textit{population-based training} dengan beberapa varian penyerang. Kumpulan kebijakan penyerang historis dipakai agar agen pertahanan tidak \textit{overfit} pada satu lawan \parencite{wushishi2026coadam}. Aksi pertahanan dibatasi dengan \textit{action masking} agar tidak melanggar batas \textit{liveness} dan keadilan bagi validator jujur \parencite{skowronski2026adaptive}.
+	\item \textbf{Eksperimen dan evaluasi.} Menguji pertahanan MARL dan pertahanan statis melawan populasi penyerang adaptif yang sama untuk menguji $H_0$ dan $H_1$. Pengujian dilakukan pada tiga jenis penyerang, yaitu acak, adaptif selama pengujian, dan dilatih khusus untuk melawan masing-masing pertahanan \parencite{wushishi2026coadam}, serta diulang dengan beberapa \textit{seed} acak untuk uji signifikansi. Metrik yang diukur adalah tingkat pelanggaran \textit{safety} dan \textit{liveness}, profit relatif penyerang, biaya pertahanan, dan skor \textit{robustness}.
+	\item \textbf{Analisis dan kesimpulan.} Menganalisis pola strategi kedua agen, mengaitkannya dengan RQ dan hipotesis, lalu menyusun kesimpulan dan saran, termasuk perluasan ke \textit{long-range attack} dan MEV.
 \end{enumerate}
 
-Keterkaitan setiap tahapan metodologi dengan rumusan masalah yang dijawab dirangkum pada Tabel \ref{tab:methodology_rq}.
+Keterkaitan tahapan dengan rumusan masalah dirangkum pada Tabel~\ref{tab:methodology_rq}.
 
 \begin{table}[htbp]
 \centering
-\caption{Keterkaitan tahapan metodologi dengan bagian \ref{sec:rumusan_masalah} tugas akhir}
+\caption{Keterkaitan tahapan metodologi dengan rumusan masalah}
 \label{tab:methodology_rq}
 \begin{tabular}{|p{0.6cm}|p{5cm}|p{2cm}|p{5cm}|}
 \hline
 \textbf{No.} & \textbf{Tahapan} & \textbf{Menjawab} & \textbf{Keluaran Utama} \\
 \hline
-1 & Investigasi dan perumusan masalah & Latar Belakang & Peta literatur, posisi kontribusi (Bab II) \\
+1 & Investigasi dan perumusan masalah & Latar Belakang & Peta literatur dan posisi kontribusi (Bab~II) \\
 \hline
-2 & Perancangan simulator dan formulasi permainan & RQ1 & Simulator Gasper, formulasi Markov game \\
+2 & Perancangan simulator dan formulasi permainan & RQ1 & Simulator Gasper, formulasi \textit{Markov game} \\
 \hline
-3 & Validasi simulator & Kriteria 1 (Tujuan) & Simulator tervalidasi terhadap data \textit{on-chain} \\
+3 & Validasi simulator & Kriteria 1 & Simulator tervalidasi terhadap data \textit{on-chain} \\
 \hline
-4 & Reproduksi baseline serangan & Konteks $H_0$ & Baseline agen penyerang \textit{single-agent} \\
+4 & Reproduksi \textit{baseline} serangan & Konteks $H_0$ & Agen penyerang tunggal \\
 \hline
 5 & Pembangunan arena MARL & RQ1, RQ2 & Kebijakan pertahanan hasil \textit{self-play} \\
 \hline
 6 & Eksperimen dan evaluasi & RQ2, RQ3, $H_0$/$H_1$ & Metrik \textit{safety}, \textit{liveness}, profit, \textit{robustness} \\
 \hline
-7 & Analisis dan penarikan kesimpulan & Seluruh RQ & Simpulan dan saran pengembangan \\
+7 & Analisis dan kesimpulan & Seluruh RQ & Simpulan dan saran \\
 \hline
 \end{tabular}
 \end{table}
 
 \section{Sistematika Penulisan}
 \label{sec:sistematika}
-
-Laporan tugas akhir ini disusun ke dalam beberapa bab dengan sistematika penulisan sebagai berikut:
+Laporan ini disusun sebagai berikut:
 
 \begin{enumerate}
-    \item \textbf{Bab I Pendahuluan:} Berisi gambaran umum tugas akhir, meliputi latar belakang, rumusan masalah, tujuan penelitian, ruang lingkup dan batasan masalah, hipotesis penelitian, metodologi yang digunakan, serta sistematika penulisan laporan.
-    \item \textbf{Bab II Studi Literatur:} Berisi kajian pustaka dan dasar teori yang relevan dengan topik tugas akhir, termasuk tinjauan terhadap serangan strategis pada konsensus \textit{blockchain}, penerapan \textit{reinforcement learning}, kerangka kerja \textit{Multi-Agent Reinforcement Learning} (MARL), dan identifikasi kesenjangan (\textit{gap}) penelitian.
-    \item \textbf{Bab III Analisis Masalah:} Berisi analisis dan evaluasi ketahanan sistem pertahanan PoS statis saat ini, formulasi \textit{Markov game} untuk interaksi agen penyerang-pertahanan, serta rancangan skema pendekatan MARL \textit{self-play} sebagai solusi yang diusulkan.
-    \item \textbf{Bab IV Desain Konsep Solusi:} Berisi penjelasan terperinci mengenai rancangan arsitektur dan parameter simulator konsensus PoS, rancangan ruang agen (pendefinisian \textit{state}, \textit{action}, dan \textit{reward}), serta alur skema pelatihan \textit{population-based training}.
-    \item \textbf{Bab V Rencana Selanjutnya:} Berisi penjabaran langkah-langkah implementasi, rancangan eksperimen dan skenario pengujian \textit{baseline} (statis) versus MARL, penetapan metrik evaluasi (\textit{safety, liveness, profit, robustness}), serta analisis risiko penelitian beserta mitigasinya.
+    \item \textbf{Bab I Pendahuluan:} latar belakang, rumusan masalah, tujuan, ruang lingkup, hipotesis, metodologi, dan sistematika penulisan.
+    \item \textbf{Bab II Studi Literatur:} dasar teori konsensus Gasper, serangan strategis pada PoS, \textit{reinforcement learning} dan \textit{Markov game}, penelitian terkait, serta celah penelitian.
+    \item \textbf{Bab III Analisis Masalah:} analisis kelemahan pertahanan PoS statis, formulasi \textit{Markov game}, dan rancangan pendekatan MARL \textit{self-play}.
+    \item \textbf{Bab IV Desain Konsep Solusi:} rancangan arsitektur simulator, ruang \textit{state}, \textit{action}, dan \textit{reward}, serta alur \textit{population-based training}.
+    \item \textbf{Bab V Rencana Selanjutnya:} langkah implementasi, rancangan eksperimen statis versus MARL, metrik evaluasi, serta analisis risiko dan mitigasinya.
 \end{enumerate}
