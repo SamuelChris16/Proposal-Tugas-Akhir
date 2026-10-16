@@ -1,0 +1,557 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/apasortcite//global/global/global}
+    \entry{ethereum2025attackdefense}{online}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=91a561dbd1e35b5459edfad15075d17c}{%
+           family={{Ethereum Foundation}},
+           familyi={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{fullhash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{fullhashraw}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{bibnamehash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{authorbibnamehash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{authornamehash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{authorfullhash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{authorfullhashraw}{91a561dbd1e35b5459edfad15075d17c}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labeldatesource}{nodate}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Ethereum Proof-of-Stake Attack and Defense}
+      \field{urlday}{16}
+      \field{urlmonth}{10}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://ethereum.org/developers/docs/consensus-mechanisms/pos/attack-and-defense/
+      \endverb
+      \verb{url}
+      \verb https://ethereum.org/developers/docs/consensus-mechanisms/pos/attack-and-defense/
+      \endverb
+    \endentry
+    \entry{laneve2025stochastic}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=b4b4335f6388def5643b477e6614cbed}{%
+           family={Laneve},
+           familyi={L\bibinitperiod},
+           given={Cosimo},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a4fe683b8d8f5e10c550654b115e24cd}{%
+           family={Veschetti},
+           familyi={V\bibinitperiod},
+           given={Adele},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{fullhash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{fullhashraw}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{bibnamehash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{authorbibnamehash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{authornamehash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{authorfullhash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{authorfullhashraw}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computer Communications}
+      \field{title}{A stochastic analysis of the {Gasper} protocol}
+      \field{volume}{236}
+      \field{year}{2025}
+      \field{pages}{108123}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.comcom.2025.108123
+      \endverb
+    \endentry
+    \entry{ma2025multiagent}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=b7474a83684166d88e90f36969b7fa98}{%
+           family={Ma},
+           familyi={M\bibinitperiod},
+           given={Yongze},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e1af60a68382a919b168f2b6d6c41b0c}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Yanqing},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7150f56689dcf5a744083321653c466d}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Yi},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8a98f9e24fee7423386f59ad71d8c22a}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Xingyu},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bec36fe057c3cdb966565c48061dd6bd}{%
+           family={Feng},
+           familyi={F\bibinitperiod},
+           given={Sifang},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{b93fa07bf437045558f15c51dfddf8a0}
+      \strng{fullhash}{198da3cbe8df55f746d17cf229eed99b}
+      \strng{fullhashraw}{198da3cbe8df55f746d17cf229eed99b}
+      \strng{bibnamehash}{198da3cbe8df55f746d17cf229eed99b}
+      \strng{authorbibnamehash}{198da3cbe8df55f746d17cf229eed99b}
+      \strng{authornamehash}{b93fa07bf437045558f15c51dfddf8a0}
+      \strng{authorfullhash}{198da3cbe8df55f746d17cf229eed99b}
+      \strng{authorfullhashraw}{198da3cbe8df55f746d17cf229eed99b}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{number}{19}
+      \field{title}{Multi-Agent Deep Reinforcement Learning for Joint Task Offloading and Resource Allocation in {IIoT} with Dynamic Priorities}
+      \field{volume}{25}
+      \field{year}{2025}
+      \field{pages}{6160}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/s25196160
+      \endverb
+    \endentry
+    \entry{rizal2025enhancing}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=16e4e47ae1287b56cf6c69f36ebe6549}{%
+           family={Rizal},
+           familyi={R\bibinitperiod},
+           given={Syamsul},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=460ba9b71ee234b7d589c95523a54f77}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={Dong-Seong},
+           giveni={D\bibinithyphendelim S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{fullhash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{fullhashraw}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{bibnamehash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{authorbibnamehash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{authornamehash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{authorfullhash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{authorfullhashraw}{9be6f806eda03839fc3ae2d446e144ce}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Blockchain: Research and Applications}
+      \field{title}{Enhancing blockchain consensus mechanisms: A comprehensive survey on machine learning applications and optimizations}
+      \field{volume}{6}
+      \field{year}{2025}
+      \field{pages}{100302}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.bcra.2025.100302
+      \endverb
+    \endentry
+    \entry{skowronski2026adaptive}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=f6fdaa7496a5a1397b03dd3761beeb99}{%
+           family={Skowroński},
+           familyi={S\bibinitperiod},
+           given={Rafa{ł}},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{fullhash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{fullhashraw}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{bibnamehash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{authorbibnamehash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{authornamehash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{authorfullhash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{authorfullhashraw}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{number}{4}
+      \field{title}{Adaptive Threat Mitigation in {PoW} Blockchains ({Part II}): A Deep Reinforcement Learning Approach to Countering Evasive Adversaries}
+      \field{volume}{26}
+      \field{year}{2026}
+      \field{pages}{1368}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/s26041368
+      \endverb
+    \endentry
+    \entry{wushishi2026coadam}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=e3455691c51a224fc6f856ae9e56480a}{%
+           family={Wushishi},
+           familyi={W\bibinitperiod},
+           given={Usman},
+           giveni={U\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ceaacf2cb09f9665905ebbee7f0daede}{%
+           family={Hussain},
+           familyi={H\bibinitperiod},
+           given={Nasir},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e188d2f2209d9a43379b492da8bb2b0f}{%
+           family={Hussain},
+           familyi={H\bibinitperiod},
+           given={Altaf},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9bbc07f69c7c6b8d8be46f841709e37b}{%
+           family={Al-Rasheed},
+           familyi={A\bibinithyphendelim R\bibinitperiod},
+           given={Amal},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=021b781b03ae0e2c7fa46321b518b53a}{%
+           family={Ullah},
+           familyi={U\bibinitperiod},
+           given={Zahid},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4ef868e1a439c8f5571e1605164b26d0}
+      \strng{fullhash}{78df91cbce7b2c298b120cd3728e45db}
+      \strng{fullhashraw}{78df91cbce7b2c298b120cd3728e45db}
+      \strng{bibnamehash}{78df91cbce7b2c298b120cd3728e45db}
+      \strng{authorbibnamehash}{78df91cbce7b2c298b120cd3728e45db}
+      \strng{authornamehash}{4ef868e1a439c8f5571e1605164b26d0}
+      \strng{authorfullhash}{78df91cbce7b2c298b120cd3728e45db}
+      \strng{authorfullhashraw}{78df91cbce7b2c298b120cd3728e45db}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Scientific Reports}
+      \field{title}{{Co-ADAM}: a co-evolutionary signaling game framework for equilibrium cyber deception in industrial {IoT}}
+      \field{volume}{16}
+      \field{year}{2026}
+      \field{pages}{25306}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41598-026-60920-0
+      \endverb
+    \endentry
+  \enddatalist
+  \datalist[entry]{apa/global//global/global/global}
+    \entry{ethereum2025attackdefense}{online}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=91a561dbd1e35b5459edfad15075d17c}{%
+           family={{Ethereum Foundation}},
+           familyi={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{fullhash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{fullhashraw}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{bibnamehash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{authorbibnamehash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{authornamehash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{authorfullhash}{91a561dbd1e35b5459edfad15075d17c}
+      \strng{authorfullhashraw}{91a561dbd1e35b5459edfad15075d17c}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labeldatesource}{nodate}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Ethereum Proof-of-Stake Attack and Defense}
+      \field{urlday}{16}
+      \field{urlmonth}{10}
+      \field{urlyear}{2026}
+      \field{urldateera}{ce}
+      \verb{urlraw}
+      \verb https://ethereum.org/developers/docs/consensus-mechanisms/pos/attack-and-defense/
+      \endverb
+      \verb{url}
+      \verb https://ethereum.org/developers/docs/consensus-mechanisms/pos/attack-and-defense/
+      \endverb
+    \endentry
+    \entry{laneve2025stochastic}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=b4b4335f6388def5643b477e6614cbed}{%
+           family={Laneve},
+           familyi={L\bibinitperiod},
+           given={Cosimo},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=a4fe683b8d8f5e10c550654b115e24cd}{%
+           family={Veschetti},
+           familyi={V\bibinitperiod},
+           given={Adele},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{fullhash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{fullhashraw}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{bibnamehash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{authorbibnamehash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{authornamehash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{authorfullhash}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \strng{authorfullhashraw}{0c4f1287420e1cbbd4c39d13019e01dc}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Computer Communications}
+      \field{title}{A stochastic analysis of the {Gasper} protocol}
+      \field{volume}{236}
+      \field{year}{2025}
+      \field{pages}{108123}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.comcom.2025.108123
+      \endverb
+    \endentry
+    \entry{ma2025multiagent}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=b7474a83684166d88e90f36969b7fa98}{%
+           family={Ma},
+           familyi={M\bibinitperiod},
+           given={Yongze},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e1af60a68382a919b168f2b6d6c41b0c}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Yanqing},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=7150f56689dcf5a744083321653c466d}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Yi},
+           giveni={Y\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=8a98f9e24fee7423386f59ad71d8c22a}{%
+           family={He},
+           familyi={H\bibinitperiod},
+           given={Xingyu},
+           giveni={X\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=bec36fe057c3cdb966565c48061dd6bd}{%
+           family={Feng},
+           familyi={F\bibinitperiod},
+           given={Sifang},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{b93fa07bf437045558f15c51dfddf8a0}
+      \strng{fullhash}{198da3cbe8df55f746d17cf229eed99b}
+      \strng{fullhashraw}{198da3cbe8df55f746d17cf229eed99b}
+      \strng{bibnamehash}{198da3cbe8df55f746d17cf229eed99b}
+      \strng{authorbibnamehash}{198da3cbe8df55f746d17cf229eed99b}
+      \strng{authornamehash}{b93fa07bf437045558f15c51dfddf8a0}
+      \strng{authorfullhash}{198da3cbe8df55f746d17cf229eed99b}
+      \strng{authorfullhashraw}{198da3cbe8df55f746d17cf229eed99b}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{number}{19}
+      \field{title}{Multi-Agent Deep Reinforcement Learning for Joint Task Offloading and Resource Allocation in {IIoT} with Dynamic Priorities}
+      \field{volume}{25}
+      \field{year}{2025}
+      \field{pages}{6160}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/s25196160
+      \endverb
+    \endentry
+    \entry{rizal2025enhancing}{article}{}{}
+      \name{author}{2}{}{%
+        {{un=0,uniquepart=base,hash=16e4e47ae1287b56cf6c69f36ebe6549}{%
+           family={Rizal},
+           familyi={R\bibinitperiod},
+           given={Syamsul},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=460ba9b71ee234b7d589c95523a54f77}{%
+           family={Kim},
+           familyi={K\bibinitperiod},
+           given={Dong-Seong},
+           giveni={D\bibinithyphendelim S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{fullhash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{fullhashraw}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{bibnamehash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{authorbibnamehash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{authornamehash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{authorfullhash}{9be6f806eda03839fc3ae2d446e144ce}
+      \strng{authorfullhashraw}{9be6f806eda03839fc3ae2d446e144ce}
+      \field{sortinit}{R}
+      \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Blockchain: Research and Applications}
+      \field{title}{Enhancing blockchain consensus mechanisms: A comprehensive survey on machine learning applications and optimizations}
+      \field{volume}{6}
+      \field{year}{2025}
+      \field{pages}{100302}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1016/j.bcra.2025.100302
+      \endverb
+    \endentry
+    \entry{skowronski2026adaptive}{article}{}{}
+      \name{author}{1}{}{%
+        {{un=0,uniquepart=base,hash=f6fdaa7496a5a1397b03dd3761beeb99}{%
+           family={Skowroński},
+           familyi={S\bibinitperiod},
+           given={Rafa{ł}},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{fullhash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{fullhashraw}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{bibnamehash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{authorbibnamehash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{authornamehash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{authorfullhash}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \strng{authorfullhashraw}{f6fdaa7496a5a1397b03dd3761beeb99}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{number}{4}
+      \field{title}{Adaptive Threat Mitigation in {PoW} Blockchains ({Part II}): A Deep Reinforcement Learning Approach to Countering Evasive Adversaries}
+      \field{volume}{26}
+      \field{year}{2026}
+      \field{pages}{1368}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.3390/s26041368
+      \endverb
+    \endentry
+    \entry{wushishi2026coadam}{article}{}{}
+      \name{author}{5}{}{%
+        {{un=0,uniquepart=base,hash=e3455691c51a224fc6f856ae9e56480a}{%
+           family={Wushishi},
+           familyi={W\bibinitperiod},
+           given={Usman},
+           giveni={U\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=ceaacf2cb09f9665905ebbee7f0daede}{%
+           family={Hussain},
+           familyi={H\bibinitperiod},
+           given={Nasir},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=e188d2f2209d9a43379b492da8bb2b0f}{%
+           family={Hussain},
+           familyi={H\bibinitperiod},
+           given={Altaf},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=9bbc07f69c7c6b8d8be46f841709e37b}{%
+           family={Al-Rasheed},
+           familyi={A\bibinithyphendelim R\bibinitperiod},
+           given={Amal},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{un=0,uniquepart=base,hash=021b781b03ae0e2c7fa46321b518b53a}{%
+           family={Ullah},
+           familyi={U\bibinitperiod},
+           given={Zahid},
+           giveni={Z\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4ef868e1a439c8f5571e1605164b26d0}
+      \strng{fullhash}{78df91cbce7b2c298b120cd3728e45db}
+      \strng{fullhashraw}{78df91cbce7b2c298b120cd3728e45db}
+      \strng{bibnamehash}{78df91cbce7b2c298b120cd3728e45db}
+      \strng{authorbibnamehash}{78df91cbce7b2c298b120cd3728e45db}
+      \strng{authornamehash}{4ef868e1a439c8f5571e1605164b26d0}
+      \strng{authorfullhash}{78df91cbce7b2c298b120cd3728e45db}
+      \strng{authorfullhashraw}{78df91cbce7b2c298b120cd3728e45db}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Scientific Reports}
+      \field{title}{{Co-ADAM}: a co-evolutionary signaling game framework for equilibrium cyber deception in industrial {IoT}}
+      \field{volume}{16}
+      \field{year}{2026}
+      \field{pages}{25306}
+      \range{pages}{1}
+      \verb{doi}
+      \verb 10.1038/s41598-026-60920-0
+      \endverb
+    \endentry
+  \enddatalist
+  \missing{laudon2020}
+  \missing{pressman2019}
+\endrefsection
+\endinput
+
