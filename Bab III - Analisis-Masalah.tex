@@ -4,21 +4,325 @@
 % fungsional dan nonfungsional, analisis berbagai alternatif solusi yang dapat ditawarkan, dan
 % metode pemilihan solusi yang diusulkan.
 % ============================================================================================
+\cleardoublepage % memastikan bab baru dimulai di halaman ganjil (kanan)
 \chapter{ANALISIS MASALAH}
 \label{chap:analisis-masalah}
+
+Bab ini menganalisis masalah dari kondisi saat ini, menurunkan kebutuhan solusi, lalu memilih solusi secara terukur. Analisis dilakukan dengan studi kasus dokumen terhadap empat studi utama pada Bab~II. Cara ini dipilih karena tugas akhir ini bersifat penelitian dan objeknya adalah protokol publik, bukan organisasi tertentu yang dapat diwawancarai.
+
 \section{Analisis Kondisi Saat Ini}
-Menurut \textcite{laudon2020}, gambarkan terlebih dahulu model konseptual sistem yang ada saat ini. Model konseptual ini berisi berbagai komponen atau subsitem dan interaksi antarsubsistem tersebut. Setelah itu, berikan penjelasan tentang masalah yang ada pada sistem tersebut. Paragraf berikut berisi contoh penjabaran masalah sistem informasi fasilitas kesehatan untuk pasien \autocite{pressman2019}. 
+\label{sec:kondisi_saat_ini}
+Gambar~\ref{fig:kondisi_saat_ini} menunjukkan model konseptual sistem pertahanan Gasper saat ini. Sistem ini terdiri atas lima komponen. Komponen pertama adalah spesifikasi protokol yang memuat parameter tetap, yaitu \textit{reward} dasar, \textit{slashing} 1/32 saldo, batas inklusi 32 \textit{slot}, \textit{inactivity leak}, dan \textit{proposer boost} 40\% \parencite{laneve2025stochastic}. Komponen kedua adalah jaringan validator yang terdiri atas validator jujur dan koalisi penyerang. Komponen ketiga adalah lapisan konsensus LMD-GHOST dan Casper FFG. Komponen keempat adalah keluaran berupa justifikasi, finalisasi, \textit{reward}, dan penalti. Komponen kelima adalah siklus evaluasi dan tambalan, yaitu analisis formal dengan penyerang terskenario, temuan serangan baru, lalu tambalan manual melalui pembaruan protokol.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  font=\footnotesize,
+  box/.style={draw, rounded corners=2pt, align=center, inner sep=4pt, text width=#1,
+             execute at begin node={\hyphenpenalty=10000}},
+  box/.default=3.2cm,
+  arr/.style={-{Stealth[length=2.2mm]}, thick},
+  lbl/.style={font=\scriptsize\itshape, align=center},
+  masalah/.style={circle, draw=red!70!black, fill=red!10, text=red!70!black,
+                  font=\scriptsize\bfseries, inner sep=0.5pt, minimum size=6mm}
+]
+% Baris atas
+\node[box=3.6cm, fill=gray!12] (spec) at (1.8,0)
+  {\textbf{Spesifikasi protokol}\\(parameter tetap)\\[2pt]
+   \textit{reward} dasar, \textit{slashing} 1/32,\\
+   batas inklusi 32 \textit{slot},\\
+   \textit{inactivity leak},\\
+   \textit{proposer boost} 40\%};
+\node[box=3.2cm, fill=blue!6] (jujur) at (10.4,0.85)
+  {\textbf{Validator jujur}\\mengikuti protokol};
+\node[box=3.2cm, fill=red!6] (serang) at (10.4,-0.85)
+  {\textbf{Koalisi penyerang}\\$<1/3$ \textit{stake}, strategi berubah};
+\node[draw, dashed, rounded corners=2pt, fit=(jujur)(serang), inner sep=4pt,
+      label={[font=\footnotesize\bfseries]above:Jaringan validator}] (net) {};
+
+% Baris tengah
+\node[box=3.8cm, fill=green!8] (gasper) at (6.1,-3.0)
+  {\textbf{Lapisan konsensus}\\LMD-GHOST dan Casper FFG};
+\node[box=3.2cm, fill=gray!5] (out) at (10.4,-3.0)
+  {\textbf{Keluaran}\\justifikasi, finalisasi,\\\textit{reward}, penalti};
+
+% Baris bawah
+\node[box=3.2cm, fill=yellow!10] (eval) at (10.4,-5.7)
+  {\textbf{Evaluasi keamanan}\\analisis formal\\dengan penyerang\\terskenario};
+\node[box=3.0cm, fill=yellow!10] (temuan) at (6.1,-5.7)
+  {\textbf{Temuan}\\serangan baru};
+\node[box=3.6cm, fill=yellow!10] (tambal) at (1.8,-5.7)
+  {\textbf{Tambalan manual}\\melalui pembaruan\\protokol};
+
+% Panah
+\draw[arr] (spec.south) |- node[lbl, pos=0.25, left] {aturan dan\\parameter} (gasper.west);
+\draw[arr] (net.south) -- ++(0,-0.35) -| node[lbl, pos=0.3, above=1pt] {blok dan suara} (gasper.north);
+\draw[arr] (gasper.east) -- (out.west);
+\draw[arr] (out.south) -- node[lbl, right] {diukur} (eval.north);
+\draw[arr] (eval.west) -- (temuan.east);
+\draw[arr] (temuan.west) -- (tambal.east);
+\draw[arr] (tambal.west) -- ++(-0.45,0) |- (spec.west);
+\draw[arr, dashed, red!70!black] (spec.east) -- ++(0.7,0) |- node[lbl, pos=0.75, below] {diamati dan dipelajari penyerang} (serang.west);
+
+% Penanda masalah
+\node[masalah] at (spec.north east) {M1};
+\node[masalah] at (tambal.north east) {M2};
+\node[masalah] at (eval.north east) {M3};
+\node[masalah] at (out.north east) {M4};
+\end{tikzpicture}
+\caption{Model konseptual sistem pertahanan Gasper saat ini. Label M1 sampai M4 menandai letak masalah pada Tabel~\ref{tab:masalah}}
+\label{fig:kondisi_saat_ini}
+\end{figure}
+
+Interaksi antarkomponen berjalan sebagai berikut. Spesifikasi memberi aturan dan parameter kepada lapisan konsensus. Validator mengirim blok dan suara, lalu lapisan konsensus menghasilkan justifikasi, finalisasi, \textit{reward}, dan penalti. Keluaran tersebut dinilai melalui analisis formal yang memakai penyerang terskenario \parencite{laneve2025stochastic}. Jika serangan baru ditemukan, tambalan dirancang manual lalu dimasukkan ke spesifikasi. Persoalannya, siklus ini lambat dan bergantung pada manusia, sedangkan penyerang dapat mengamati parameter yang tetap dan menyesuaikan strateginya kapan saja. Dari model ini teridentifikasi empat masalah berikut.
+
+\textbf{M1. Parameter tetap dapat dipelajari penyerang.} Seluruh parameter insentif Gasper bernilai tetap. Penyerang adaptif cukup menguji batasnya secara bertahap. Pada PoW, penyerang menemukan amplitudo serangan 0,75 yang lolos deteksi sambil mempertahankan sekitar 40\% keuntungan, sehingga pertahanan statis ditembus dalam sekitar 20 hari \parencite{skowronski2026adaptive}. Gasper tidak memiliki mekanisme yang mencegah pola penyesuaian serupa.
+
+\textbf{M2. Mitigasi bersifat reaktif, khusus, dan bermata dua.} \textit{Proposer boost} hanya ditujukan untuk \textit{balancing}, sedangkan tambalan \textit{bouncing} pernah diterapkan lalu dihapus \parencite{laneve2025stochastic}. Setiap parameter juga memiliki efek dua sisi, seperti dijelaskan pada Subbab~\ref{subsec:mitigasi}. Selain itu, \textit{slashing} tidak menyentuh perilaku menahan blok dan suara, sehingga menaikkan \textit{slashing} saja tidak cukup. Belum ada mekanisme yang menimbang efek dua sisi tersebut sesuai kondisi serangan.
+
+\textbf{M3. Evaluasi terhadap penyerang tetap melebihkan ketangguhan.} Analisis formal memakai penyerang terskenario dan harus diulang untuk setiap varian \parencite{laneve2025stochastic}. Bukti dari domain lain menunjukkan bahayanya. Pertahanan yang dilatih tanpa penyerang ko-evolusioner menghasilkan \textit{reward} 146,41 dan tingkat mitigasi 0,8236 yang tampak tinggi, tetapi angka itu semu dan runtuh saat diuji melawan penyerang adaptif \parencite{wushishi2026coadam}. Masalah ini diperparah oleh tidak adanya acuan validasi model Gasper. \textcite{laneve2025stochastic} hanya dapat membandingkan modelnya dengan \textit{Hybrid Casper}, dan modelnya pun tidak konsisten soal panjang \textit{epoch}.
+
+\textbf{M4. Biaya pertahanan bagi validator jujur tidak terukur.} Analisis \textit{stake} pada \textcite{laneve2025stochastic} tidak memasukkan \textit{slashing} dan \textit{inactivity leak}, padahal \textit{time attack} menunjukkan bahwa validator jujur yang tertunda justru kehilangan \textit{stake} karena \textit{inactivity leak}. Sebaliknya, \textcite{skowronski2026adaptive} mengukur biaya pertahanan bagi pihak jujur secara eksplisit melalui tingkat salah tuduh 3,8\%. Tanpa ukuran serupa, suatu pertahanan bisa tampak aman tetapi memindahkan beban ke validator jujur. Kondisi ini juga berisiko mendorong sentralisasi \parencite{rizal2025enhancing}.
+
+Ringkasan keempat masalah disajikan pada Tabel~\ref{tab:masalah}.
+
+\begin{table}[htbp]
+\centering
+\caption{Masalah pada sistem pertahanan Gasper saat ini}
+\label{tab:masalah}
+\small
+\begin{tabular}{|p{0.7cm}|p{3.0cm}|p{4.7cm}|p{3.8cm}|}
+\hline
+\textbf{ID} & \textbf{Masalah} & \textbf{Bukti} & \textbf{Dampak} \\
+\hline
+M1 & Parameter tetap dapat dipelajari penyerang & Pertahanan statis ditembus dalam sekitar 20 hari, profit $-95\%$ menjadi $+65\%$ \parencite{skowronski2026adaptive} & Nilai yang dinilai aman kehilangan efektivitas \\
+\hline
+M2 & Mitigasi reaktif, khusus, dan bermata dua & \textit{Proposer boost} tetap 40\%, tambalan \textit{bouncing} dihapus, \textit{inactivity leak} dipakai penyerang \parencite{laneve2025stochastic} & Satu nilai statis tidak tepat untuk semua kondisi \\
+\hline
+M3 & Evaluasi terhadap penyerang tetap melebihkan ketangguhan & Penyerang terskenario dan tanpa acuan validasi \parencite{laneve2025stochastic}, kinerja semu tanpa ko-evolusi \parencite{wushishi2026coadam} & Kesimpulan aman yang menyesatkan \\
+\hline
+M4 & Biaya bagi validator jujur tidak terukur & Analisis tanpa \textit{slashing} dan \textit{inactivity leak} \parencite{laneve2025stochastic}, risiko sentralisasi \parencite{rizal2025enhancing} & Pertahanan memindahkan beban ke pihak jujur \\
+\hline
+\end{tabular}
+\end{table}
+
 \section{Analisis Kebutuhan}
-\lipsum[4]
+\label{sec:analisis_kebutuhan}
+Kebutuhan diturunkan dari masalah M1 sampai M4 dan dari praktik yang terbukti pada empat studi utama. Setiap kebutuhan diberi dasar literatur agar dapat dipertanggungjawabkan pada tahap evaluasi.
+
 \subsection{Identifikasi Masalah Pengguna}
-\lipsum[5]
+\label{subsec:masalah_pengguna}
+Pengguna hasil tugas akhir ini adalah empat pemangku kepentingan pada Tabel~\ref{tab:pengguna}. Peneliti keamanan dan perancang protokol menjadi pengguna langsung arena. Validator jujur dan pengguna jaringan menjadi pihak yang menerima dampak kebijakan pertahanan.
+
+\begin{table}[htbp]
+\centering
+\caption{Masalah dan kebutuhan setiap pemangku kepentingan}
+\label{tab:pengguna}
+\small
+\begin{tabular}{|p{2.2cm}|p{4.6cm}|p{4.2cm}|p{1.2cm}|}
+\hline
+\textbf{Pengguna} & \textbf{Masalah yang dihadapi} & \textbf{Kebutuhan} & \textbf{Terkait} \\
+\hline
+Peneliti keamanan protokol & Analisis formal harus diulang untuk setiap varian serangan, dan tidak ada penyerang yang mencari celah sendiri \parencite{laneve2025stochastic} & Arena yang menghasilkan penyerang adaptif secara otomatis di atas simulator tervalidasi & M3 \\
+\hline
+Perancang protokol dan tata kelola & Tambalan diputuskan per serangan tanpa bukti lintas kondisi \parencite{laneve2025stochastic} & Rekomendasi parameter yang teruji melawan berbagai penyerang, aman, dan dapat diaudit sebelum diusulkan \parencite{skowronski2026adaptive} & M1, M2 \\
+\hline
+Validator jujur & Menanggung penalti inklusi dan \textit{inactivity leak} saat latensi tinggi atau disensor \parencite{laneve2025stochastic} & Pertahanan yang tidak memindahkan biaya kepada validator jujur & M4 \\
+\hline
+Pengguna jaringan & Finalisasi yang tertunda menahan transaksi \parencite{laneve2025stochastic} & Jaminan \textit{safety} dan \textit{liveness} yang terukur & M2, M3 \\
+\hline
+\end{tabular}
+\end{table}
+
 \subsection{Kebutuhan Fungsional}
-\lipsum[6]
+\label{subsec:kebutuhan_fungsional}
+Kebutuhan fungsional adalah kemampuan yang harus dimiliki arena agar keempat masalah dapat dijawab. Daftarnya disajikan pada Tabel~\ref{tab:kebutuhan_fungsional}.
+
+\begin{table}[htbp]
+\centering
+\caption{Kebutuhan fungsional arena penyerang dan pertahanan}
+\label{tab:kebutuhan_fungsional}
+\small
+\begin{tabular}{|p{1.1cm}|p{6.6cm}|p{3.0cm}|p{1.5cm}|}
+\hline
+\textbf{ID} & \textbf{Kebutuhan} & \textbf{Dasar} & \textbf{Masalah} \\
+\hline
+KF-01 & Mensimulasikan siklus \textit{slot} dan \textit{epoch} Gasper, yaitu pemilihan \textit{proposer} acak, propagasi blok dengan latensi, \textit{attestation}, LMD-GHOST, serta justifikasi dan finalisasi dua pertiga & Struktur modul \textcite{laneve2025stochastic} & M3 \\
+\hline
+KF-02 & Menghitung \textit{reward}, penalti inklusi, \textit{inactivity leak}, dan \textit{slashing} setiap \textit{epoch} sesuai nilai parameter yang sedang berlaku & \textcite{laneve2025stochastic} & M2, M4 \\
+\hline
+KF-03 & Menyediakan aksi dasar penyerang, yaitu menahan dan melepas blok, menahan dan melepas suara ke cabang tertentu, serta tidak menyertakan \textit{attestation}, termasuk skenario \textit{balancing} 4 dari 13 validator untuk verifikasi & \textcite{laneve2025stochastic} & M3 \\
+\hline
+KF-04 & Menyediakan antarmuka \textit{Markov game} dua agen dengan frekuensi keputusan berbeda (\textit{slot} dan \textit{epoch}), pengamatan sebagian bagi pertahanan, dan \textit{reward} terpisah & \textcite{wushishi2026coadam} & M1 \\
+\hline
+KF-05 & Menyetel empat parameter secara diskret, satu parameter per keputusan, dengan \textit{action masking} untuk rentang, langkah, dan pergeseran kumulatif & \textcite{skowronski2026adaptive} & M1, M2 \\
+\hline
+KF-06 & Melatih kedua agen secara ko-evolusioner dengan kumpulan potret penyerang historis & \textcite{wushishi2026coadam} & M1, M3 \\
+\hline
+KF-07 & Mengevaluasi pertahanan melawan tiga rezim penyerang dan membandingkannya dengan pertahanan statis, berbasis aturan, dan DRL satu sisi & \textcite{wushishi2026coadam}, \textcite{skowronski2026adaptive} & M3 \\
+\hline
+KF-08 & Mencatat profit relatif, pelanggaran \textit{safety}, keterlambatan finalisasi, biaya pertahanan, \textit{exploitability}, dan jejak perubahan parameter & \textcite{skowronski2026adaptive}, \textcite{wushishi2026coadam} & M3, M4 \\
+\hline
+\end{tabular}
+\end{table}
+
 \subsection{Kebutuhan Nonfungsional}
-\lipsum[7]
+\label{subsec:kebutuhan_nonfungsional}
+Kebutuhan nonfungsional menetapkan mutu arena. Setiap kebutuhan diberi kriteria terukur pada Tabel~\ref{tab:kebutuhan_nonfungsional}. Angka yang tidak berasal dari literatur merupakan target rancangan penulis.
+
+\begin{table}[htbp]
+\centering
+\caption{Kebutuhan nonfungsional beserta kriteria terukurnya}
+\label{tab:kebutuhan_nonfungsional}
+\small
+\begin{tabular}{|p{1.3cm}|p{2.3cm}|p{5.7cm}|p{2.9cm}|}
+\hline
+\textbf{ID} & \textbf{Atribut} & \textbf{Kriteria terukur} & \textbf{Dasar} \\
+\hline
+KNF-01 & Fidelitas & Pada konfigurasi \textcite{laneve2025stochastic}, peluang justifikasi dan finalisasi berselisih paling besar 0,05 dari acuan. Pada konfigurasi kalibrasi, metrik normal lolos uji Kolmogorov-Smirnov ($p > 0{,}05$) & \textcite{laneve2025stochastic}, \textcite{skowronski2026adaptive} \\
+\hline
+KNF-02 & Kepatuhan invarian & Nol pelanggaran invarian dan batas parameter di seluruh pelatihan dan pengujian & \textcite{skowronski2026adaptive} \\
+\hline
+KNF-03 & Determinisme & Aksi diskret, \textit{seed} tercatat, dan kebijakan dibekukan saat pengujian sehingga hasil dapat diulang identik & \textcite{skowronski2026adaptive} \\
+\hline
+KNF-04 & Ketelitian statistik & Pelatihan dengan minimal 10 \textit{seed}, pengujian 30 kali, uji Wilcoxon dengan koreksi Bonferroni, dan Cohen's $d$ & \textcite{wushishi2026coadam}, \textcite{skowronski2026adaptive} \\
+\hline
+KNF-05 & Efisiensi & Satu sesi pelatihan selesai paling lama 24 jam pada CPU \textit{multi-core} dan satu GPU kelas menengah (target penulis) & Acuan 8 jam per 200 ribu langkah \parencite{skowronski2026adaptive} \\
+\hline
+KNF-06 & Skalabilitas & Kinerja kebijakan pada 256 validator turun paling banyak 5\% dari kinerja pada 64 validator (target penulis), lalu diuji hingga 1.000 validator & \textcite{wushishi2026coadam} \\
+\hline
+KNF-07 & Keadilan & Perubahan parameter berlaku seragam untuk semua validator, tanpa perlakuan berdasarkan identitas & \textcite{rizal2025enhancing} \\
+\hline
+KNF-08 & Keterjelasan & Setiap perubahan parameter tercatat bersama \textit{state} pemicunya, dan sebaran aksi dilaporkan & \textcite{skowronski2026adaptive}, \textcite{rizal2025enhancing} \\
+\hline
+\end{tabular}
+\end{table}
 
 \section{Analisis Pemilihan Solusi}
+\label{sec:pemilihan_solusi}
+
 \subsection{Alternatif Solusi}
-\lipsum[8]
+\label{subsec:alternatif}
+Berdasarkan Bab~II, terdapat enam alternatif solusi. Bukti dan kelemahan setiap alternatif dirangkum pada Tabel~\ref{tab:alternatif}.
+
+\begin{enumerate}
+	\item \textbf{A1, parameter statis dengan analisis formal berulang.} Ini adalah kondisi saat ini. Analisis formal mengukur peluang justifikasi dan finalisasi dengan presisi, tetapi penyerangnya terskenario dan setiap varian harus dianalisis ulang secara manual \parencite{laneve2025stochastic}.
+	\item \textbf{A2, deteksi berbasis ML tanpa penyetelan parameter.} ML dapat memprediksi dan mendeteksi serangan \parencite{rizal2025enhancing}. Namun, pada PoW, klasifikator terawasi hanya mencapai F1 0,78 karena gagal mengenali varian baru, dan detektor GAN mencapai 0,86 \parencite{skowronski2026adaptive}. Alternatif ini juga tidak mengubah insentif.
+	\item \textbf{A3, pengendali adaptif non-DRL.} Pengendali berbasis aturan, PID, EWMA, dan \textit{bandit} menyetel parameter secara otomatis, tetapi tidak mengantisipasi perubahan strategi. Profit penyerang tetap positif antara $+58\%$ dan $+92\%$ \parencite{skowronski2026adaptive}.
+	\item \textbf{A4, DRL satu sisi melawan penyerang tetap.} Agen DRL menekan profit penyerang berbasis aturan hingga $-42\%$ \parencite{skowronski2026adaptive}. Namun, pertahanan yang dilatih melawan penyerang tetap turun tingkat mitigasinya dari 0,778 menjadi 0,681 ketika lawannya ikut belajar \parencite{wushishi2026coadam}.
+	\item \textbf{A5, model permainan analitis (Stackelberg).} Model ini memiliki penurunan kinerja terkecil antarrezim penyerang (skor 0,0892), tetapi mengasumsikan penyerang mengetahui struktur permainan secara penuh, dan tingkat mitigasinya di bawah pertahanan ko-evolusioner (0,753 berbanding 0,803) \parencite{wushishi2026coadam}. Ruang strategi penyerang Gasper yang diputuskan setiap \textit{slot} juga terlalu besar untuk diselesaikan secara analitis.
+	\item \textbf{A6, MARL ko-evolusioner dengan kumpulan penyerang dan \textit{action masking}.} Pertahanan dilatih bersama penyerang yang belajar dan kumpulan penyerang historis \parencite{wushishi2026coadam}, sedangkan perubahan parameter dibatasi dengan \textit{action masking} \parencite{skowronski2026adaptive}. Kelemahannya, alternatif ini belum diuji pada \textit{blockchain}, konvergensinya tidak dijamin, dan biaya komputasinya lebih besar.
+\end{enumerate}
+
+\begin{table}[htbp]
+\centering
+\caption{Ringkasan alternatif solusi beserta bukti dan kelemahannya}
+\label{tab:alternatif}
+\small
+\begin{tabular}{|p{0.9cm}|p{3.0cm}|p{4.3cm}|p{4.0cm}|}
+\hline
+\textbf{Kode} & \textbf{Alternatif} & \textbf{Bukti utama} & \textbf{Kelemahan utama} \\
+\hline
+A1 & Parameter statis dan analisis formal & Peluang finalisasi terukur presisi \parencite{laneve2025stochastic} & Penyerang terskenario, analisis ulang manual \\
+\hline
+A2 & Deteksi ML tanpa penyetelan & F1 0,78 (terawasi) dan 0,86 (GAN) \parencite{skowronski2026adaptive} & Tidak mengubah insentif, gagal pada varian baru \\
+\hline
+A3 & Pengendali adaptif non-DRL & Profit penyerang $+58\%$ sampai $+92\%$ \parencite{skowronski2026adaptive} & Tidak mengantisipasi perubahan strategi \\
+\hline
+A4 & DRL satu sisi & Profit $-42\%$ melawan penyerang berbasis aturan \parencite{skowronski2026adaptive} & Mitigasi turun 0,778 ke 0,681 melawan penyerang adaptif \parencite{wushishi2026coadam} \\
+\hline
+A5 & Permainan analitis (Stackelberg) & Penurunan terkecil, skor 0,0892 \parencite{wushishi2026coadam} & Butuh pengetahuan penuh, mitigasi absolut lebih rendah \\
+\hline
+A6 & MARL ko-evolusioner dengan \textit{action masking} & Mitigasi 0,803 melawan penyerang adaptif, nol pelanggaran batas \parencite{wushishi2026coadam, skowronski2026adaptive} & Belum diuji pada \textit{blockchain}, konvergensi tidak dijamin \\
+\hline
+\end{tabular}
+\end{table}
+
 \subsection{Analisis Penentuan Solusi}
-\lipsum[9]
+\label{subsec:penentuan_solusi}
+Alternatif dinilai dengan enam kriteria yang diturunkan langsung dari masalah dan kebutuhan pada Subbab~\ref{sec:kondisi_saat_ini} dan \ref{sec:analisis_kebutuhan}.
+\begin{enumerate}
+	\item \textbf{K1, tangguh terhadap penyerang yang belajar} (M1, M3, KF-06, KF-07).
+	\item \textbf{K2, menyetel parameter insentif}, bukan hanya mendeteksi (M2, KF-05).
+	\item \textbf{K3, menjaga invarian protokol} (KNF-02).
+	\item \textbf{K4, tidak bergantung pada label serangan atau pengetahuan penuh tentang penyerang} (KF-04).
+	\item \textbf{K5, deterministik dan dapat diaudit} (KNF-03, KNF-08).
+	\item \textbf{K6, layak secara komputasi} (KNF-05).
+\end{enumerate}
+Hasil penilaian disajikan pada Tabel~\ref{tab:penilaian}. K1 menjadi kriteria penentu karena merupakan inti masalah tugas akhir ini.
+
+\begin{table}[htbp]
+\centering
+\caption{Penilaian alternatif solusi terhadap kriteria pemilihan}
+\label{tab:penilaian}
+\small
+\begin{tabular}{|p{4.3cm}|c|c|c|c|c|c|}
+\hline
+\textbf{Alternatif} & \textbf{K1} & \textbf{K2} & \textbf{K3} & \textbf{K4} & \textbf{K5} & \textbf{K6} \\
+\hline
+A1 Parameter statis dan analisis formal & $\times$ & $\circ$ & \checkmark & $\times$ & \checkmark & \checkmark \\
+\hline
+A2 Deteksi ML tanpa penyetelan & $\circ$ & $\times$ & \checkmark & $\circ$ & $\circ$ & \checkmark \\
+\hline
+A3 Pengendali adaptif non-DRL & $\times$ & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark \\
+\hline
+A4 DRL satu sisi & $\circ$ & \checkmark & \checkmark & $\circ$ & \checkmark & \checkmark \\
+\hline
+A5 Permainan analitis & $\circ$ & \checkmark & \checkmark & $\times$ & \checkmark & $\circ$ \\
+\hline
+A6 MARL ko-evolusioner & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark & $\circ$ \\
+\hline
+\multicolumn{7}{|l|}{\footnotesize Keterangan: \checkmark{} terpenuhi, $\circ$ terpenuhi sebagian, $\times$ tidak terpenuhi.} \\
+\hline
+\end{tabular}
+\end{table}
+
+A6 adalah satu-satunya alternatif yang memenuhi K1 sampai K5. A3 dan A4 unggul pada kemudahan, tetapi gagal pada K1 yang menjadi inti masalah. A5 kuat secara teori, tetapi gagal pada K4 karena penyerang nyata tidak terikat pada struktur permainan yang diasumsikan. Kelemahan A6 pada K6 masih dapat diterima karena satu sesi pelatihan DRL pada \textcite{skowronski2026adaptive} selesai sekitar 8 jam, dan pelatihan ko-evolusioner pada \textcite{wushishi2026coadam} konvergen pada episode ke-1.377 dari 5.000. Karena itu, A6 dipilih sebagai solusi.
+
+Setelah alternatif ditentukan, algoritma pembelajarannya perlu dipilih. Dua keluarga dibandingkan pada Tabel~\ref{tab:algoritma}, yaitu keluarga DQN dan keluarga \textit{actor-critic} seperti DDPG dan PPO.
+
+\begin{table}[htbp]
+\centering
+\caption{Perbandingan keluarga algoritma untuk kedua agen}
+\label{tab:algoritma}
+\small
+\begin{tabular}{|p{3.0cm}|p{4.8cm}|p{4.8cm}|}
+\hline
+\textbf{Aspek} & \textbf{Keluarga DQN (DDQN, \textit{dueling})} & \textbf{Keluarga \textit{actor-critic} (DDPG, PPO)} \\
+\hline
+Kecocokan dengan aksi diskret & Langsung sesuai & DDPG dirancang untuk aksi kontinu \parencite{skowronski2026adaptive} \\
+\hline
+Determinisme keluaran & 100\% identik antar-\textit{node} \parencite{skowronski2026adaptive} & DDPG 99,7\% karena galat pembulatan \parencite{skowronski2026adaptive} \\
+\hline
+Stabilitas pelatihan & Konvergen 197 ribu langkah, variasi $\pm 4{,}2\%$ \parencite{skowronski2026adaptive} & DDPG 221 ribu langkah dan butuh penyetelan cermat \parencite{skowronski2026adaptive} \\
+\hline
+Bukti pada pelatihan ko-evolusioner & Pertahanan DQN terbukti, dan menghapus DQN menurunkan \textit{reward} 23\% \parencite{wushishi2026coadam} & PPO pada IIoT hanya diuji melawan ancaman yang berubah, bukan penyerang ko-evolusioner \parencite{wushishi2026coadam} \\
+\hline
+\end{tabular}
+\end{table}
+
+Bukti pada keempat studi utama lebih kuat untuk keluarga DQN. Karena itu, agen pertahanan memakai DDQN dengan \textit{dueling network} dan PER, mengikuti konfigurasi terbaik \textcite{skowronski2026adaptive}. Agen penyerang juga memakai DDQN. \textit{Q-learning} tabel seperti pada \textcite{wushishi2026coadam} tidak dipakai karena pengamatan penyerang memuat nilai kontinu seperti selisih bobot antarcabang, sehingga tabel tidak praktis. Keluarga \textit{actor-critic} disiapkan sebagai alternatif jika pelatihan DDQN tidak konvergen akibat lawan yang terus berubah, sesuai keterbatasan pada Subbab~\ref{subsec:dqn}.
+
+Solusi terpilih terdiri atas enam komponen, yaitu simulator Gasper, agen penyerang, agen pertahanan, lapisan \textit{action masking}, kumpulan penyerang historis, dan modul evaluasi. Keterlacakan antara masalah, kebutuhan, komponen, dan pertanyaan penelitian disajikan pada Tabel~\ref{tab:keterlacakan}. Rancangan rinci setiap komponen dan perbandingannya dengan Gambar~\ref{fig:kondisi_saat_ini} disajikan pada Bab~IV.
+
+\begin{table}[htbp]
+\centering
+\caption{Keterlacakan masalah, kebutuhan, komponen solusi, dan pertanyaan penelitian}
+\label{tab:keterlacakan}
+\small
+\begin{tabular}{|p{1.5cm}|p{3.1cm}|p{5.6cm}|p{2.0cm}|}
+\hline
+\textbf{Masalah} & \textbf{Kebutuhan} & \textbf{Komponen solusi} & \textbf{RQ} \\
+\hline
+M1 & KF-04, KF-05, KF-06 & Agen pertahanan DDQN yang menyetel parameter setiap \textit{epoch} & RQ2 \\
+\hline
+M2 & KF-02, KF-05, KNF-02 & Empat parameter insentif dengan \textit{action masking} & RQ1, RQ2 \\
+\hline
+M3 & KF-01, KF-03, KF-07, KNF-01 & Simulator tervalidasi, agen penyerang yang belajar, kumpulan penyerang, evaluasi tiga rezim & RQ1, RQ3 \\
+\hline
+M4 & KF-08, KNF-07 & Suku biaya pada Persamaan~\eqref{eq:reward_pertahanan} dan pencatatan biaya pertahanan & RQ3 \\
+\hline
+\end{tabular}
+\end{table}
+
+Pilihan ini membawa empat risiko yang perlu diantisipasi. Pertama, pelatihan ko-evolusioner dapat berputar tanpa konvergen. Kedua, \textit{exploitability} hanya relatif terhadap kumpulan penyerang \parencite{wushishi2026coadam}. Ketiga, hasil simulasi belum tentu sama dengan jaringan nyata, sebagaimana selisih antara simulasi dan uji fisik pada \textcite{wushishi2026coadam}. Keempat, satu koalisi penyerang tidak mewakili penyerang independen yang saling bersaing. Mitigasi keempat risiko ini dirinci pada Bab~V.
