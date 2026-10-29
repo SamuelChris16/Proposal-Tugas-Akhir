@@ -19,38 +19,6 @@
 
 \refsection{0}
   \datalist[entry]{apa/apasortcite//global/global/global}
-    \entry{ethereum2025attackdefense}{online}{}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=91a561dbd1e35b5459edfad15075d17c}{%
-           family={{Ethereum Foundation}},
-           familyi={E\bibinitperiod}}}%
-      }
-      \strng{namehash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{fullhash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{fullhashraw}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{bibnamehash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{authorbibnamehash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{authornamehash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{authorfullhash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{authorfullhashraw}{91a561dbd1e35b5459edfad15075d17c}
-      \field{sortinit}{E}
-      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
-      \field{labeldatesource}{nodate}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{title}{Ethereum Proof-of-Stake Attack and Defense}
-      \field{urlday}{16}
-      \field{urlmonth}{10}
-      \field{urlyear}{2026}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://ethereum.org/developers/docs/consensus-mechanisms/pos/attack-and-defense/
-      \endverb
-      \verb{url}
-      \verb https://ethereum.org/developers/docs/consensus-mechanisms/pos/attack-and-defense/
-      \endverb
-    \endentry
     \entry{laneve2025stochastic}{article}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=b4b4335f6388def5643b477e6614cbed}{%
@@ -89,65 +57,6 @@
       \range{pages}{1}
       \verb{doi}
       \verb 10.1016/j.comcom.2025.108123
-      \endverb
-    \endentry
-    \entry{ma2025multiagent}{article}{}{}
-      \name{author}{5}{}{%
-        {{un=0,uniquepart=base,hash=b7474a83684166d88e90f36969b7fa98}{%
-           family={Ma},
-           familyi={M\bibinitperiod},
-           given={Yongze},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=e1af60a68382a919b168f2b6d6c41b0c}{%
-           family={Zhao},
-           familyi={Z\bibinitperiod},
-           given={Yanqing},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=7150f56689dcf5a744083321653c466d}{%
-           family={Hu},
-           familyi={H\bibinitperiod},
-           given={Yi},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=8a98f9e24fee7423386f59ad71d8c22a}{%
-           family={He},
-           familyi={H\bibinitperiod},
-           given={Xingyu},
-           giveni={X\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=bec36fe057c3cdb966565c48061dd6bd}{%
-           family={Feng},
-           familyi={F\bibinitperiod},
-           given={Sifang},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{b93fa07bf437045558f15c51dfddf8a0}
-      \strng{fullhash}{198da3cbe8df55f746d17cf229eed99b}
-      \strng{fullhashraw}{198da3cbe8df55f746d17cf229eed99b}
-      \strng{bibnamehash}{198da3cbe8df55f746d17cf229eed99b}
-      \strng{authorbibnamehash}{198da3cbe8df55f746d17cf229eed99b}
-      \strng{authornamehash}{b93fa07bf437045558f15c51dfddf8a0}
-      \strng{authorfullhash}{198da3cbe8df55f746d17cf229eed99b}
-      \strng{authorfullhashraw}{198da3cbe8df55f746d17cf229eed99b}
-      \field{sortinit}{M}
-      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Sensors}
-      \field{number}{19}
-      \field{title}{Multi-Agent Deep Reinforcement Learning for Joint Task Offloading and Resource Allocation in {IIoT} with Dynamic Priorities}
-      \field{volume}{25}
-      \field{year}{2025}
-      \field{pages}{6160}
-      \range{pages}{1}
-      \verb{doi}
-      \verb 10.3390/s25196160
       \endverb
     \endentry
     \entry{rizal2025enhancing}{article}{}{}
@@ -285,38 +194,6 @@
     \endentry
   \enddatalist
   \datalist[entry]{apa/global//global/global/global}
-    \entry{ethereum2025attackdefense}{online}{}{}
-      \name{author}{1}{}{%
-        {{un=0,uniquepart=base,hash=91a561dbd1e35b5459edfad15075d17c}{%
-           family={{Ethereum Foundation}},
-           familyi={E\bibinitperiod}}}%
-      }
-      \strng{namehash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{fullhash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{fullhashraw}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{bibnamehash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{authorbibnamehash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{authornamehash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{authorfullhash}{91a561dbd1e35b5459edfad15075d17c}
-      \strng{authorfullhashraw}{91a561dbd1e35b5459edfad15075d17c}
-      \field{sortinit}{E}
-      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
-      \field{labeldatesource}{nodate}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{title}{Ethereum Proof-of-Stake Attack and Defense}
-      \field{urlday}{16}
-      \field{urlmonth}{10}
-      \field{urlyear}{2026}
-      \field{urldateera}{ce}
-      \verb{urlraw}
-      \verb https://ethereum.org/developers/docs/consensus-mechanisms/pos/attack-and-defense/
-      \endverb
-      \verb{url}
-      \verb https://ethereum.org/developers/docs/consensus-mechanisms/pos/attack-and-defense/
-      \endverb
-    \endentry
     \entry{laneve2025stochastic}{article}{}{}
       \name{author}{2}{}{%
         {{un=0,uniquepart=base,hash=b4b4335f6388def5643b477e6614cbed}{%
@@ -355,65 +232,6 @@
       \range{pages}{1}
       \verb{doi}
       \verb 10.1016/j.comcom.2025.108123
-      \endverb
-    \endentry
-    \entry{ma2025multiagent}{article}{}{}
-      \name{author}{5}{}{%
-        {{un=0,uniquepart=base,hash=b7474a83684166d88e90f36969b7fa98}{%
-           family={Ma},
-           familyi={M\bibinitperiod},
-           given={Yongze},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=e1af60a68382a919b168f2b6d6c41b0c}{%
-           family={Zhao},
-           familyi={Z\bibinitperiod},
-           given={Yanqing},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=7150f56689dcf5a744083321653c466d}{%
-           family={Hu},
-           familyi={H\bibinitperiod},
-           given={Yi},
-           giveni={Y\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=8a98f9e24fee7423386f59ad71d8c22a}{%
-           family={He},
-           familyi={H\bibinitperiod},
-           given={Xingyu},
-           giveni={X\bibinitperiod},
-           givenun=0}}%
-        {{un=0,uniquepart=base,hash=bec36fe057c3cdb966565c48061dd6bd}{%
-           family={Feng},
-           familyi={F\bibinitperiod},
-           given={Sifang},
-           giveni={S\bibinitperiod},
-           givenun=0}}%
-      }
-      \strng{namehash}{b93fa07bf437045558f15c51dfddf8a0}
-      \strng{fullhash}{198da3cbe8df55f746d17cf229eed99b}
-      \strng{fullhashraw}{198da3cbe8df55f746d17cf229eed99b}
-      \strng{bibnamehash}{198da3cbe8df55f746d17cf229eed99b}
-      \strng{authorbibnamehash}{198da3cbe8df55f746d17cf229eed99b}
-      \strng{authornamehash}{b93fa07bf437045558f15c51dfddf8a0}
-      \strng{authorfullhash}{198da3cbe8df55f746d17cf229eed99b}
-      \strng{authorfullhashraw}{198da3cbe8df55f746d17cf229eed99b}
-      \field{sortinit}{M}
-      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
-      \field{extradatescope}{labelyear}
-      \field{labeldatesource}{}
-      \true{uniqueprimaryauthor}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{journaltitle}{Sensors}
-      \field{number}{19}
-      \field{title}{Multi-Agent Deep Reinforcement Learning for Joint Task Offloading and Resource Allocation in {IIoT} with Dynamic Priorities}
-      \field{volume}{25}
-      \field{year}{2025}
-      \field{pages}{6160}
-      \range{pages}{1}
-      \verb{doi}
-      \verb 10.3390/s25196160
       \endverb
     \endentry
     \entry{rizal2025enhancing}{article}{}{}
@@ -550,8 +368,6 @@
       \endverb
     \endentry
   \enddatalist
-  \missing{laudon2020}
-  \missing{pressman2019}
 \endrefsection
 \endinput
 
