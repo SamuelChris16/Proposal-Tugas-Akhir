@@ -124,7 +124,7 @@ Tugas akhir ini menggunakan pendekatan eksperimen simulasi kuantitatif dengan ta
 \begin{enumerate}
 	\item \textbf{Investigasi dan studi literatur.} Menelusuri kondisi keamanan konsensus PoS dan melakukan \textit{systematic literature review} (SLR) di Scopus dengan \textit{query} \texttt{TITLE-ABS-KEY(("proof of stake" OR blockchain OR consensus) AND "reinforcement learning" AND (attack OR defense OR security OR "selfish mining"))}. Hasilnya disajikan pada Bab~II.
 	\item \textbf{Analisis kebutuhan dan pemilihan solusi.} Menurunkan masalah, kebutuhan fungsional, dan kebutuhan nonfungsional dari studi kasus dokumen terhadap keempat studi utama, lalu membandingkan alternatif solusi dengan kriteria yang terukur. Hasilnya disajikan pada Bab~III.
-	\item \textbf{Perancangan simulator dan formulasi permainan.} Merancang arsitektur secara bertahap dari konteks sistem ke komponen (model C4) dengan diagram UML. Struktur modul simulator mengacu pada \textcite{laneve2025stochastic}. Ruang \textit{state}, \textit{action}, dan \textit{reward} kedua agen dirumuskan sebagai \textit{Markov game} untuk menjawab RQ1.
+	\item \textbf{Perancangan simulator dan formulasi permainan.} Merancang arsitektur secara bertahap dari konteks sistem ke komponen (model C4) dengan diagram UML. Struktur modul simulator mengacu pada \textcite{laneve2025stochastic}. Ruang \textit{state}, \textit{action}, dan \textit{reward} kedua agen dirumuskan sebagai \textit{Markov game} untuk menjawab RQ1. Model konseptualnya disajikan pada Bab~IV, dan rinciannya disusun pada awal implementasi sesuai Bab V.
 	\item \textbf{Implementasi dan validasi simulator.} Mengimplementasikan simulator dengan Python dan antarmuka multi-agen PettingZoo, lalu memvalidasinya dengan kriteria pertama pada Subbab~\ref{sec:tujuan}. Tahap berikutnya hanya dilanjutkan jika simulator lolos validasi.
 	\item \textbf{Pembanding.} Menyiapkan tiga pembanding, yaitu parameter statis, pengendali adaptif berbasis aturan, dan agen DRL satu sisi yang dilatih melawan penyerang tetap, mengikuti rancangan pembanding \textcite{skowronski2026adaptive} dan \textcite{wushishi2026coadam}.
 	\item \textbf{Pelatihan ko-evolusioner.} Melatih agen pertahanan DDQN dengan \textit{dueling network} dan \textit{action masking} \parencite{skowronski2026adaptive} melawan agen penyerang yang ikut belajar dan kumpulan 10 kebijakan penyerang historis \parencite{wushishi2026coadam}. Implementasi memakai PyTorch.
@@ -147,7 +147,7 @@ Keterkaitan tahapan dengan rumusan masalah dirangkum pada Tabel~\ref{tab:methodo
 \hline
 2 & Analisis kebutuhan dan pemilihan solusi & Latar belakang & Kebutuhan dan solusi terpilih (Bab~III) \\
 \hline
-3 & Perancangan simulator dan permainan & RQ1 & Arsitektur simulator dan \textit{Markov game} (Bab~IV) \\
+3 & Perancangan simulator dan permainan & RQ1 & Model konseptual solusi (Bab~IV), lalu arsitektur rinci \\
 \hline
 4 & Implementasi dan validasi simulator & RQ1, kriteria 1 & Simulator tervalidasi \\
 \hline
