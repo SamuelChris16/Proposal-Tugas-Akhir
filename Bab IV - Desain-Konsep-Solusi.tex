@@ -1,9 +1,129 @@
-% ==========================================
-% BAB IV DESAIN KONSEP SOLUSI
-% ==========================================
+\cleardoublepage % memastikan bab baru dimulai di halaman ganjil (kanan)
 \chapter{DESAIN KONSEP SOLUSI}
 \label{chap:desain-konsep-solusi}
-Ilustrasikan desain konsep solusi dalam bentuk model konseptual dan penjelasan secara ringkas, 
-beserta perbedaannya dengan sistem saat ini. Ilustrasi harus dapat dibandingkan (\textit{before} and \textit{after}). 
-Karena masih berupa proposal, bab ini hanya berisi gambar desain konsep solusi tersebut dan 
-penjelasan perbandingannya dengan gambar sistem yang ada saat ini (yang tergambar di awal Bab \ref{chap:analisis-masalah}).
+
+Bab ini menyajikan model konseptual solusi terpilih pada Subbab~\ref{subsec:penentuan_solusi}, lalu membandingkannya dengan kondisi saat ini pada Gambar~\ref{fig:kondisi_saat_ini}. Agar mudah dibandingkan, tata letak gambar solusi dibuat sama dengan gambar kondisi saat ini. Kotak yang setara menempati posisi yang sama, kotak baru ditambahkan di baris paling atas dan paling bawah, dan label S1 sampai S4 diletakkan di tempat masalah M1 sampai M4 sebelumnya.
+
+\section{Model Konseptual Solusi}
+\label{sec:model_solusi}
+Gambar~\ref{fig:desain_solusi} menunjukkan arena penyerang dan pertahanan yang diusulkan. Perubahan utamanya ada pada dua siklus. Siklus pertama adalah siklus serangan. Validator penyerang tidak lagi menjalankan skenario tetap, tetapi digantikan agen penyerang yang belajar setiap \textit{slot} dan dilatih bersama kumpulan penyerang historis \parencite{wushishi2026coadam}. Siklus kedua adalah siklus pertahanan. Tambalan manual digantikan agen pertahanan yang mengamati keluaran jaringan setiap \textit{epoch}, lalu mengusulkan perubahan parameter yang disaring \textit{action masking} sebelum diterapkan \parencite{skowronski2026adaptive}.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+  font=\footnotesize,
+  box/.style={draw, rounded corners=2pt, align=center, inner sep=4pt, text width=#1, font=\footnotesize,
+             execute at begin node={\hyphenpenalty=10000}},
+  box/.default=3.2cm,
+  arr/.style={-{Stealth[length=2.2mm]}, thick},
+  lbl/.style={font=\scriptsize\itshape, align=center},
+  solusi/.style={circle, draw=green!45!black, fill=green!12, text=green!40!black,
+                 font=\scriptsize\bfseries, inner sep=0.5pt, minimum size=6mm}
+]
+% Baris paling atas
+\node[box=3.6cm, fill=red!4] (pool) at (6.1,2.1)
+  {\textbf{Kumpulan penyerang}\\$K=10$ potret historis};
+
+% Baris atas
+\node[box=3.6cm, fill=gray!12] (spec) at (1.8,0)
+  {\textbf{Spesifikasi protokol}\\[2pt]
+   \textit{Invarian terkunci:}\\ambang 2/3, \textit{slot} 12 detik,\\\textit{epoch} 32 \textit{slot}, \textit{proposer boost}\\[2pt]
+   \textit{Parameter adaptif:}\\$\kappa_r$, $\kappa_s$, $\lambda_{\text{inc}}$, $\kappa_l$};
+\node[box=3.8cm, fill=blue!6] (jujur) at (10.6,0.85)
+  {\textbf{Validator jujur}\\mengikuti protokol};
+\node[box=3.8cm, fill=red!6] (serang) at (10.6,-0.85)
+  {\textbf{Agen penyerang DDQN}\\$<1/3$ \textit{stake}, belajar setiap \textit{slot}};
+\node[draw, dashed, rounded corners=2pt, fit=(jujur)(serang), inner sep=4pt] (net) {};
+
+% Baris tengah
+\node[box=3.8cm, fill=green!8] (gasper) at (6.1,-3.5)
+  {\textbf{Simulator Gasper}\\LMD-GHOST dan Casper FFG,\\tervalidasi};
+\node[box=3.8cm, fill=gray!5] (out) at (10.6,-3.5)
+  {\textbf{Keluaran terukur}\\profit, \textit{safety}, \textit{liveness},\\biaya validator jujur};
+
+% Baris bawah (siklus pertahanan otomatis)
+\node[box=3.8cm, fill=cyan!8] (def) at (10.6,-6.2)
+  {\textbf{Agen pertahanan DDQN}\\memilih aksi setiap \textit{epoch}};
+\node[box=2.8cm, fill=cyan!8] (mask) at (6.1,-6.2)
+  {\textbf{\textit{Action masking}}\\rentang, langkah, pergeseran kumulatif};
+\node[box=3.6cm, fill=cyan!8] (upd) at (1.8,-6.2)
+  {\textbf{Perubahan parameter}\\otomatis dan terbatas};
+
+% Baris evaluasi
+\node[box=4.2cm, fill=yellow!10] (eval) at (6.1,-8.8)
+  {\textbf{Modul evaluasi}\\kebijakan beku diuji melawan tiga rezim penyerang dan tiga pembanding};
+\node[box=3.6cm, fill=yellow!10] (rek) at (1.8,-8.8)
+  {\textbf{Rekomendasi parameter}\\bagi perancang protokol};
+
+% Panah siklus konsensus
+\draw[arr] (spec.south) |- node[lbl, pos=0.25, left] {aturan dan\\parameter} (gasper.west);
+\draw[arr] (net.south) -- ++(0,-0.45) -| node[lbl, pos=0.3, above=1pt] {blok dan suara} (gasper.north);
+\draw[arr] (gasper.east) -- (out.west);
+
+% Panah siklus serangan
+\draw[arr, <->, red!70!black] (pool.east) -| node[lbl, pos=0.45, above] {lawan diambil, $p_{\text{pool}} = 0{,}30$} (net.north);
+\draw[arr, dashed, red!70!black] (spec.east) -- ++(0.7,0) |- node[lbl, pos=0.75, below] {parameter berubah} (serang.west);
+
+% Panah siklus pertahanan
+\draw[arr] (out.south) -- node[lbl, right] {pengamatan\\agregat} (def.north);
+\draw[arr] (def.west) -- node[lbl, below] {aksi\\usulan} (mask.east);
+\draw[arr] (mask.west) -- node[lbl, below] {aksi\\sah} (upd.east);
+\draw[arr] (upd.west) -- ++(-0.45,0) |- (spec.west);
+
+% Panah evaluasi
+\draw[arr] (def.south) |- node[lbl, pos=0.25, right] {kebijakan beku} (eval.east);
+\draw[arr] (eval.west) -- (rek.east);
+
+% Penanda solusi
+\node[solusi] at (spec.north east) {S1};
+\node[solusi] at (upd.north east) {S2};
+\node[solusi] at (eval.north east) {S3};
+\node[solusi] at (out.north east) {S4};
+\end{tikzpicture}
+\caption{Model konseptual arena penyerang dan pertahanan yang diusulkan. Label S1 sampai S4 menandai solusi atas masalah M1 sampai M4 pada Gambar~\ref{fig:kondisi_saat_ini}}
+\label{fig:desain_solusi}
+\end{figure}
+
+Arena bekerja dalam dua skala waktu. Pada setiap \textit{slot}, agen penyerang memilih menahan atau melepas blok dan suara, atau tidak menyertakan \textit{attestation}. Simulator lalu menerapkan aturan LMD-GHOST dan Casper FFG seperti pada model \textcite{laneve2025stochastic}. Pada setiap akhir \textit{epoch}, simulator menghitung \textit{reward}, penalti, dan metrik keluaran. Agen pertahanan membaca ringkasan metrik tersebut, mengusulkan satu perubahan parameter, dan \textit{action masking} menolak usulan yang melanggar Persamaan~\eqref{eq:batas_parameter}. Parameter baru berlaku pada \textit{epoch} berikutnya. Agen penyerang menerima \textit{reward} dari keluaran yang sama untuk belajar. Setiap 500 episode, kebijakan penyerang disimpan ke kumpulan, dan pada setiap episode lawan diambil dari kumpulan tersebut dengan peluang 0,30 \parencite{wushishi2026coadam}.
+
+Setelah pelatihan selesai, kebijakan pertahanan dibekukan dan diuji pada modul evaluasi. Keluaran akhirnya bukan perubahan langsung pada jaringan \textit{Ethereum}, tetapi rekomendasi parameter beserta buktinya bagi perancang protokol. Posisi ini sejalan dengan model tata kelola pada \textcite{skowronski2026adaptive}, yaitu kebijakan dijalankan dalam mode bayangan, ditinjau komunitas, lalu baru diaktifkan melalui pemungutan suara. Penerapan ke jaringan nyata berada di luar ruang lingkup tugas akhir ini.
+
+\section{Perbandingan dengan Kondisi Saat Ini}
+\label{sec:perbandingan_solusi}
+Perbandingan kedua model dirangkum pada Tabel~\ref{tab:before_after}. Empat perubahan utamanya dijelaskan sebagai berikut.
+
+\textbf{S1 menjawab M1.} Pada kondisi saat ini, seluruh parameter insentif tetap sehingga penyerang dapat mempelajarinya. Pada solusi, parameter dibagi dua. Invarian yang menjamin \textit{safety} tetap dikunci, sedangkan empat parameter insentif menjadi adaptif. Penyerang tidak lagi menghadapi sasaran diam, sehingga strategi yang berhasil pada satu \textit{epoch} belum tentu berhasil pada \textit{epoch} berikutnya. Pola ini meniru temuan \textcite{skowronski2026adaptive}, ketika pertahanan yang terus menyesuaikan diri mencegah penyerang kembali untung.
+
+\textbf{S2 menjawab M2.} Tambalan manual yang khusus untuk satu serangan digantikan siklus otomatis yang menimbang efek dua sisi setiap parameter melalui fungsi \textit{reward} pada Persamaan~\eqref{eq:reward_pertahanan}. Perubahan tetap dibatasi, yaitu satu parameter per \textit{epoch}, langkah 5\%, dan pergeseran kumulatif terbatas, sehingga tidak terjadi lonjakan parameter yang membahayakan jaringan \parencite{skowronski2026adaptive}.
+
+\textbf{S3 menjawab M3.} Evaluasi terhadap penyerang terskenario digantikan evaluasi terhadap tiga rezim penyerang, termasuk penyerang yang dilatih khusus melawan pertahanan yang sudah dibekukan \parencite{wushishi2026coadam}. Simulator juga diverifikasi terhadap model \textcite{laneve2025stochastic} dan dikalibrasi dengan data \textit{on-chain}, sehingga hasilnya tidak bergantung pada satu model yang belum tervalidasi.
+
+\textbf{S4 menjawab M4.} Biaya bagi validator jujur menjadi metrik keluaran yang diukur setiap \textit{epoch} dan masuk ke fungsi \textit{reward} pertahanan. Dengan demikian, pertahanan yang menekan penyerang dengan cara membebani validator jujur akan terlihat dan dihukum. Pendekatan ini mengikuti \textcite{skowronski2026adaptive} yang menghitung biaya salah tuduh terhadap pihak jujur sebagai bagian dari \textit{reward}.
+
+\begin{table}[htbp]
+\centering
+\caption{Perbandingan kondisi saat ini dan solusi usulan}
+\label{tab:before_after}
+\small
+\begin{tabular}{|p{2.4cm}|p{4.1cm}|p{4.4cm}|p{1.3cm}|}
+\hline
+\textbf{Aspek} & \textbf{Saat ini (Gambar~\ref{fig:kondisi_saat_ini})} & \textbf{Usulan (Gambar~\ref{fig:desain_solusi})} & \textbf{Solusi} \\
+\hline
+Parameter insentif & Tetap untuk semua kondisi & Adaptif dalam batas, invarian tetap dikunci & S1 \\
+\hline
+Cara mengubah parameter & Tambalan manual setelah serangan ditemukan & Agen pertahanan setiap \textit{epoch}, disaring \textit{action masking} & S2 \\
+\hline
+Kecepatan respons & Siklus pembaruan protokol & Satu \textit{epoch} di dalam simulasi & S2 \\
+\hline
+Penyerang saat evaluasi & Terskenario & Belajar, berasal dari kumpulan historis, dan dilatih khusus melawan pertahanan beku & S3 \\
+\hline
+Dasar kepercayaan model & Tanpa acuan validasi & Verifikasi terhadap \textcite{laneve2025stochastic} dan kalibrasi data \textit{on-chain} & S3 \\
+\hline
+Biaya validator jujur & Tidak diukur & Diukur setiap \textit{epoch} dan masuk \textit{reward} & S4 \\
+\hline
+Keluaran bagi tata kelola & Tambalan untuk satu serangan & Rekomendasi parameter beserta bukti statistik & S2, S3 \\
+\hline
+\end{tabular}
+\end{table}
+
+Beberapa bagian sengaja tidak diubah. Validator jujur tetap mengikuti protokol, aturan pemilihan rantai tetap sama, dan ambang dua pertiga tetap dikunci. Pembatasan ini menjaga agar perbedaan hasil antara pertahanan statis dan pertahanan adaptif hanya berasal dari cara parameter insentif disetel. Dengan begitu, uji hipotesis pada Subbab~\ref{sec:hipotesis} membandingkan dua kondisi yang setara.

@@ -1,11 +1,290 @@
-% ==========================================
-% BAB V RENCANA SELANJUTNYA
-% ==========================================
+\cleardoublepage % memastikan bab baru dimulai di halaman ganjil (kanan)
 \chapter{RENCANA SELANJUTNYA}
 \label{chap:rencana-selanjutnya}
-Jelaskan secara detail langkah-langkah rencana selanjutnya, hal-hal yang diperlukan atau akan disiapkan, dan risiko dan mitigasinya, yang meliputi:
+
+Bab ini menjabarkan cara solusi pada Bab~IV akan dibangun dan diuji. Pembahasan mencakup rencana implementasi, desain pengujian dan evaluasi, serta analisis risiko dan mitigasinya. Setiap rencana dikaitkan dengan kebutuhan pada Subbab~\ref{sec:analisis_kebutuhan} dan kriteria keberhasilan pada Subbab~\ref{sec:tujuan}.
+
+\section{Rencana Implementasi}
+\label{sec:rencana_implementasi}
+
+\subsection{Tahapan dan Jadwal}
+\label{subsec:jadwal}
+Implementasi direncanakan selama 16 minggu pada semester kedua tugas akhir. Tahapan dan jadwalnya disajikan pada Tabel~\ref{tab:jadwal}. Ada dua gerbang keputusan. Gerbang G1 berada setelah validasi simulator, dan pelatihan agen baru dimulai jika simulator lolos KNF-01. Gerbang G2 berada setelah pelatihan ko-evolusioner, dan eksperimen utama baru dimulai jika pelatihan memenuhi kriteria konvergensi pada Subbab~\ref{subsec:konfigurasi}. Gerbang ini mencegah hasil eksperimen dibangun di atas simulator atau kebijakan yang belum layak.
+
+\begin{table}[htbp]
+\centering
+\caption{Tahapan dan jadwal implementasi}
+\label{tab:jadwal}
+\small
+\begin{tabular}{|p{0.7cm}|p{3.0cm}|p{4.5cm}|p{1.4cm}|p{2.2cm}|}
+\hline
+\textbf{No.} & \textbf{Tahapan} & \textbf{Kegiatan utama} & \textbf{Minggu} & \textbf{Kebutuhan} \\
+\hline
+1 & Perancangan rinci & Diagram C4 dan UML, spesifikasi \textit{state}, \textit{action}, dan \textit{reward} final & 1--2 & KF-04 \\
+\hline
+2 & Implementasi simulator & Modul validator, jaringan, pengelola suara, pemilihan \textit{proposer}, dan insentif, beserta uji unit & 2--5 & KF-01 sampai KF-03 \\
+\hline
+3 & Verifikasi dan kalibrasi & Reproduksi hasil \textcite{laneve2025stochastic}, pengambilan data \textit{on-chain}, uji Kolmogorov-Smirnov (gerbang G1) & 5--6 & KNF-01 \\
+\hline
+4 & Pembanding & Pertahanan statis, berbasis aturan, dan DRL satu sisi & 7--8 & KF-07 \\
+\hline
+5 & Pelatihan ko-evolusioner & Pelatihan kedua agen, penyetelan bobot \textit{reward}, pemeriksaan konvergensi (gerbang G2) & 8--11 & KF-05, KF-06 \\
+\hline
+6 & Eksperimen dan evaluasi & Eksperimen utama, uji sensitivitas, ablasi, uji skala & 11--13 & KF-07, KF-08 \\
+\hline
+7 & Analisis dan penulisan & Uji hipotesis, analisis strategi, penyusunan laporan, persiapan sidang & 13--16 & Seluruh RQ \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Alat dan Bahan}
+\label{subsec:alat_bahan}
+Alat dan bahan yang diperlukan disajikan pada Tabel~\ref{tab:alat_bahan}. Pemilihan perangkat lunak mengikuti lingkungan yang terbukti dapat mereproduksi pelatihan DRL pada \textcite{skowronski2026adaptive}, yaitu Python dan PyTorch. PettingZoo ditambahkan karena arena melibatkan dua agen. Spesifikasi perangkat keras disesuaikan dengan kebutuhan pada \textcite{skowronski2026adaptive} untuk pelatihan dan \textcite{laneve2025stochastic} untuk simulasi berulang.
+
+\begin{table}[htbp]
+\centering
+\caption{Alat dan bahan implementasi}
+\label{tab:alat_bahan}
+\small
+\begin{tabular}{|p{2.3cm}|p{4.4cm}|p{5.5cm}|}
+\hline
+\textbf{Kategori} & \textbf{Alat atau bahan} & \textbf{Fungsi} \\
+\hline
+Bahasa dan pustaka utama & Python 3.10 atau lebih baru, PyTorch 2.x & Implementasi simulator dan jaringan DDQN \\
+\hline
+Antarmuka multi-agen & PettingZoo & Antarmuka \textit{Markov game} dua agen dengan frekuensi keputusan berbeda \\
+\hline
+Komputasi ilmiah & NumPy (termasuk \textit{SeedSequence}), SciPy, Pandas & Pembangkitan \textit{seed}, uji Kolmogorov-Smirnov, uji Wilcoxon, olah data \\
+\hline
+Pemantauan dan versi & TensorBoard, Git, GitHub & Pemantauan kurva pelatihan, pengelolaan versi kode dan konfigurasi \\
+\hline
+Data & API \textit{beaconcha.in}, \textit{BigQuery}, \textit{consensus-specs} & Statistik \textit{slot} kosong, partisipasi \textit{attestation}, blok yatim, dan nilai parameter acuan \\
+\hline
+Perangkat keras & CPU minimal 8 inti, RAM minimal 32 GB, GPU setara RTX 3090 24 GB & Simulasi paralel dan pelatihan. Acuan: satu GPU RTX 3090 \parencite{skowronski2026adaptive} dan mesin 8 vCPU 64 GB \parencite{laneve2025stochastic} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Lingkungan dan Konfigurasi}
+\label{subsec:konfigurasi}
+Konfigurasi awal disajikan pada Tabel~\ref{tab:konfigurasi}. Nilai hiperparameter agen diambil dari konfigurasi yang sudah teruji pada \textcite{skowronski2026adaptive}, sedangkan parameter kumpulan penyerang diambil dari \textcite{wushishi2026coadam}. Nilai ini menjadi titik awal dan dapat disetel ulang jika pelatihan tidak konvergen. Rentang parameter konsensus pada Tabel~\ref{tab:batas_parameter} dikalibrasi pada tahap ini dengan syarat perilaku normal simulator tetap lolos KNF-01.
+
+\begin{table}[htbp]
+\centering
+\caption{Konfigurasi awal arena}
+\label{tab:konfigurasi}
+\small
+\begin{tabular}{|p{4.6cm}|p{4.2cm}|p{3.4cm}|}
+\hline
+\textbf{Komponen} & \textbf{Nilai awal} & \textbf{Dasar} \\
+\hline
+Arsitektur jaringan kedua agen & \textit{Dueling}, lapisan [128, 128, 64], ReLU & \textcite{skowronski2026adaptive} \\
+\hline
+Laju belajar dan pengoptimal & $10^{-4}$, Adam & \textcite{skowronski2026adaptive} \\
+\hline
+Faktor diskon $\gamma$ & 0,99 & \textcite{skowronski2026adaptive} \\
+\hline
+Ukuran \textit{batch} dan \textit{replay buffer} & 64 dan 50.000 transisi & \textcite{skowronski2026adaptive} \\
+\hline
+Pembaruan jaringan target & Setiap 1.000 langkah & \textcite{skowronski2026adaptive} \\
+\hline
+Eksplorasi $\epsilon$ & 1,0 menuju 0,1 dalam 100.000 langkah & \textcite{skowronski2026adaptive} \\
+\hline
+PER & Eksponen prioritas 0,6, koreksi bobot 0,4 menuju 1,0 & \textcite{skowronski2026adaptive} \\
+\hline
+Kumpulan penyerang & $K = 10$, $p_{\text{pool}} = 0{,}30$, potret setiap 500 episode & \textcite{wushishi2026coadam} \\
+\hline
+Panjang episode & 100 \textit{epoch} (3.200 \textit{slot}) & Mengikuti 100 langkah per episode \parencite{wushishi2026coadam} \\
+\hline
+Jumlah validator & 13 (verifikasi), 64, 128, 256 (utama), 1.000 (uji skala) & Subbab~\ref{sec:ruang_lingkup} \\
+\hline
+Porsi \textit{stake} penyerang & 0,10; 0,20; 0,30 & Di bawah sepertiga (Subbab~\ref{subsec:ambang}) \\
+\hline
+\textit{Seed} & Satu \textit{master seed} ditetapkan sebelum eksperimen, diturunkan dengan \textit{SeedSequence} & \textcite{skowronski2026adaptive} \\
+\hline
+\end{tabular}
+\end{table}
+
+Pelatihan dinyatakan konvergen jika tiga syarat terpenuhi bersamaan selama 5.000 langkah, mengikuti \textcite{skowronski2026adaptive}. Pertama, rata-rata bergerak \textit{reward} 10.000 langkah berada dalam rentang $\pm 2\%$ dari rata-rata 20.000 langkah. Kedua, norma gradien di bawah 0,01. Ketiga, kinerja pada episode validasi tidak lagi naik lebih dari 0,01 selama 10.000 langkah. Pada pelatihan ko-evolusioner, syarat keempat ditambahkan, yaitu \textit{exploitability} terhadap kumpulan penyerang tidak berubah lebih dari 5\% antara dua potret berurutan. Syarat ini perlu karena lawan terus berubah sehingga \textit{reward} yang stabil saja belum cukup menunjukkan konvergensi.
+
+\subsection{Estimasi Biaya}
+\label{subsec:biaya}
+Seluruh perangkat lunak dan data yang digunakan bersifat gratis. Biaya utama berasal dari komputasi GPU. Kebutuhannya diperkirakan pada Tabel~\ref{tab:biaya} dengan acuan satu sesi pelatihan DRL sekitar 8 jam \parencite{skowronski2026adaptive} dan batas 24 jam per sesi pada KNF-05.
+
+\begin{table}[htbp]
+\centering
+\caption{Estimasi kebutuhan komputasi}
+\label{tab:biaya}
+\small
+\begin{tabular}{|p{4.6cm}|p{4.6cm}|p{2.6cm}|}
+\hline
+\textbf{Kegiatan} & \textbf{Perhitungan} & \textbf{GPU-jam} \\
+\hline
+Verifikasi, kalibrasi, pembanding statis dan berbasis aturan & Hanya CPU & 0 \\
+\hline
+Pembanding DRL satu sisi & 10 \textit{seed} $\times$ 8 jam & 80 \\
+\hline
+Pelatihan ko-evolusioner utama & 10 \textit{seed} $\times$ 24 jam & 240 \\
+\hline
+Penyerang yang dilatih khusus melawan pertahanan beku & 4 pertahanan $\times$ 5 \textit{seed} $\times$ 4 jam & 80 \\
+\hline
+Ablasi & 3 varian $\times$ 5 \textit{seed} $\times$ 8 jam & 120 \\
+\hline
+\textbf{Total} & & \textbf{520} \\
+\hline
+\end{tabular}
+\end{table}
+
+Pilihan utama adalah memakai GPU pribadi atau fasilitas komputasi kampus sehingga biaya tambahan hanya listrik. Jika fasilitas tersebut tidak tersedia, GPU disewa dari penyedia komputasi awan. Dengan tarif sewa RTX 3090 sekitar US\$0,50 per jam, 520 GPU-jam membutuhkan sekitar US\$260. Dengan cadangan 30\% untuk pengulangan, anggaran maksimum ditetapkan sekitar US\$340.
+% Sumber tarif: halaman harga RunPod (https://www.runpod.io/gpu-instance/pricing), dicek November 2026. Perbarui sebelum laporan final.
+
+\section{Desain Pengujian dan Evaluasi}
+\label{sec:desain_pengujian}
+Pengujian dibagi menjadi tiga bagian. Verifikasi memastikan simulator dan agen dibangun dengan benar. Validasi memastikan simulator mewakili Gasper. Eksperimen menjawab RQ2 dan RQ3 serta menguji hipotesis.
+
+\subsection{Verifikasi}
+\label{subsec:verifikasi}
+Rencana verifikasi disajikan pada Tabel~\ref{tab:verifikasi}. Verifikasi dilakukan sejak tahap implementasi dan diulang setiap kali kode berubah.
+
+\begin{table}[htbp]
+\centering
+\caption{Rencana verifikasi}
+\label{tab:verifikasi}
+\small
+\begin{tabular}{|p{1.0cm}|p{3.1cm}|p{4.6cm}|p{3.5cm}|}
+\hline
+\textbf{ID} & \textbf{Objek} & \textbf{Metode} & \textbf{Kriteria lulus} \\
+\hline
+VF-01 & Justifikasi dan finalisasi & Uji unit pada kasus batas, misalnya suara tepat dua pertiga dan kurang satu suara & Seluruh kasus sesuai Persamaan~\eqref{eq:justified} \\
+\hline
+VF-02 & \textit{Reward} dan penalti & Hitung manual dibandingkan keluaran simulator untuk \textit{reward} dasar, \textit{slashing} 1/32, batas inklusi, dan \textit{inactivity leak} & Selisih nol \\
+\hline
+VF-03 & \textit{Action masking} & Uji properti pada 10.000 \textit{state} acak, meniru rangkaian uji kasus tepi \textcite{skowronski2026adaptive} & Tidak ada aksi ilegal yang lolos \\
+\hline
+VF-04 & Determinisme & Dua kali menjalankan simulasi dengan \textit{seed} yang sama & Keluaran identik (KNF-03) \\
+\hline
+VF-05 & Reproduksi model acuan & Konfigurasi 13 validator dan latensi 12,6 detik seperti \textcite{laneve2025stochastic} & Kriteria keberhasilan pertama (KNF-01) \\
+\hline
+\end{tabular}
+\end{table}
+
+VF-05 memerlukan perhatian khusus karena model \textcite{laneve2025stochastic} tidak konsisten soal panjang \textit{epoch}. Karena itu, verifikasi dijalankan pada dua varian, yaitu \textit{checkpoint} setiap 32 \textit{slot} dan setiap 64 \textit{slot}. Varian yang paling mendekati angka acuan dipakai untuk verifikasi, dan perbedaannya dilaporkan sebagai temuan. Eksperimen utama tetap memakai 32 \textit{slot} sesuai Subbab~\ref{sec:gasper}.
+
+\subsection{Validasi}
+\label{subsec:validasi}
+Validasi dilakukan dengan dua cara. Pertama, validasi statistik. Distribusi rasio \textit{slot} kosong, tingkat partisipasi \textit{attestation}, dan rasio blok yatim pada simulator dibandingkan dengan data \textit{on-chain} menggunakan uji Kolmogorov-Smirnov. Simulator dinyatakan valid jika $p > 0{,}05$, mengikuti \textcite{skowronski2026adaptive} yang memperoleh $D = 0{,}032$ dan $p = 0{,}78$ pada simulatornya. Kedua, validasi perilaku. Agen penyerang yang dilatih melawan pertahanan statis diharapkan menemukan kembali pola yang sudah dikenal, misalnya penahanan suara yang mirip \textit{balancing}. Pemeriksaan ini meniru \textcite{wushishi2026coadam}, ketika penyerang yang belajar secara mandiri memilih aksi berdampak tinggi. Jika agen penyerang tidak menemukan pola yang sudah terbukti efektif, ruang aksi atau \textit{reward}-nya perlu diperbaiki sebelum eksperimen dilanjutkan.
+
+Validasi ini tidak menjamin hasil simulasi sama dengan jaringan nyata. \textcite{wushishi2026coadam} menunjukkan bahwa kinerja di uji fisik (0,9975) dapat berbeda jauh dari simulasi (0,8363). Karena itu, kesimpulan tugas akhir ini dibatasi pada lingkungan simulasi, dan ketahanan hasil diperiksa melalui uji sensitivitas terhadap latensi dan skala jaringan.
+
+\subsection{Rancangan Eksperimen}
+\label{subsec:rancangan_eksperimen}
+Variabel eksperimen disajikan pada Tabel~\ref{tab:variabel}. Eksperimen utama memakai seluruh kombinasi jenis pertahanan dan rezim penyerang pada konfigurasi dasar, yaitu 128 validator dengan porsi \textit{stake} penyerang 0,20. Faktor lain diubah satu per satu pada uji sensitivitas agar jumlah eksperimen tetap terjangkau.
+
+\begin{table}[htbp]
+\centering
+\caption{Variabel eksperimen}
+\label{tab:variabel}
+\small
+\begin{tabular}{|p{2.4cm}|p{3.2cm}|p{6.6cm}|}
+\hline
+\textbf{Jenis} & \textbf{Variabel} & \textbf{Level} \\
+\hline
+Bebas (utama) & Jenis pertahanan & Statis, berbasis aturan, DRL satu sisi, MARL ko-evolusioner \\
+\hline
+Bebas (utama) & Rezim penyerang & Terskenario (\textit{balancing}, penahanan blok, \textit{censorship}), adaptif selama pengujian, dilatih khusus melawan pertahanan beku \parencite{wushishi2026coadam} \\
+\hline
+Bebas (sensitivitas) & Porsi \textit{stake} penyerang & 0,10; 0,20; 0,30 \\
+\hline
+Bebas (sensitivitas) & Jumlah validator & 64, 128, 256, dan 1.000 untuk uji skala \\
+\hline
+Bebas (sensitivitas) & Latensi & Hasil kalibrasi \textit{on-chain} dan 12,6 detik \parencite{laneve2025stochastic} \\
+\hline
+Terikat & Metrik keamanan dan biaya & Tabel~\ref{tab:metrik} \\
+\hline
+Kontrol & Invarian protokol & Ambang dua pertiga, panjang \textit{slot} dan \textit{epoch}, aturan pemilihan rantai \\
+\hline
+\end{tabular}
+\end{table}
+
+Penyerang yang tidak pernah dilihat selama pelatihan, sesuai kriteria keberhasilan kedua, didefinisikan sebagai dua kelompok. Kelompok pertama adalah penyerang terskenario yang tidak pernah menjadi lawan saat pelatihan. Kelompok kedua adalah penyerang yang dilatih dari awal dengan \textit{seed} baru khusus untuk melawan setiap pertahanan yang sudah dibekukan. Kelompok kedua merupakan uji terberat karena penyerang mencari kelemahan satu pertahanan tertentu.
+
+Metrik yang diukur disajikan pada Tabel~\ref{tab:metrik}. Selain rata-rata, kinerja pada kondisi terburuk dilaporkan dengan \textit{Conditional Value at Risk} 5\% (CVaR$_{0{,}05}$), yaitu rata-rata 5\% hasil terburuk, mengikuti \textcite{wushishi2026coadam}.
+
+\begin{table}[htbp]
+\centering
+\caption{Metrik evaluasi dan keterkaitannya dengan pertanyaan penelitian}
+\label{tab:metrik}
+\small
+\begin{tabular}{|p{3.4cm}|p{6.6cm}|p{2.2cm}|}
+\hline
+\textbf{Metrik} & \textbf{Definisi} & \textbf{RQ} \\
+\hline
+Pelanggaran invarian & Jumlah aksi yang melanggar Persamaan~\eqref{eq:batas_parameter}, harus nol & RQ1 \\
+\hline
+Profit relatif penyerang & Persamaan~\eqref{eq:profit_relatif}, rata-rata dan CVaR$_{0{,}05}$ & RQ2 \\
+\hline
+Pelanggaran \textit{safety} & Proporsi episode dengan dua \textit{checkpoint} bertentangan yang sama-sama final & RQ2 \\
+\hline
+Pelanggaran \textit{liveness} & Proporsi \textit{epoch} dengan keterlambatan finalisasi di atas tiga \textit{epoch} & RQ2 \\
+\hline
+\textit{Exploitability} & Persamaan~\eqref{eq:exploitability} & RQ2, RQ3 \\
+\hline
+Biaya pertahanan & Penurunan relatif \textit{reward} validator jujur dibanding parameter bawaan & RQ3 \\
+\hline
+Pola strategi & Frekuensi aksi penyerang, jejak perubahan parameter, dan sebaran aksi pertahanan & RQ3 \\
+\hline
+\end{tabular}
+\end{table}
+
+Ablasi dilakukan pada tiga varian, mengikuti cara \textcite{wushishi2026coadam} menguji sumbangan setiap komponen. Varian pertama tanpa kumpulan penyerang ($p_{\text{pool}} = 0$). Varian kedua tanpa suku biaya pada \textit{reward} pertahanan ($w_4 = 0$). Varian ketiga tanpa \textit{action masking}, yang dijalankan untuk menunjukkan berapa banyak pelanggaran yang terjadi jika batas tidak ditegakkan.
+
+\subsection{Analisis Statistik dan Keputusan Hipotesis}
+\label{subsec:analisis_statistik}
+Setiap kombinasi eksperimen dijalankan 30 kali dengan \textit{seed} berbeda \parencite{skowronski2026adaptive}. Pertahanan MARL dan pertahanan statis dipasangkan berdasarkan \textit{seed} dan penyerang yang sama, sehingga dipakai uji Wilcoxon \textit{signed-rank} satu sisi. Taraf signifikansi $\alpha = 0{,}05$ dikoreksi dengan Bonferroni sesuai jumlah perbandingan, dan besar efek dilaporkan dengan Cohen's $d$ \parencite{wushishi2026coadam}. Aturan keputusannya adalah sebagai berikut.
 \begin{enumerate}
-\item	Rencana implementasi, termasuk alat dan bahan yang diperlukan, lingkungan, konfigurasi, biaya, dan sebagainya.
-\item	Desain pengujian dan evaluasi, misalnya metode verifikasi dan validasi.
-\item	Analisis risiko dan mitigasi, misalnya tindakan selanjutnya jika ada yang tidak berjalan sesuai rencana.
+	\item $H_0$ ditolak untuk suatu metrik jika nilai $p$ lebih kecil dari taraf signifikansi yang sudah dikoreksi.
+	\item Kriteria keberhasilan kedua terpenuhi jika $H_0$ ditolak untuk profit relatif atau tingkat pelanggaran, dan pelanggaran invarian bernilai nol.
+	\item Jika $H_0$ tidak ditolak, hasil tetap dilaporkan beserta besar efeknya sebagai bukti bahwa penyetelan adaptif tidak memberi keuntungan pada kondisi tersebut.
 \end{enumerate}
+
+RQ3 dijawab dengan dua analisis. Pertama, \textit{trade-off} keamanan dan biaya dipetakan dengan melatih ulang pertahanan pada beberapa nilai bobot $w_4$, lalu menggambar pasangan profit penyerang dan biaya validator jujur sebagai kurva Pareto. Kedua, strategi penyerang dianalisis dari frekuensi aksinya, seperti analisis frekuensi taktik pada \textcite{wushishi2026coadam}, lalu dibandingkan dengan serangan yang sudah dikenal pada \textcite{laneve2025stochastic}.
+
+\section{Analisis Risiko dan Mitigasi}
+\label{sec:risiko}
+Risiko yang dapat menghambat penelitian disajikan pada Tabel~\ref{tab:risiko}. Kemungkinan dan dampak dinilai dengan tiga tingkat, yaitu rendah (R), sedang (S), dan tinggi (T). Setiap risiko memiliki mitigasi untuk mencegahnya dan rencana cadangan jika risiko tetap terjadi. Empat risiko yang sudah disebut pada Subbab~\ref{subsec:penentuan_solusi} tercakup pada R2 sampai R5.
+
+\begin{table}[htbp]
+\centering
+\caption{Analisis risiko dan mitigasi}
+\label{tab:risiko}
+\footnotesize
+\begin{tabular}{|p{0.6cm}|p{2.7cm}|p{0.6cm}|p{0.6cm}|p{3.6cm}|p{3.2cm}|}
+\hline
+\textbf{ID} & \textbf{Risiko} & \textbf{K} & \textbf{D} & \textbf{Mitigasi} & \textbf{Rencana cadangan} \\
+\hline
+R1 & Simulator tidak lolos verifikasi atau kalibrasi & S & T & Uji unit sejak awal, verifikasi dua varian panjang \textit{epoch} (Subbab~\ref{subsec:verifikasi}) & Gerbang G1 ditahan. Kalibrasi hanya ke data \textit{on-chain} dan selisih dengan model acuan dilaporkan \\
+\hline
+R2 & Pelatihan ko-evolusioner berputar tanpa konvergen & S & T & Kumpulan penyerang \parencite{wushishi2026coadam}, empat syarat konvergensi, \textit{replay buffer} diperkecil agar transisi usang cepat terganti & Pelatihan bergantian dengan salah satu agen dibekukan, atau beralih ke keluarga \textit{actor-critic} (Subbab~\ref{subsec:penentuan_solusi}) \\
+\hline
+R3 & \textit{Exploitability} hanya relatif terhadap kumpulan & T & S & Uji melawan penyerang baru yang dilatih khusus untuk setiap pertahanan beku & Dilaporkan sebagai batas klaim, bukan keseimbangan Nash formal \parencite{wushishi2026coadam} \\
+\hline
+R4 & Hasil simulasi berbeda dengan jaringan nyata & S & S & Kalibrasi \textit{on-chain} dan uji sensitivitas latensi serta skala & Kesimpulan dibatasi pada simulasi. Uji \textit{testnet} menjadi saran lanjutan \\
+\hline
+R5 & Satu koalisi tidak mewakili banyak penyerang & T & R & Dicatat sejak asumsi pada Subbab~\ref{subsec:markov_game} & Jika waktu cukup, uji tambahan dengan dua penyerang independen \\
+\hline
+R6 & Agen penyerang gagal menemukan serangan efektif & S & T & \textit{Reward} bertahap dan inisialisasi dari contoh serangan \textit{balancing} \parencite{laneve2025stochastic} & Evaluasi tetap memakai penyerang terskenario. Jawaban RQ3 dibatasi \\
+\hline
+R7 & Agen pertahanan menekan penyerang dengan membebani validator jujur & S & S & Suku biaya $w_4$ dan ablasi $w_4 = 0$ & Bobot $w_4$ dinaikkan dan kurva Pareto dilaporkan \\
+\hline
+R8 & Komputasi melebihi anggaran & S & S & Uji skala kecil dahulu, jumlah \textit{seed} minimal 10 \parencite{wushishi2026coadam} & Ablasi dan uji 1.000 validator dikurangi. GPU awan dalam batas Subbab~\ref{subsec:biaya} \\
+\hline
+R9 & Data \textit{on-chain} terbatas atau akses API dibatasi & R & S & Data diambil sejak awal, disimpan lokal, dan memakai dua sumber & Kalibrasi memakai statistik ringkas publik \\
+\hline
+R10 & Jadwal terlambat & S & S & Gerbang G1 dan G2, pemantauan mingguan dengan pembimbing & Prioritas pada eksperimen utama. Ablasi dan uji skala dipangkas \\
+\hline
+\multicolumn{6}{|l|}{K = kemungkinan, D = dampak, R = rendah, S = sedang, T = tinggi} \\
+\hline
+\end{tabular}
+\end{table}
+
+Risiko dengan dampak tinggi, yaitu R1, R2, dan R6, ditangani paling awal karena ketiganya menentukan apakah eksperimen utama dapat berjalan. Jika ketiga risiko tersebut sudah terkendali sebelum minggu ke-11, sisa waktu cukup untuk menyelesaikan eksperimen utama sekalipun ablasi dan uji skala harus dipangkas.
