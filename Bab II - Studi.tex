@@ -185,7 +185,7 @@ Ketangguhan pertahanan diukur terhadap penyerang terkuat, bukan rata-rata. Ukura
 
 \subsection{Rancangan Awal Ruang \textit{State}, \textit{Action}, dan \textit{Reward}}
 \label{subsec:rancangan_agen}
-Tabel~\ref{tab:rancangan_agen} menyajikan rancangan awal ruang agen. Rancangan ini menjadi titik awal untuk menjawab RQ1 dan akan dirinci pada Bab~IV. Agen penyerang mengambil keputusan setiap \textit{slot} karena serangan bergantung pada waktu pelepasan blok dan suara. Agen pertahanan mengambil keputusan setiap \textit{epoch} karena parameter pada Subbab~\ref{subsec:insentif} bekerja pada skala \textit{epoch}.
+Tabel~\ref{tab:rancangan_agen} menyajikan rancangan awal ruang agen. Rancangan ini menjadi titik awal untuk menjawab RQ1 dan akan dirinci pada tahap perancangan sesuai rencana pada Subbab~\ref{subsec:jadwal}. Agen penyerang mengambil keputusan setiap \textit{slot} karena serangan bergantung pada waktu pelepasan blok dan suara. Agen pertahanan mengambil keputusan setiap \textit{epoch} karena parameter pada Subbab~\ref{subsec:insentif} bekerja pada skala \textit{epoch}.
 
 \begin{table}[htbp]
 \centering
@@ -265,7 +265,7 @@ Setiap keputusan agen pertahanan juga harus memenuhi batasan berikut:
 	\item Hanya satu parameter yang boleh berubah per keputusan karena mengubah beberapa parameter sekaligus memperlambat pelatihan (347 ribu berbanding 197 ribu langkah) tanpa menaikkan kinerja.
 	\item Batas perubahan kumulatif meniru batas pergeseran harian yang mencegah agen menggeser parameter sedikit demi sedikit hingga jauh dari nilai aman.
 \end{itemize}
-Seluruh batasan ditegakkan dengan \textit{action masking}. \textcite{skowronski2026adaptive} melaporkan nol pelanggaran batas dalam 30 kali uji dengan cara ini, dan \textcite{wushishi2026coadam} memakai mekanisme serupa untuk batas anggaran pertahanan. Batas atas $\lambda_{\text{inc}}$ ditetapkan 32 \textit{slot} karena suara di luar \textit{epoch} yang sama memang tidak diterima \parencite{laneve2025stochastic}. Rentang lainnya merupakan rancangan awal penulis dan akan dikalibrasi pada Bab~IV agar perilaku normal simulator tetap sesuai dengan data \textit{on-chain}.
+Seluruh batasan ditegakkan dengan \textit{action masking}. \textcite{skowronski2026adaptive} melaporkan nol pelanggaran batas dalam 30 kali uji dengan cara ini, dan \textcite{wushishi2026coadam} memakai mekanisme serupa untuk batas anggaran pertahanan. Batas atas $\lambda_{\text{inc}}$ ditetapkan 32 \textit{slot} karena suara di luar \textit{epoch} yang sama memang tidak diterima \parencite{laneve2025stochastic}. Rentang lainnya merupakan rancangan awal penulis dan akan dikalibrasi pada tahap implementasi (Subbab~\ref{subsec:konfigurasi}) agar perilaku normal simulator tetap sesuai dengan data \textit{on-chain}.
 
 \section{Penerapan AI pada Konsensus \textit{Blockchain}}
 \label{sec:ai_konsensus}
