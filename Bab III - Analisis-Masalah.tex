@@ -18,8 +18,7 @@ Gambar~\ref{fig:kondisi_saat_ini} menunjukkan model konseptual sistem pertahanan
 \centering
 \begin{tikzpicture}[
   font=\footnotesize,
-  box/.style={draw, rounded corners=2pt, align=center, inner sep=4pt, text width=#1,
-             execute at begin node={\hyphenpenalty=10000}},
+  box/.style={draw, rounded corners=2pt, align=center, inner sep=4pt, text width=#1, font=\footnotesize, execute at begin node={\hyphenpenalty=10000}},
   box/.default=3.2cm,
   arr/.style={-{Stealth[length=2.2mm]}, thick},
   lbl/.style={font=\scriptsize\itshape, align=center},
@@ -303,7 +302,7 @@ Bukti pada pelatihan ko-evolusioner & Pertahanan DQN terbukti, dan menghapus DQN
 
 Bukti pada keempat studi utama lebih kuat untuk keluarga DQN. Karena itu, agen pertahanan memakai DDQN dengan \textit{dueling network} dan PER, mengikuti konfigurasi terbaik \textcite{skowronski2026adaptive}. Agen penyerang juga memakai DDQN. \textit{Q-learning} tabel seperti pada \textcite{wushishi2026coadam} tidak dipakai karena pengamatan penyerang memuat nilai kontinu seperti selisih bobot antarcabang, sehingga tabel tidak praktis. Keluarga \textit{actor-critic} disiapkan sebagai alternatif jika pelatihan DDQN tidak konvergen akibat lawan yang terus berubah, sesuai keterbatasan pada Subbab~\ref{subsec:dqn}.
 
-Solusi terpilih terdiri atas enam komponen, yaitu simulator Gasper, agen penyerang, agen pertahanan, lapisan \textit{action masking}, kumpulan penyerang historis, dan modul evaluasi. Keterlacakan antara masalah, kebutuhan, komponen, dan pertanyaan penelitian disajikan pada Tabel~\ref{tab:keterlacakan}. Rancangan rinci setiap komponen dan perbandingannya dengan Gambar~\ref{fig:kondisi_saat_ini} disajikan pada Bab~IV.
+Solusi terpilih terdiri atas enam komponen, yaitu simulator Gasper, agen penyerang, agen pertahanan, lapisan \textit{action masking}, kumpulan penyerang historis, dan modul evaluasi. Keterlacakan antara masalah, kebutuhan, komponen, dan pertanyaan penelitian disajikan pada Tabel~\ref{tab:keterlacakan}. Model konseptual solusi ini dan perbandingannya dengan Gambar~\ref{fig:kondisi_saat_ini} disajikan pada Bab~IV, sedangkan rencana implementasi dan pengujiannya disajikan pada Bab~V.
 
 \begin{table}[htbp]
 \centering
