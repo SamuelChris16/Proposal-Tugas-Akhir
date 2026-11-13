@@ -9,7 +9,7 @@ Bab ini menjabarkan cara solusi pada Bab~IV akan dibangun dan diuji. Pembahasan 
 
 \subsection{Tahapan dan Jadwal}
 \label{subsec:jadwal}
-Implementasi direncanakan selama 16 minggu pada semester kedua tugas akhir. Tahapan dan jadwalnya disajikan pada Tabel~\ref{tab:jadwal}. Ada dua gerbang keputusan. Gerbang G1 berada setelah validasi simulator, dan pelatihan agen baru dimulai jika simulator lolos KNF-01. Gerbang G2 berada setelah pelatihan ko-evolusioner, dan eksperimen utama baru dimulai jika pelatihan memenuhi kriteria konvergensi pada Subbab~\ref{subsec:konfigurasi}. Gerbang ini mencegah hasil eksperimen dibangun di atas simulator atau kebijakan yang belum layak.
+Implementasi direncanakan selama 16 minggu pada semester kedua tugas akhir. Tahapan dan jadwalnya disajikan pada Tabel~\ref{tab:jadwal}. Ada tiga gerbang keputusan. Gerbang G0 berada setelah simulator selesai dan sebelum pelatihan agen. Gerbang ini mengukur kemampuan \textit{MacBook} dan menentukan kegiatan mana yang tetap di \textit{MacBook} dan mana yang dipindah ke infrastruktur eksternal (Subbab~\ref{subsec:infrastruktur}). Gerbang G1 berada setelah validasi simulator, dan pelatihan agen baru dimulai jika simulator lolos KNF-01. Gerbang G2 berada setelah pelatihan ko-evolusioner, dan eksperimen utama baru dimulai jika pelatihan memenuhi kriteria konvergensi pada Subbab~\ref{subsec:konfigurasi}. Gerbang G1 dan G2 mencegah hasil eksperimen dibangun di atas simulator atau kebijakan yang belum layak.
 
 \begin{table}[htbp]
 \centering
@@ -24,7 +24,7 @@ Implementasi direncanakan selama 16 minggu pada semester kedua tugas akhir. Taha
 \hline
 2 & Implementasi simulator & Modul validator, jaringan, pengelola suara, pemilihan \textit{proposer}, dan insentif, beserta uji unit & 2--5 & KF-01 sampai KF-03 \\
 \hline
-3 & Verifikasi dan kalibrasi & Reproduksi hasil \textcite{laneve2025stochastic}, pengambilan data \textit{on-chain}, uji Kolmogorov-Smirnov (gerbang G1) & 5--6 & KNF-01 \\
+3 & Verifikasi, kalibrasi, dan benchmark & Reproduksi hasil \textcite{laneve2025stochastic}, pengambilan data \textit{on-chain}, uji Kolmogorov-Smirnov (gerbang G1), uji asap pelatihan dan pengukuran kecepatan \textit{MacBook} Reproduksi hasil \textcite{laneve2025stochastic}, pengambilan data \textit{on-chain}, uji Kolmogorov-Smirnov (gerbang G1) & 5--6 & KNF-01 \\
 \hline
 4 & Pembanding & Pertahanan statis, berbasis aturan, dan DRL satu sisi & 7--8 & KF-07 \\
 \hline
@@ -39,7 +39,7 @@ Implementasi direncanakan selama 16 minggu pada semester kedua tugas akhir. Taha
 
 \subsection{Alat dan Bahan}
 \label{subsec:alat_bahan}
-Alat dan bahan yang diperlukan disajikan pada Tabel~\ref{tab:alat_bahan}. Pemilihan perangkat lunak mengikuti lingkungan yang terbukti dapat mereproduksi pelatihan DRL pada \textcite{skowronski2026adaptive}, yaitu Python dan PyTorch. PettingZoo ditambahkan karena arena melibatkan dua agen. Spesifikasi perangkat keras disesuaikan dengan kebutuhan pada \textcite{skowronski2026adaptive} untuk pelatihan dan \textcite{laneve2025stochastic} untuk simulasi berulang.
+Alat dan bahan yang diperlukan disajikan pada Tabel~\ref{tab:alat_bahan}. Pemilihan perangkat lunak mengikuti lingkungan yang terbukti dapat mereproduksi pelatihan DRL pada \textcite{skowronski2026adaptive}, yaitu Python dan PyTorch. PettingZoo ditambahkan karena arena melibatkan dua agen. Perangkat utama adalah \textit{MacBook Pro} dengan Apple M5 Pro milik penulis. Perangkat eksternal hanya disiapkan sebagai cadangan, dengan acuan kebutuhan pada \textcite{skowronski2026adaptive} untuk pelatihan dan \textcite{laneve2025stochastic} untuk simulasi berulang. Pembagian tugas keduanya dijelaskan pada Subbab~\ref{subsec:infrastruktur}.
 
 \begin{table}[htbp]
 \centering
@@ -50,7 +50,7 @@ Alat dan bahan yang diperlukan disajikan pada Tabel~\ref{tab:alat_bahan}. Pemili
 \hline
 \textbf{Kategori} & \textbf{Alat atau bahan} & \textbf{Fungsi} \\
 \hline
-Bahasa dan pustaka utama & Python 3.10 atau lebih baru, PyTorch 2.x & Implementasi simulator dan jaringan DDQN \\
+Bahasa dan pustaka utama & Python 3.10 atau lebih baru, PyTorch 2.x (backend MPS atau CPU di \textit{MacBook}, CUDA di infrastruktur eksternal) & Implementasi simulator dan jaringan DDQN \\
 \hline
 Antarmuka multi-agen & PettingZoo & Antarmuka \textit{Markov game} dua agen dengan frekuensi keputusan berbeda \\
 \hline
@@ -60,10 +60,53 @@ Pemantauan dan versi & TensorBoard, Git, GitHub & Pemantauan kurva pelatihan, pe
 \hline
 Data & API \textit{beaconcha.in}, \textit{BigQuery}, \textit{consensus-specs} & Statistik \textit{slot} kosong, partisipasi \textit{attestation}, blok yatim, dan nilai parameter acuan \\
 \hline
-Perangkat keras & CPU minimal 8 inti, RAM minimal 32 GB, GPU setara RTX 3090 24 GB & Simulasi paralel dan pelatihan. Acuan: satu GPU RTX 3090 \parencite{skowronski2026adaptive} dan mesin 8 vCPU 64 GB \parencite{laneve2025stochastic} \\
+Perangkat utama & \textit{MacBook Pro} Apple M5 Pro, RAM terpadu dengan kapasitas dicatat pada gerbang G0 & Pengembangan, simulasi paralel multi-inti, verifikasi, validasi, evaluasi, dan pelatihan sejauh lolos gerbang G0 \\
+\hline
+Perangkat eksternal (cadangan) & GPU NVIDIA 24 GB (fasilitas kampus atau sewa awan) dengan CUDA & Hanya untuk kegiatan yang tidak lolos gerbang G0. Acuan: satu GPU RTX 3090 \parencite{skowronski2026adaptive} dan mesin 8 vCPU 64 GB \parencite{laneve2025stochastic} \\
+\hline
+Penyimpanan cadangan & Hardisk eksternal atau penyimpanan awan & Salinan konfigurasi, \textit{checkpoint}, dan log pelatihan \\
 \hline
 \end{tabular}
 \end{table}
+\subsection{Pembagian Infrastruktur}
+\label{subsec:infrastruktur}
+\textit{MacBook Pro} M5 Pro digunakan lebih dulu untuk seluruh pekerjaan. Infrastruktur eksternal baru dipakai jika \textit{MacBook} terbukti tidak mampu menyelesaikan suatu kegiatan sesuai jadwal. Kemampuan itu diukur pada gerbang G0, bukan diperkirakan. Pembagian ini didasarkan pada empat pertimbangan.
+\begin{enumerate}
+	\item Simulator tidak memerlukan GPU. Simulator Gasper berjalan di CPU, dan \textcite{laneve2025stochastic} menjalankannya pada mesin 8 vCPU. Inti CPU \textit{MacBook} dapat dipakai paralel, sehingga tidak ada alasan teknis memindahkan simulator.
+	\item Jaringan agen tergolong kecil. Arsitektur \textit{dueling} [128, 128, 64] ringan dibanding model yang lazim memerlukan GPU besar, dan satu sesi pelatihan pada \textcite{skowronski2026adaptive} sekitar 8 jam pada satu GPU. Karena itu, GPU Apple melalui backend MPS (\textit{Metal Performance Shaders}) atau CPU berpeluang memadai. Kepastiannya baru diperoleh dari pengukuran.
+	\item \textit{MacBook} memiliki keterbatasan. Perangkat ini tidak mendukung CUDA, sehingga operator PyTorch tertentu mungkin belum tersedia pada MPS. Sebagai laptop, pelatihan berhari-hari juga rentan terhadap penurunan kecepatan akibat panas, dan perangkatnya hanya satu.
+	\item Perbandingan harus adil. Hasil pelatihan pada MPS dan CUDA dapat berbeda sedikit karena implementasi numeriknya berbeda. Kegiatan yang hasilnya dibandingkan berpasangan pada Subbab~\ref{subsec:analisis_statistik} karena itu harus dilatih pada jenis perangkat yang sama.
+\end{enumerate}
+
+Pembagian kegiatan disajikan pada Tabel~\ref{tab:infrastruktur}. Angka jam pada kelompok B mengacu pada Tabel~\ref{tab:biaya}.
+
+\begin{table}[htbp]
+\centering
+\caption{Pembagian kegiatan antara \textit{MacBook} dan infrastruktur eksternal}
+\label{tab:infrastruktur}
+\small
+\begin{tabular}{|p{2.0cm}|p{4.4cm}|p{2.4cm}|p{3.0cm}|}
+\hline
+\textbf{Kelompok} & \textbf{Kegiatan} & \textbf{Infrastruktur} & \textbf{Alasan} \\
+\hline
+A. Pasti di \textit{MacBook} & Perancangan, implementasi simulator, uji unit VF-01 sampai VF-04, verifikasi VF-05, validasi Kolmogorov-Smirnov, pembanding statis dan berbasis aturan, pengambilan data \textit{on-chain}, evaluasi kebijakan beku, analisis statistik, penulisan & \textit{MacBook} & Hanya memerlukan CPU. Evaluasi di CPU membuat pengukuran akhir sama apa pun perangkat pelatihannya \\
+\hline
+B. \textit{MacBook} jika lolos G0 & Pembanding DRL satu sisi (80 jam), pelatihan ko-evolusioner utama (240 jam), penyerang yang dilatih khusus (80 jam), ablasi (120 jam) & \textit{MacBook}, dipindah jika gagal G0 & Memerlukan pelatihan jaringan, dan kecepatan MPS atau CPU belum diketahui sebelum diukur \\
+\hline
+C. Eksternal, bersyarat & Kegiatan kelompok B yang gagal G0, dan uji skala 1.000 validator jika RAM tidak cukup & GPU NVIDIA kampus atau awan, atau mesin RAM besar & Hanya cadangan, karena menambah biaya dan waktu penyiapan \\
+\hline
+\end{tabular}
+\end{table}
+
+Keputusan pada gerbang G0 mengikuti aturan berikut.
+\begin{enumerate}
+	\item Ukur kecepatan pelatihan (langkah per detik) pada \textit{MacBook} dengan backend MPS dan CPU, lalu pilih yang tercepat. Ukur juga kebutuhan memori simulator pada 128 dan 256 validator, lalu ekstrapolasikan ke 1.000 validator.
+	\item Proyeksikan jam setiap kegiatan kelompok B dari kecepatan terukur dan jumlah langkah hingga konvergen pada uji asap.
+	\item Suatu kegiatan tetap di \textit{MacBook} jika proyeksi jamnya, dibagi 0,7 untuk memperhitungkan jeda akibat panas dan pemakaian lain, tidak melebihi alokasi kalendernya pada Tabel~\ref{tab:jadwal}. Jika melebihi, kegiatan dipindah ke infrastruktur eksternal.
+	\item Uji skala 1.000 validator tetap di \textit{MacBook} jika proyeksi memorinya paling banyak 75\% dari RAM. Jika lebih, uji ini dipindah ke mesin dengan RAM lebih besar.
+\end{enumerate}
+
+Dua aturan menjaga agar hasil tetap sebanding. Pertama, pembanding DRL satu sisi, pelatihan ko-evolusioner utama, dan ablasi berada pada jenis perangkat yang sama karena hasilnya dibandingkan berpasangan. Jika salah satunya gagal G0, ketiganya dipindah bersama atau cakupan kegiatan yang gagal dikurangi sesuai R8. Kedua, evaluasi kebijakan beku selalu dijalankan di CPU \textit{MacBook} dengan presisi \textit{float32}. Spesifikasi perangkat, versi Python dan PyTorch, backend, dan \textit{master seed} dicatat untuk setiap eksperimen.
 
 \subsection{Lingkungan dan Konfigurasi}
 \label{subsec:konfigurasi}
@@ -109,33 +152,35 @@ Pelatihan dinyatakan konvergen jika tiga syarat terpenuhi bersamaan selama 5.000
 
 \subsection{Estimasi Biaya}
 \label{subsec:biaya}
-Seluruh perangkat lunak dan data yang digunakan bersifat gratis. Biaya utama berasal dari komputasi GPU. Kebutuhannya diperkirakan pada Tabel~\ref{tab:biaya} dengan acuan satu sesi pelatihan DRL sekitar 8 jam \parencite{skowronski2026adaptive} dan batas 24 jam per sesi pada KNF-05.
+Seluruh perangkat lunak dan data yang digunakan bersifat gratis. Perangkat utama adalah \textit{MacBook} yang sudah dimiliki, sehingga biaya tambahannya hanya listrik. Kebutuhan komputasi diperkirakan pada Tabel~\ref{tab:biaya} dengan acuan satu sesi pelatihan DRL sekitar 8 jam \parencite{skowronski2026adaptive} dan batas 24 jam per sesi pada KNF-05. Jam pada tabel adalah anggaran rencana dan dikalibrasi ulang dengan hasil benchmark pada gerbang G0.
 
 \begin{table}[htbp]
 \centering
 \caption{Estimasi kebutuhan komputasi}
 \label{tab:biaya}
 \small
-\begin{tabular}{|p{4.6cm}|p{4.6cm}|p{2.6cm}|}
+\begin{tabular}{|p{3.8cm}|p{3.4cm}|p{1.9cm}|p{2.7cm}|}
 \hline
-\textbf{Kegiatan} & \textbf{Perhitungan} & \textbf{GPU-jam} \\
+\textbf{Kegiatan} & \textbf{Perhitungan} & \textbf{Jam komputasi} & \textbf{Lokasi awal} \\
 \hline
-Verifikasi, kalibrasi, pembanding statis dan berbasis aturan & Hanya CPU & 0 \\
+Verifikasi, kalibrasi, pembanding statis dan berbasis aturan & Hanya CPU & 0 & \textit{MacBook} \\
 \hline
-Pembanding DRL satu sisi & 10 \textit{seed} $\times$ 8 jam & 80 \\
+Pembanding DRL satu sisi & 10 \textit{seed} $\times$ 8 jam & 80 & \textit{MacBook}, bersyarat G0 \\
 \hline
-Pelatihan ko-evolusioner utama & 10 \textit{seed} $\times$ 24 jam & 240 \\
+Pelatihan ko-evolusioner utama & 10 \textit{seed} $\times$ 24 jam & 240 & \textit{MacBook}, bersyarat G0 \\
 \hline
-Penyerang yang dilatih khusus melawan pertahanan beku & 4 pertahanan $\times$ 5 \textit{seed} $\times$ 4 jam & 80 \\
+Penyerang yang dilatih khusus melawan pertahanan beku & 4 pertahanan $\times$ 5 \textit{seed} $\times$ 4 jam & 80 & \textit{MacBook}, bersyarat G0 \\
 \hline
-Ablasi & 3 varian $\times$ 5 \textit{seed} $\times$ 8 jam & 120 \\
+Ablasi & 3 varian $\times$ 5 \textit{seed} $\times$ 8 jam & 120 & \textit{MacBook}, bersyarat G0 \\
 \hline
-\textbf{Total} & & \textbf{520} \\
+\textbf{Total} & & \textbf{520} & \\
 \hline
 \end{tabular}
 \end{table}
 
-Pilihan utama adalah memakai GPU pribadi atau fasilitas komputasi kampus sehingga biaya tambahan hanya listrik. Jika fasilitas tersebut tidak tersedia, GPU disewa dari penyedia komputasi awan. Dengan tarif sewa RTX 3090 sekitar US\$0,50 per jam, 520 GPU-jam membutuhkan sekitar US\$260. Dengan cadangan 30\% untuk pengulangan, anggaran maksimum ditetapkan sekitar US\$340.
+Jika dijalankan berurutan di \textit{MacBook}, 520 jam setara sekitar 22 hari tanpa henti. Jendela kalender pelatihan dan eksperimen (minggu 7 sampai 13) mencakup sekitar 49 hari. Dengan asumsi \textit{MacBook} aktif 70\% waktu, kapasitasnya sekitar 34 hari, Jika dijalankan berurutan di \textit{MacBook}, 520 jam setara sekitar 22 hari tanpa henti. Jendela kalender pelatihan dan eksperimen (minggu 7 sampai 13) mencakup sekitar 49 hari. Dengan asumsi \textit{MacBook} aktif 70\% dari waktu kalender, kapasitas efektifnya sekitar 34 hari. Seluruh kegiatan tetap selesai dalam jendela ini selama \textit{MacBook} tidak lebih dari sekitar 1,5 kali lebih lambat daripada anggaran jam. Jika lebih lambat, kegiatan yang melampaui batas tersebut dipindah sesuai gerbang G0. Pelatihan beberapa \textit{seed} secara paralel pada inti yang berbeda dapat menambah margin ini. Batas tersebut diuji pada gerbang G0. Pelatihan beberapa \textit{seed} secara paralel pada inti yang berbeda dapat menambah margin ini. Batas tersebut diuji pada gerbang G0.
+
+Infrastruktur eksternal hanya dipakai untuk kegiatan yang tidak lolos G0. Pilihan pertama adalah GPU kampus atau laboratorium, yang biayanya di luar anggaran penelitian. Jika tidak tersedia, GPU disewa dari penyedia komputasi awan. Dengan tarif sewa RTX 3090 sekitar US\$0,50 per jam, memindahkan seluruh 520 jam membutuhkan sekitar US\$260. Dengan cadangan 30\% untuk pengulangan, batas atas anggarannya sekitar US\$340. Angka ini adalah batas atas, bukan perkiraan utama. Setelah G0, anggaran dihitung ulang sesuai jam yang benar-benar dipindah.
 % Sumber tarif: halaman harga RunPod (https://www.runpod.io/gpu-instance/pricing), dicek November 2026. Perbarui sebelum laporan final.
 
 \section{Desain Pengujian dan Evaluasi}
@@ -161,14 +206,14 @@ VF-02 & \textit{Reward} dan penalti & Hitung manual dibandingkan keluaran simula
 \hline
 VF-03 & \textit{Action masking} & Uji properti pada 10.000 \textit{state} acak, meniru rangkaian uji kasus tepi \textcite{skowronski2026adaptive} & Tidak ada aksi ilegal yang lolos \\
 \hline
-VF-04 & Determinisme & Dua kali menjalankan simulasi dengan \textit{seed} yang sama & Keluaran identik (KNF-03) \\
+VF-04 & Determinisme & Dua kali menjalankan simulasi dan evaluasi kebijakan dengan \textit{seed} yang sama di CPU \textit{MacBook} (\textit{float32}) & Keluaran identik (KNF-03) \\
 \hline
 VF-05 & Reproduksi model acuan & Konfigurasi 13 validator dan latensi 12,6 detik seperti \textcite{laneve2025stochastic} & Kriteria keberhasilan pertama (KNF-01) \\
 \hline
 \end{tabular}
 \end{table}
 
-VF-05 memerlukan perhatian khusus karena model \textcite{laneve2025stochastic} tidak konsisten soal panjang \textit{epoch}. Karena itu, verifikasi dijalankan pada dua varian, yaitu \textit{checkpoint} setiap 32 \textit{slot} dan setiap 64 \textit{slot}. Varian yang paling mendekati angka acuan dipakai untuk verifikasi, dan perbedaannya dilaporkan sebagai temuan. Eksperimen utama tetap memakai 32 \textit{slot} sesuai Subbab~\ref{sec:gasper}.
+VF-05 memerlukan perhatian khusus karena model \textcite{laneve2025stochastic} tidak konsisten soal panjang \textit{epoch}. Karena itu, verifikasi dijalankan pada dua varian, yaitu \textit{checkpoint} setiap 32 \textit{slot} dan setiap 64 \textit{slot}. Varian yang paling mendekati angka acuan dipakai untuk verifikasi, dan perbedaannya dilaporkan sebagai temuan. Eksperimen utama tetap memakai 32 \textit{slot} sesuai Subbab~\ref{sec:gasper}. Determinisme pada VF-04 dinilai pada simulator dan evaluasi di CPU. Pelatihan pada MPS atau CUDA dapat berbeda sedikit antarperangkat, sehingga keterulangannya dinilai secara statistik melalui 10 \textit{seed}, bukan identik bit demi bit.
 
 \subsection{Validasi}
 \label{subsec:validasi}
@@ -276,15 +321,20 @@ R6 & Agen penyerang gagal menemukan serangan efektif & S & T & \textit{Reward} b
 \hline
 R7 & Agen pertahanan menekan penyerang dengan membebani validator jujur & S & S & Suku biaya $w_4$ dan ablasi $w_4 = 0$ & Bobot $w_4$ dinaikkan dan kurva Pareto dilaporkan \\
 \hline
-R8 & Komputasi melebihi anggaran & S & S & Uji skala kecil dahulu, jumlah \textit{seed} minimal 10 \parencite{wushishi2026coadam} & Ablasi dan uji 1.000 validator dikurangi. GPU awan dalam batas Subbab~\ref{subsec:biaya} \\
+R8 & Komputasi melebihi jadwal atau anggaran & S & S & Benchmark pada gerbang G0, uji skala kecil dahulu, jumlah \textit{seed} minimal 10 \parencite{wushishi2026coadam} & Kegiatan yang tidak lolos G0 dipindah ke infrastruktur eksternal dalam batas Subbab~\ref{subsec:biaya}. Ablasi dan uji 1.000 validator dikurangi \\
 \hline
 R9 & Data \textit{on-chain} terbatas atau akses API dibatasi & R & S & Data diambil sejak awal, disimpan lokal, dan memakai dua sumber & Kalibrasi memakai statistik ringkas publik \\
 \hline
 R10 & Jadwal terlambat & S & S & Gerbang G1 dan G2, pemantauan mingguan dengan pembimbing & Prioritas pada eksperimen utama. Ablasi dan uji skala dipangkas \\
 \hline
+R11 & \textit{MacBook} panas, tertidur, atau melambat saat pelatihan panjang & S & S & Adaptor daya terpasang, mode tidur dimatikan, \textit{checkpoint} disimpan berkala agar pelatihan dapat dilanjutkan & Pelatihan dipecah per sesi, kegiatan yang terlambat dipindah sesuai G0 \\
+\hline
+R12 & Operator PyTorch tidak didukung MPS atau hasilnya menyimpang & S & S & Uji asap pada G0 dengan lapisan standar (\textit{dueling}, ReLU) & Pelatihan dijalankan di CPU atau dipindah ke infrastruktur eksternal \\
+\hline
+R13 & Perangkat tunggal rusak atau data hilang & R & T & Kode di Git, \textit{checkpoint} dan log dicadangkan berkala ke penyimpanan kedua & Lanjut dari cadangan terakhir pada perangkat pinjaman atau infrastruktur eksternal \\
+\hline
 \multicolumn{6}{|l|}{K = kemungkinan, D = dampak, R = rendah, S = sedang, T = tinggi} \\
 \hline
 \end{tabular}
 \end{table}
-
-Risiko dengan dampak tinggi, yaitu R1, R2, dan R6, ditangani paling awal karena ketiganya menentukan apakah eksperimen utama dapat berjalan. Jika ketiga risiko tersebut sudah terkendali sebelum minggu ke-11, sisa waktu cukup untuk menyelesaikan eksperimen utama sekalipun ablasi dan uji skala harus dipangkas.
+Risiko dengan dampak tinggi, yaitu R1, R2, dan R6, ditangani paling awal karena ketiganya menentukan apakah eksperimen utama dapat berjalan. Jika ketiga risiko tersebut sudah terkendali sebelum minggu ke-11, sisa waktu cukup untuk menyelesaikan eksperimen utama sekalipun ablasi dan uji skala harus dipangkas. Risiko R13 ditangani sejak minggu pertama dengan pencadangan rutin, karena kehilangan data akan menghentikan seluruh pekerjaan.
